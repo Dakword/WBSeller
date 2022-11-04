@@ -29,7 +29,7 @@ $statApi = $wbSeller->Statistics();
 
 // Получить список НМ
 $result = $contentApi->getCardsList();
-if(!$result->error) {
+if (!$result->error) {
     var_dump($result->data->cards, $result->data->cursor);
 }
 
@@ -63,7 +63,7 @@ try {
         ],
     ]);
 
-    if($createCardResult->error) {
+    if ($createCardResult->error) {
         echo 'Ошибка создания карточки: ' . $createCardResult->errorText;
     } else {
         echo 'Запрос на создание карточки отправлен в очередь';

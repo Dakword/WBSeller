@@ -195,7 +195,6 @@ class Statistics extends AbstractEndpoint
                 if ($result->errors[0] == '(api-new) too many requests') {
                     if ($attempt == $attempts) {
                         throw new Exception('(api-new) too many requests', 429);
-                        break;
                     }
                     sleep($attempt * 10);
                     $attempt++;

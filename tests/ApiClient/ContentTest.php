@@ -101,6 +101,22 @@ class ContentTest extends TestCase
         $this->assertTrue($result2->error);
     }
 
+    public function test_updateCard()
+    {
+        $listCards = $this->getCardsList();
+        $listCard = array_shift($listCards);
+        $cardsList = $this->Content()->getCardsByVendorCodes($listCard->vendorCode);
+        $cards = array_filter($cardsList->data, fn($card) => $card->vendorCode == $listCard->vendorCode);
+        $card = array_shift($cards);
+        
+        if($card) {
+            $result = $this->Content()->updateCards([$card]);
+            $this->assertFalse($result->error);
+        } else {
+            $this->markTestSkipped('No card found');
+        }
+    }
+
     public function test_searchCategory()
     {
         $result = $this->Content()

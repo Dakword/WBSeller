@@ -93,7 +93,7 @@ class Content extends AbstractEndpoint
      */
     public function updateCards(array $cards): object
     {
-        return $this->request('/content/v1/cards/update', 'POST', array_map(fn($card) => [$card], $cards));
+        return $this->request('/content/v1/cards/update', 'POST', $cards);
     }
 
     /**
