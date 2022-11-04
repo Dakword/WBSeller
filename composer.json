@@ -1,0 +1,27 @@
+{
+    "name": "dakword/wbseller",
+    "description": "Wildberries API v1.4 client for PHP",
+    "keywords": ["wildberries", "api", "openapi", "php"],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5.0"
+    },
+    "scripts": {
+        "test": "phpunit -v -c tests/phpunit.xml tests"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dakword\\WBSeller\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dakword\\WBSeller\\Tests\\": "tests/"
+        }
+    }
+}

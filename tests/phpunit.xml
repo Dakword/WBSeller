@@ -1,0 +1,16 @@
+<phpunit 
+	bootstrap="bootstrap.php"
+	cacheResult="false"
+	colors="true"
+	verbose="true"
+>
+	<testsuites>
+		<testsuite name="Tests">
+			<directory>./tests</directory>
+		</testsuite>
+	</testsuites>
+	<php>
+		<env name="APIKEY"  value="" />
+		<env name="STATKEY" value="" />
+	</php>
+</phpunit>
