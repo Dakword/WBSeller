@@ -32,10 +32,10 @@ class ContentTest extends TestCase
     {
         $limit = 5;
         $Content = $this->Content();
-        $result1 = $Content->getCardsList('20022', $limit);
+        $result1 = $Content->getCardsList('', $limit);
         $this->assertObjectHasAttribute('cursor', $result1->data);
         if ($result1->data->cursor->total == $limit) {
-            $result2 = $Content->getCardsList('20022', $limit, -1, 'updateAt', false, $result1->data->cursor->updatedAt, $result1->data->cursor->nmID);
+            $result2 = $Content->getCardsList('', $limit, -1, 'updateAt', false, $result1->data->cursor->updatedAt, $result1->data->cursor->nmID);
             $this->assertObjectHasAttribute('cursor', $result2->data);
         }
     }
