@@ -2,10 +2,10 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\Endpoints\Marketplace;
+use Dakword\WBSeller\API\Endpoints\Marketplace;
 use Dakword\WBSeller\Enums\OrderStatus;
 use Dakword\WBSeller\Enums\SupplyStatus;
-use Dakword\WBSeller\Tests\TestCase;
+use Dakword\WBSeller\Tests\ApiClient\TestCase;
 use DateTime;
 use InvalidArgumentException;
 

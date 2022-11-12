@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller\Endpoints;
+namespace Dakword\WBSeller\API\Endpoints;
 
+use Dakword\WBSeller\API\AbstractEndpoint;
 use DateTime;
 use Exception;
 use InvalidArgumentException;

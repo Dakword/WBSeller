@@ -2,8 +2,8 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\Endpoints\Content;
-use Dakword\WBSeller\Tests\TestCase;
+use Dakword\WBSeller\API\Endpoints\Content;
+use Dakword\WBSeller\Tests\ApiClient\TestCase;
 use InvalidArgumentException;
 
 class ContentTest extends TestCase

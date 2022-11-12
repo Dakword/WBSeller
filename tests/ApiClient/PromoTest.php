@@ -2,8 +2,8 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\Endpoints\Promo;
-use Dakword\WBSeller\Tests\TestCase;
+use Dakword\WBSeller\API\Endpoints\Promo;
+use Dakword\WBSeller\Tests\ApiClient\TestCase;
 
 class PromoTest extends TestCase
 {

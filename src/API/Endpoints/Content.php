@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller\Endpoints;
+namespace Dakword\WBSeller\API\Endpoints;
 
-use Dakword\WBSeller\Endpoints\AbstractEndpoint;
+use Dakword\WBSeller\API\AbstractEndpoint;
 use InvalidArgumentException;
 
 class Content extends AbstractEndpoint

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dakword\WBSeller;
 
-use Dakword\WBSeller\Endpoints\{
+use Dakword\WBSeller\API\Endpoints\{
     Content,
     Marketplace,
     Prices,

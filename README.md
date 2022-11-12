@@ -5,25 +5,25 @@
 
 ```php
 
-$wbSeller = new \Dakword\WBSeller\API([
+$wbSellerAPI = new \Dakword\WBSeller\API([
     'apikey' => 'XXX',
     'statkey' => 'YYY',
 ]);
 
 // API контента
-$contentApi = $wbSeller->Content();
+$contentApi = $wbSellerAPI->Content();
 
 // API цен
-$pricesApi = $wbSeller->Prices();
+$pricesApi = $wbSellerAPI->Prices();
 
 // API marketplace
-$marketApi = $wbSeller->Marketplace();
+$marketApi = $wbSellerAPI->Marketplace();
 
 // API скидок и промокодов
-$promoApi = $wbSeller->Promo();
+$promoApi = $wbSellerAPI->Promo();
 
 // API статистики
-$statApi = $wbSeller->Statistics();
+$statApi = $wbSellerAPI->Statistics();
 
 
 
@@ -38,7 +38,7 @@ $info = $pricesApi->getPricesOnStock();
 var_dump($info);
 
 // Cписок складов поставщика
-$warehouses = $wbSeller->Marketplace()->getWarehouses();
+$warehouses = $wbSellerAPI->Marketplace()->getWarehouses();
 var_dump($warehouses);
 
 // Заказы, сделанные сегодня

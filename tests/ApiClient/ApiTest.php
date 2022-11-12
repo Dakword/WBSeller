@@ -4,7 +4,7 @@ namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\API;
 use Dakword\WBSeller\Exceptions\ApiClientException;
-use Dakword\WBSeller\Tests\TestCase;
+use Dakword\WBSeller\Tests\ApiClient\TestCase;
 
 class ApiTest extends TestCase
 {

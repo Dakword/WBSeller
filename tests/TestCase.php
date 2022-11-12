@@ -4,7 +4,7 @@ namespace Dakword\WBSeller\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Dakword\WBSeller\API;
-use Dakword\WBSeller\Endpoints\{
+use Dakword\WBSeller\API\Endpoints\{
     Content,
     Marketplace,
     Prices,
@@ -35,44 +35,14 @@ class TestCase extends PHPUnitTestCase
         ]);
     }
 
-    protected function Content(): Content
-    {
-        $this->skipIfNoKeyAPI();
-        return $this->API()->Content();
-    }
-
-    protected function Marketplace(): Marketplace
-    {
-        $this->skipIfNoKeyAPI();
-        return $this->API()->Marketplace();
-    }
-
-    protected function Prices(): Prices
-    {
-        $this->skipIfNoKeyAPI();
-        return $this->API()->Prices();
-    }
-
-    protected function Promo(): Promo
-    {
-        $this->skipIfNoKeyAPI();
-        return $this->API()->Promo();
-    }
-
-    protected function Statistics(): Statistics
-    {
-        $this->skipIfNoKeySTAT();
-        return $this->API()->Statistics();
-    }
-
-    private function skipIfNoKeyAPI(): void
+    protected function skipIfNoKeyAPI(): void
     {
         if (empty($this->apiKey)) {
             $this->markTestSkipped();
         }
     }
 
-    private function skipIfNoKeySTAT(): void
+    protected function skipIfNoKeySTAT(): void
     {
         if (empty($this->statKey)) {
             $this->markTestSkipped();

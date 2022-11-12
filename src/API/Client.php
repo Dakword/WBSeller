@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller;
+namespace Dakword\WBSeller\API;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;

@@ -2,8 +2,8 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\Endpoints\Prices;
-use Dakword\WBSeller\Tests\TestCase;
+use Dakword\WBSeller\API\Endpoints\Prices;
+use Dakword\WBSeller\Tests\ApiClient\TestCase;
 
 /**
  * @coversDefaultClass \Dakword\WBSeller\Endpoints\Prices
