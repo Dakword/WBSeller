@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller\Enums;
+namespace Dakword\WBSeller\Enum;
 
-class SupplyStatus
+final class SupplyStatus
 {
     /**
      * @var string Активная поставка

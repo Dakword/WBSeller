@@ -2,7 +2,7 @@
 
 Библиотека для работы с [Wildberries API 1.4](https://openapi.wb.ru)
 
-
+### Работа с API
 ```php
 
 $wbSellerAPI = new \Dakword\WBSeller\API([
@@ -12,20 +12,14 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
 
 // API контента
 $contentApi = $wbSellerAPI->Content();
-
 // API цен
 $pricesApi = $wbSellerAPI->Prices();
-
 // API marketplace
 $marketApi = $wbSellerAPI->Marketplace();
-
 // API скидок и промокодов
 $promoApi = $wbSellerAPI->Promo();
-
 // API статистики
 $statApi = $wbSellerAPI->Statistics();
-
-
 
 // Получить список НМ
 $result = $contentApi->getCardsList();
@@ -71,6 +65,52 @@ try {
 	
 } catch (\Exception $exc) {
     echo 'Исключение при создании карточки: ' . $exc->getMessage();
+}
+
+```
+
+### Запросы
+```php
+
+$wbSellerAPI = new \Dakword\WBSeller\API([
+    'apikey' => 'XXX',
+    'statkey' => 'YYY',
+]);
+$Query = new \Dakword\WBSeller\Query($wbSellerAPI);
+
+// Список НМ
+$cardsList = $Query->CardsList()->find('20')->withPhoto()->sortDesc()->getAll();
+var_dump($cardsList);
+
+$cardsListQuery = $Query->CardsList()->find('iPhone')->perPage(250);
+$firstPage = $cardsListQuery->getFirst();
+var_dump($firstPage);
+if ($cardsListQuery->hasNext()) {
+    $nextPage = $cardsListQuery->getNext($cursor);
+    var_dump($nextPage);
+	if ($cardsListQuery->hasNext()) {
+		$cursor = $cardsListQuery->getCursor();
+		// ...
+		$renewCardsListQuery = $Query->CardsList()->find('iPhone')->perPage(250);
+		$pageByCursor = $renewCardsListQuery->getNext($cursor);
+		var_dump($pageByCursor);
+	}
+}
+
+// Список ошибочных НМ
+$errorCards = $Query->ErrorCardsList()->getAll();
+var_dump($errorCards);
+
+$vendorCode = 'ABCD';
+$result = $Query->ErrorCardsList()->find($vendorCode);
+if (!is_null($result)) {
+    var_dump($result->errors);
+}
+
+$vendorCodes = ['ABCD', 'XYZ'];
+$results = $Query->ErrorCardsList()->find($vendorCodes);
+if (array_key_exists('ABCD', $results)) {
+    var_dump($results['ABCD']->errors);
 }
 
 ```

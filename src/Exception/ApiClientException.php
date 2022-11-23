@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller\Exceptions;
+namespace Dakword\WBSeller\Exception;
 
 class ApiClientException extends \Exception
 {

@@ -11,8 +11,8 @@ use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
 use InvalidArgumentException;
 
-class Client {
-
+class Client
+{
     public $responseCode = 0;
     public $responsePhrase = null;
     public $responseHeaders = [];
@@ -26,7 +26,8 @@ class Client {
     private HttpClient $Client;
     private HandlerStack $stack;
 
-    function __construct(string $baseUrl, string $apiKey) {
+    function __construct(string $baseUrl, string $apiKey)
+    {
         $this->baseUrl = rtrim($baseUrl, '/');
         $this->apiKey = $apiKey;
 
@@ -40,7 +41,8 @@ class Client {
         ]);
     }
 
-    public function addMiddleware(callable $middleware, string $name = ''): void {
+    public function addMiddleware(callable $middleware, string $name = ''): void
+    {
         $this->stack->push($middleware, $name);
     }
 
@@ -48,7 +50,8 @@ class Client {
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function request(string $path, string $method, array $params = [], array $addonHeaders = []) {
+    public function request(string $path, string $method, array $params = [], array $addonHeaders = [])
+    {
         $this->responseCode = 0;
         $this->responsePhrase = null;
         $this->responseHeaders = [];
@@ -63,7 +66,7 @@ class Client {
                             'Accept' => 'application/json',
                             'Content-Type' => 'application/json',
                             'Authorization' => $this->apiKey,
-                        ], $addonHeaders),
+                            ], $addonHeaders),
                         'query' => $params,
                     ]);
                     break;
@@ -74,7 +77,7 @@ class Client {
                             'Accept' => 'application/json',
                             'Content-Type' => 'application/json',
                             'Authorization' => $this->apiKey,
-                        ], $addonHeaders),
+                            ], $addonHeaders),
                         'body' => json_encode($params)
                     ]);
                     break;
@@ -85,7 +88,7 @@ class Client {
                             'Accept' => 'application/json',
                             'Content-Type' => 'application/json',
                             'Authorization' => $this->apiKey,
-                        ], $addonHeaders),
+                            ], $addonHeaders),
                         'body' => json_encode($params)
                     ]);
                     break;
@@ -94,7 +97,7 @@ class Client {
                     $response = $this->Client->post($this->baseUrl . $path, [
                         'headers' => array_merge([
                             'Authorization' => $this->apiKey,
-                        ], $addonHeaders),
+                            ], $addonHeaders),
                         'multipart' => $params,
                     ]);
                     break;
@@ -105,7 +108,7 @@ class Client {
                             'Accept' => 'application/json',
                             'Content-Type' => 'application/json',
                             'Authorization' => $this->apiKey,
-                        ], $addonHeaders),
+                            ], $addonHeaders),
                         'body' => json_encode($params)
                     ]);
                     break;

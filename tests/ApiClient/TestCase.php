@@ -4,7 +4,7 @@ namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
 use Dakword\WBSeller\API;
-use Dakword\WBSeller\API\Endpoints\{
+use Dakword\WBSeller\API\Endpoint\{
     Content,
     Marketplace,
     Prices,

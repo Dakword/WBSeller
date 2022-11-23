@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API;
 
 use Dakword\WBSeller\API\Client;
-use Dakword\WBSeller\Exceptions\ApiClientException;
+use Dakword\WBSeller\Exception\ApiClientException;
 
 abstract class AbstractEndpoint
 {

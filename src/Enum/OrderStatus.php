@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller\Enums;
+namespace Dakword\WBSeller\Enum;
 
-class OrderStatus
+final class OrderStatus
 {
     /**
      * @var int НОВЫЙ

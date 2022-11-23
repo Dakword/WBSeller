@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller\API\Endpoints;
+namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
-use Dakword\WBSeller\Enums\OrderStatus;
-use Dakword\WBSeller\Enums\SupplyStatus;
+use Dakword\WBSeller\Enum\OrderStatus;
+use Dakword\WBSeller\Enum\SupplyStatus;
 use DateTime;
 use InvalidArgumentException;
 

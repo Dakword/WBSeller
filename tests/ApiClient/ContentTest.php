@@ -2,7 +2,7 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\API\Endpoints\Content;
+use Dakword\WBSeller\API\Endpoint\Content;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
 use InvalidArgumentException;
 

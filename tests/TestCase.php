@@ -4,7 +4,8 @@ namespace Dakword\WBSeller\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Dakword\WBSeller\API;
-use Dakword\WBSeller\API\Endpoints\{
+use Dakword\WBSeller\Query;
+use Dakword\WBSeller\API\Endpoint\{
     Content,
     Marketplace,
     Prices,
@@ -33,6 +34,11 @@ class TestCase extends PHPUnitTestCase
             'apikey' => $this->apiKey,
             'statkey' => $this->statKey,
         ]);
+    }
+
+    protected function Query(): Query
+    {
+        return new Query($this->API());
     }
 
     protected function skipIfNoKeyAPI(): void

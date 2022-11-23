@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dakword\WBSeller\API\Endpoints;
+namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
 use InvalidArgumentException;

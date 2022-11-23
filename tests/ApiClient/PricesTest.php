@@ -2,7 +2,7 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\API\Endpoints\Prices;
+use Dakword\WBSeller\API\Endpoint\Prices;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
 
 /**

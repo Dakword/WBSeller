@@ -2,7 +2,7 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\API\Endpoints\Statistics;
+use Dakword\WBSeller\API\Endpoint\Statistics;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
 use DateTime;
 use InvalidArgumentException;
