@@ -168,21 +168,6 @@ class Statistics extends AbstractEndpoint
 
     // ---
 
-    protected function middleware()
-    {
-        return function (callable $handler) {
-            return function (RequestInterface $request, array $options) use ($handler) {
-                $uri = $request->getUri();
-                $query = $uri->getQuery();
-                $query .= ($query ? '&' : '') . ('key=' . $this->apiKey);
-                return $handler($request
-                    ->withoutHeader('Authorization')
-                    ->withUri($uri->withQuery($query))
-                , $options);
-            };
-        };
-    }
-
     private function sendRequest(string $path, array $data = [])
     {
         $attempts = 4;

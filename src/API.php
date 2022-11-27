@@ -17,7 +17,7 @@ class API
     const WB_API_VERSION = '1.4';
 
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
-    private string $statBaseUrl = 'https://suppliers-stats.wildberries.ru';
+    private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
     private string $apiKey;
     private string $statKey;
 
