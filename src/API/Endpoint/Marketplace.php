@@ -96,6 +96,38 @@ class Marketplace extends AbstractEndpoint
     }
 
     /**
+     * Штрихкод поставки в формате PDF
+     * 
+     * Возвращает штрихкод поставки в формате pdf.
+     * Штрихкод генерируется в формате code-128.
+     * Массив байтов передаётся закодированным в base64.
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * 
+     * @return object {mimeType: string ("application/pdf"), name: string, file: base64}
+     */
+    public function getSupplyPdfBarcode(string $supplyId): object
+    {
+        return $this->getSupplyBarcode($supplyId, 'pdf');
+    }
+
+    /**
+     * Штрихкод поставки в формате SVG
+     * 
+     * Возвращает штрихкод поставки в формате svg.
+     * Штрихкод генерируется в формате code-128.
+     * Массив байтов передаётся закодированным в base64.
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * 
+     * @return object {mimeType: string ("image/svg+xml"), name: string, file: base64}
+     */
+    public function getSupplySvgBarcode(string $supplyId): object
+    {
+        return $this->getSupplyBarcode($supplyId, 'svg');
+    }
+
+    /**
      * Список заказов, закреплённых за поставкой
      * 
      * @param string $supplyId Идентификатор поставки
