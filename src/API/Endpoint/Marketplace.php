@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
-use Dakword\WBSeller\Enum\OrderStatus;
-use Dakword\WBSeller\Enum\SupplyStatus;
 use DateTime;
 use InvalidArgumentException;
 
@@ -16,115 +14,63 @@ class Marketplace extends AbstractEndpoint
     /**
      * Список поставок
      * 
-     * @param string $status ACTIVE - активные поставки
-     *                       ON_DELIVERY - поставки в пути (которые ещё не приняты на складе).
+     * @param int $limit Параметр пагинации. Устанавливает предельное количество возвращаемых данных.
+     * @param int $next  Параметр пагинации. Устанавливает значение, с которого надо получить следующий пакет данных.
+     *                   Для получения полного списка данных должен быть равен 0 в первом запросе.
      * 
-     * @return object {supplies: [ {supplyId: string}, ...]}
+     * @return object {next: int, supplies: [ object, ...]}
      * 
-     * @throws InvalidArgumentException Неизвестный статус поставки
+     * @throws InvalidArgumentException Превышение максимального количества запрашиваемых данных
      */
-    public function getSuppliesList(string $status): object
+    public function getSuppliesList(int $limit = 1_000, int $next = 0): object
     {
-        if (!in_array($status, [SupplyStatus::ACTIVE, SupplyStatus::ON_DELIVERY])) {
-            throw new InvalidArgumentException('Неизвестный статус поставки: ' . $status);
+        $maxLimit = 1_000;
+        if ($limit > $maxLimit) {
+            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых данных: {$maxLimit}");
         }
-        return $this->request('/api/v2/supplies', 'GET', ['status' => $status]);
+        return $this->request('/api/v3/supplies', 'GET', ['limit' => $limit, 'next' => $next]);
     }
 
     /**
      * Создание новой поставки
      * 
-     * @return object Объект с идентификатором поставки {supplyId: string}
-     * @return object У поставщика уже есть активная поставка {data: any, error: bool, errorText: string, additionalErrors: string}
+     * @param int $name Наименование поставки
+     * 
+     * @return object Объект с идентификатором поставки {id: string}
+     * 
+     * @throws InvalidArgumentException Превышение максимальной длинны наименования поставки
      */
-    public function createSupply(): object
+    public function createSupply(string $name = ''): object
     {
-        return $this->request('/api/v2/supplies', 'POST');
-    }
-
-    /**
-     * Добавление к поставке заказов
-     * 
-     * Добавляет к поставке заказы и переводит их в статус 1 ("В сборке")
-     * 
-     * @param string $supplyId Идентификатор поставки
-     * @param array  $orders   Список заказов
-     * 
-     * @return object В случае ошибки {data: any, error: bool, errorText: string, additionalErrors: string}
-     */
-    public function addSupplyOrder(string $supplyId, array $orders)
-    {
-        return $this->request('/api/v2/supplies/' . $supplyId, 'PUT', ['orders' => $orders]);
-    }
-
-    /**
-     * Закрытие поставки
-     * 
-     * Закрывает поставку.
-     * Для закрытия поставки требуется хотя бы один закреплённый за ней заказ.
-     * После закрытия к поставке нельзя будет добавить новые заказы.
-     * 
-     * @param string $supplyId Идентификатор поставки
-     * 
-     * @return object В случае ошибки {data: any, error: bool, errorText: string, additionalErrors: string}
-     */
-    public function closeSupply(string $supplyId)
-    {
-        return $this->request('/api/v2/supplies/' . $supplyId . '/close', 'POST');
-    }
-
-    /**
-     * Штрихкод поставки в заданном формате
-     * 
-     * Возвращает штрихкод поставки в заданном формате: pdf или svg.
-     * Штрихкод генерируется в формате code-128.
-     * Массив байтов передаётся закодированным в base64.
-     * 
-     * @param string $supplyId Идентификатор поставки
-     * @param string $type     Формат штрихкода ("pdf", "svg")
-     * 
-     * @return object {mimeType: string ("application/pdf", "image/svg+xml"), name: string, file: base64}
-     * 
-     * @throws InvalidArgumentException Неизвестный формат штрихкода
-     */
-    public function getSupplyBarcode(string $supplyId, string $type): object
-    {
-        if (!in_array($type, ['svg', 'pdf'])) {
-            throw new InvalidArgumentException('Неизвестный формат штрихкода: ' . $type);
+        $maxLength = 128;
+        if (mb_strlen($name) > $maxLength) {
+            throw new InvalidArgumentException("Превышение максимальной длинны наименования поставки: {$maxLength}");
         }
-        return $this->request('/api/v2/supplies/' . $supplyId . '/barcode', 'GET', ['type' => $type]);
+        return $this->request('/api/v3/supplies', 'POST', ['name' => $name]);
     }
 
     /**
-     * Штрихкод поставки в формате PDF
-     * 
-     * Возвращает штрихкод поставки в формате pdf.
-     * Штрихкод генерируется в формате code-128.
-     * Массив байтов передаётся закодированным в base64.
+     * Получить информацию о поставке
      * 
      * @param string $supplyId Идентификатор поставки
      * 
-     * @return object {mimeType: string ("application/pdf"), name: string, file: base64}
+     * @return object
      */
-    public function getSupplyPdfBarcode(string $supplyId): object
+    public function getSupply(string $supplyId): object
     {
-        return $this->getSupplyBarcode($supplyId, 'pdf');
+        return $this->request('/api/v3/supplies/' . $supplyId, 'GET');
     }
 
     /**
-     * Штрихкод поставки в формате SVG
+     * Удалить поставку
      * 
-     * Возвращает штрихкод поставки в формате svg.
-     * Штрихкод генерируется в формате code-128.
-     * Массив байтов передаётся закодированным в base64.
+     * Удаляет поставку, если она активна и за ней не закреплено ни одно сборочное задание
      * 
      * @param string $supplyId Идентификатор поставки
-     * 
-     * @return object {mimeType: string ("image/svg+xml"), name: string, file: base64}
      */
-    public function getSupplySvgBarcode(string $supplyId): object
+    public function deleteSupply(string $supplyId)
     {
-        return $this->getSupplyBarcode($supplyId, 'svg');
+        return $this->request('/api/v3/supplies/' . $supplyId, 'DELETE');
     }
 
     /**
@@ -136,62 +82,205 @@ class Marketplace extends AbstractEndpoint
      */
     public function getSupplyOrders(string $supplyId): object
     {
-        return $this->request('/api/v2/supplies/' . $supplyId . '/orders', 'GET');
+        return $this->request('/api/v3/supplies/' . $supplyId . '/orders', 'GET');
     }
 
     /**
-     * Список товаров с остатками
+     * Добавить к поставке сборочное задание
      * 
-     * Возвращает список товаров поставщика с их остатками
+     * Добавляет к поставке заказы и переводит их в статус confirm ("В сборке")
+     * Также может перемещать сборочное задание между активными поставками, либо из закрытой в активную при условии,
+     * что сборочное задание требует повторной отгрузки.
+     * Добавить в поставку возможно только задания с соответствующим сКГТ-признаком (isLargeCargo),
+     * либо если поставке ещё не присвоен сКГТ-признак (isLargeCargo = null).
      * 
-     * @param int    $page   Номер страницы
-     * @param int    $limit  Количество записей на странице
-     * @param string $search Поиск по всем полям таблицы
+     * @param string $supplyId Идентификатор поставки
+     * @param int    $orderId  Идентификатор сборочного задания
+     * 
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function addSupplyOrder(string $supplyId, int $orderId)
+    {
+        return $this->request('/api/v3/supplies/' . $supplyId . '/orders/' . $orderId, 'PATCH');
+    }
+
+    /**
+     * Передать поставку в доставку (Закрытие поставки)
+     * 
+     * Закрывает поставку и переводит все сборочные задания в ней в статус complete ("В доставке").
+     * После закрытия поставки новые сборочные задания к ней добавить будет невозможно.
+     * Передать поставку в доставку можно только при наличии в ней хотя бы одного сборочного задания.
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * 
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function closeSupply(string $supplyId)
+    {
+        return $this->request('/api/v3/supplies/' . $supplyId . '/deliver', 'PATCH');
+    }
+
+    /**
+     * Получить все сборочные задания на повторную отгрузку
+     * 
+     * Возвращает все сборочные задания, требующие повторной отгрузки.
+     * 
+     * @return object (orders: [object, ...])
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function getReShipmentOrdersSupplies(): object
+    {
+        return $this->request('/api/v3/supplies/orders/reshipment', 'GET');
+    }
+
+    /**
+     * QR поставки в заданном формате
+     * 
+     * Возвращает QR в svg, zplv (вертикальный), zplh (горизонтальный), png.
+     * Можно получить, только если поставка передана в доставку.
+     * Доступные размеры: 58х40 и 40х30.
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * @param string $type     Формат штрихкода ("pdf", "svg", "zplv", "zplh", "png")
+     * @param string $size     Размер этикетки ("40x30", "58x40")
+     * 
+     * @return object {barcode: string, file: string}
+     * 
+     * @throws InvalidArgumentException Неизвестный формат штрихкода
+     * @throws InvalidArgumentException Неизвестный размер этикетки
+     */
+    public function getSupplyBarcode(string $supplyId, string $type, string $size): object
+    {
+        if (!in_array($type, ['svg', 'zplv', 'zplh', 'png'])) {
+            throw new InvalidArgumentException('Неизвестный формат штрихкода: ' . $type);
+        }
+        if (!in_array($size, ['40x30', '58x40'])) {
+            throw new InvalidArgumentException('Неизвестный размер этикетки: ' . $type);
+        }
+        return $this->request('/api/v3/supplies/' . $supplyId . '/barcode', 'GET', ['type' => $type, 'width' => explode('x', $size)[0], 'height' => explode('x', $size)[1]]);
+    }
+
+    /**
+     * Отменить сборочное задание
+     * 
+     * Переводит сборочное задание в статус cancel ("Отменено поставщиком").
+     * 
+     * @param string $orderId Идентификатор сборочного задания
+     * 
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function cancelSupplyOrder(string $orderId)
+    {
+        return $this->request('/api/v3/orders/' . $orderId . '/cancel', 'PATCH');
+    }
+
+    /**
+     * Получить статусы сборочных заданий
+     * 
+     * Возвращает статусы сборочных заданий по переданному списку идентификаторов сборочных заданий.
+     * supplierStatus - статус сборочного задания, триггером изменения которого является сам поставщик.
+     * wbStatus - статус сборочного задания в системе Wildberries.
+     * 
+     * @param array $orders Список идентификаторов сборочных заданий
+     * 
+     * @return object (orders: [{id: int, supplierStatus: string, wbStatus: string}, ...])
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function gerOrdersStatuses(array $orders): object
+    {
+        return $this->request('/api/v3/orders/status', 'POST', ['orders' => $orders]);
+    }
+
+    /**
+     * Получить информацию по сборочным заданиям
+     * 
+     * Возвращает информацию по сборочным заданиям без их актуального статуса.
+     * Данные по сборочному заданию, возвращающиеся в данном методе, не меняются.
+     * Рекомендуется использовать для получения исторических данных.
+     * 
+     * @param int      $limit     Параметр пагинации. Устанавливает предельное количество возвращаемых данных. (не более 1000)
+     * @param int      $next      Параметр пагинации. Устанавливает значение, с которого надо получить следующий пакет данных. Для получения полного списка данных должен быть равен 0 в первом запросе.
+     * @param DateTime $dateStart С какой даты вернуть сборочные задания (заказы)
+     * @param DateTime $dateEnd   По какую дату вернуть сборочные задания (заказы)
+     * 
+     * @return object {next: int, orders: [object, ...]}
+     * 
+     * @throws InvalidArgumentException Превышение значения параметра limit
+     */
+    public function getOrders(int $limit = 1_000, int $next = 0, DateTime $dateStart = null, DateTime $dateEnd = null): object
+    {
+        $maxLimit = 1_000;
+        if ($limit > $maxLimit) {
+            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых строк: {$maxLimit}");
+        }
+        return $this->request('/api/v3/orders', 'GET',
+            ['limit' => $limit, 'next' => $next]
+            + ($dateStart == '' ? [] : ['dateFrom' => $dateStart->getTimestamp()])
+            + ($dateEnd == '' ? [] : ['dateTo' => $dateEnd->getTimestamp()])
+        );
+    }
+
+    /**
+     * Получить список новых сборочных заданий
+     * 
+     * Возвращает список всех новых сборочных заданий у поставщика на данный момент.
+     * 
+     * @return object {orders: [object, ...]}
+     */
+    public function getNewOrders(): object
+    {
+        return $this->request('/api/v3/orders/new', 'GET');
+    }
+
+    /**
+     * Закрепить за сборочным заданием КиЗ (маркировку Честного знака)
+     * 
+     * Закрепляет за сборочным заданием КиЗ (маркировку Честного знака).
+     * 
+     * @param int   $orderId Идентификатор сборочного задания
+     * @param array $sgtin   Массив КиЗов
      * 
      * @return object {total: int, stocks: [object, ...]}
      */
-    public function getStockList(int $page, int $limit, string $search = ''): object
+    public function setOrderKiz(int $orderId, array $sgtin)
     {
-        return $this->request('/api/v2/stocks', 'GET', [
-                'skip' => ($page - 1) * $limit,
-                'take' => $limit,
-                'search' => $search,
-        ]);
-    }
-
-    /**
-     * Обновление остатков товара
-     * За раз можно загрузить 1000 строк
-     * 
-     * @param array $data [{barcode: string, warehouseId: int, stock: int}, ...]
-     * 
-     * @return object {data: any, error: bool, errorText: string, additionalErrors: string}
-     *                Если error = true, то во время обновления произошла ошибка.
-     *                В ответе будут перечислены баркоды остатков, которые не загрузились.
-     *                {data: {error: [{barcode: string, err: string}, ...]}, ...}
-     */
-    public function updateStock(array $data): object
-    {
-        $maxLimit = 1_000;
-        if (count($data) > $maxLimit) {
-            throw new InvalidArgumentException("Превышение максимального количества обновляемых остатков: {$maxLimit}");
+        $maxCount = 1_000;
+        if (count($sgtin) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества строк переданного массива: {$maxCount}");
         }
-        return $this->request('/api/v2/stocks', 'POST', $data);
+        return $this->request('/api/v3/orders/' . $orderId . '/meta/sgtin', 'POST', ['sgtin' => $sgtin]);
     }
 
     /**
-     * Удаление остатков товара
+     * Получить этикетки для сборочных заданий
      * 
-     * @param array $data [{barcode: string, warehouseId: int}, ...]
+     * Возвращает список этикеток по переданному массиву сборочных заданий.
+     * Можно запросить этикетку в формате svg, zplv (вертикальный), zplh (горизонтальный), png.
+     * Метод возвращает этикетки только для сборочных заданий, находящихся на сборке (в статусе confirm)
      * 
-     * @return object {data: any, error: bool, errorText: string, additionalErrors: string}
-     *                Если error = true, то среди остатков в теле запроса есть неверно указанные.
-     *                В ответе будут неверно указанные остатки с сообщением о том, что указано неверно.
-     *                {data: {error: [{barcode: string, warehouseId: int, err: string}, ...]}, ...}
+     * @param array  $orderIds Идентификаторы сборочных заданий (не более 100)
+     * @param string $type     Формат штрихкода ("pdf", "svg", "zplv", "zplh", "png")
+     * @param string $size     Размер этикетки ("40x30", "58x40")
+     * 
+     * @return object {stickers: [object, ...]}
+     * 
+     * @throws InvalidArgumentException Неизвестный формат штрихкода
+     * @throws InvalidArgumentException Неизвестный размер этикетки
+     * @throws InvalidArgumentException Превышение максимального количества запрашиваемых этикеток
      */
-    public function deleteStock(array $data): object
+    public function getOrdersStickers(array $orderIds, string $type, string $size): object
     {
-        return $this->request('/api/v2/stocks', 'DELETE', $data);
+        $maxCount = 100;
+        if (count($orderIds) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых этикеток: {$maxCount}");
+        }
+        if (!in_array($type, ['svg', 'zplv', 'zplh', 'png'])) {
+            throw new InvalidArgumentException('Неизвестный формат штрихкода: ' . $type);
+        }
+        if (!in_array($size, ['40x30', '58x40'])) {
+            throw new InvalidArgumentException('Неизвестный размер этикетки: ' . $type);
+        }
+        return $this->request('/api/v3/orders/stickers', 'POST', ['orders' => $orderIds]);
     }
 
     /**
@@ -205,104 +294,58 @@ class Marketplace extends AbstractEndpoint
     }
 
     /**
-     * Список сборочных заданий
+     * Обновление остатков товаров по складу
      * 
-     * Метод возвращает список сборочных заданий поставщика.
+     * @param int   $warehouseId Идентификатор склада поставщика
+     * @param array $stocks      Массив баркодов товаров и их остатков (не более 1000)
      * 
-     * @param int      $page      Номер страницы
-     * @param int      $limit     Количество записей на странице (не более чем 1000)
-     * @param DateTime $dateStart С какой даты вернуть сборочные задания (заказы)
-     * @param int      $status    Статус заказа (-1 для любого)
-     * @param DateTime $dateEnd   По какую дату вернуть сборочные задания (заказы)
-     * @param int      $id        Идентификатор сборочного задания, если нужно получить данные по определенному заказу
-     * 
-     * @return object {total: int, orders: [object, ...]}
-     * 
-     * @throws InvalidArgumentException Превышение значения параметра limit
+     * @throws InvalidArgumentException Превышение максимального количества обновляемых остатков
      */
-    public function getOrders(int $page, int $limit, DateTime $dateStart, int $status = -1, DateTime $dateEnd = null, int $id = 0): object
+    public function updateWarehouseStocks(int $warehouseId, array $stocks)
     {
-        $maxLimit = 1_000;
-        if ($limit > $maxLimit) {
-            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых строк: {$maxLimit}");
+        $maxCount = 1_000;
+        if (count($stocks) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества обновляемых остатков: {$maxCount}");
         }
-        if ($status !== -1 && !in_array($status, OrderStatus::allowedStatuses())) {
-            throw new InvalidArgumentException("Неизвестный статус заказа: {$status}");
+        return $this->request('/api/v3/stocks/' . $warehouseId, 'PUT', ['stocks' => $stocks]);
+    }
+
+    /**
+     * Удаление остатков товаров по складу
+     * 
+     * Действие необратимо. Удаленный остаток будет необходимо загрузить повторно для возобновления продаж.
+     * 
+     * @param int   $warehouseId Идентификатор склада поставщика
+     * @param array $skus        Массив баркодов (не более 1000)
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества удаляемых остатков
+     */
+    public function deleteWarehouseStocks(int $warehouseId, array $skus)
+    {
+        $maxCount = 1_000;
+        if (count($skus) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества удаляемых остатков: {$maxCount}");
         }
-        return $this->request('/api/v2/orders', 'GET', [
-                'skip' => ($page - 1) * $limit,
-                'take' => $limit,
-                'date_start' => $dateStart->format(DATE_RFC3339),
-                ] + ($dateEnd == '' ? [] : [
-                'date_end' => $dateEnd->format(DATE_RFC3339),
-                ]) + ($status == -1 ? [] : [
-                'status' => $status,
-                ]) + ($id == 0 ? [] : [
-                'id' => $id,
-        ]));
+        return $this->request('/api/v3/stocks/' . $warehouseId, 'DELETE', ['skus' => $skus]);
     }
 
     /**
-     * Метод возвращает сборочное заданий поставщика по его номеру
+     * Получить остатки товаров по складу
      * 
-     * @param int $id Идентификатор сборочного задания
+     * @param int   $warehouseId Идентификатор склада поставщика
+     * @param array $skus        Массив баркодов (не более 1000)
      * 
-     * @return object {total: int, orders: [object, ...]}
+     * @return object {stocks: [object, ...]}
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества запрашиваемых остатков
      */
-    public function getOrder(int $id): object
+    public function getWarehouseStocks(int $warehouseId, array $skus)
     {
-        return $this->request('/api/v2/orders', 'GET', [
-                'date_start' => (new DateTime('2000-01-01 00:00:00'))->format(DATE_RFC3339),
-                'id' => $id,
-                'skip' => 0,
-                'take' => 100,
-        ]);
-    }
-
-    /**
-     * Обновление статуса сборочных заданий
-     * 
-     * @param array $data [{orderId: string, status: int, sgtin: [object, ...]}]
-     * 
-     * @return object {total: int, stocks: [object, ...]}
-     */
-    public function updateOrderStatus(array $data): object
-    {
-        return $this->request('/api/v2/orders', 'PUT', $data);
-    }
-
-    /**
-     * Cписок этикеток сборочных заданий
-     * 
-     * Возвращает список QR этикеток по переданному массиву сборочных заданий
-     * 
-     * @param array $orderIds Идентификаторы сборочных заданий (не более 1000)
-     * 
-     * @return object {
-     * 		data: [ {orderId: int, sticker: {}}, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
-     * }
-     */
-    public function getOrdersStickers(array $orderIds): object
-    {
-        return $this->request('/api/v2/orders/stickers', 'POST', ['orderIds' => $orderIds]);
-    }
-
-    /**
-     * Cписок QR стикеров в формате pdf
-     * 
-     * Возвращает список QR этикеток в формате pdf по переданному массиву сборочных заданий
-     * 
-     * @param array $orderIds Идентификаторы сборочных заданий (не более 1000)
-     * 
-     * @return object {
-     * 		data: {file: base64, name: string, mimeType: string},
-     * 		error: bool, errorText: string, additionalErrors: string
-     * }
-     */
-    public function getOrdersPdfStickers(array $orderIds): object
-    {
-        return $this->request('/api/v2/orders/stickers/pdf', 'POST', ['orderIds' => $orderIds]);
+        $maxCount = 1_000;
+        if (count($skus) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых остатков: {$maxCount}");
+        }
+        return $this->request('/api/v3/stocks/' . $warehouseId, 'POST', ['skus' => $skus]);
     }
 
 }

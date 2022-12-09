@@ -2,6 +2,8 @@
 
 Библиотека для работы с [Wildberries API 1.4](https://openapi.wb.ru)
 
+⚡ С поддержкой <b>Marketplace V3</b>
+
 ### Работа с API
 ```php
 

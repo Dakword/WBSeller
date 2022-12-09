@@ -93,6 +93,17 @@ class Client
                     ]);
                     break;
 
+                case 'PATCH':
+                    $response = $this->Client->patch($this->baseUrl . $path, [
+                        'headers' => array_merge([
+                            'Accept' => 'application/json',
+                            'Content-Type' => 'application/json',
+                            'Authorization' => $this->apiKey,
+                            ], $addonHeaders),
+                        'body' => json_encode($params)
+                    ]);
+                    break;
+
                 case 'MULTIPART':
                     $response = $this->Client->post($this->baseUrl . $path, [
                         'headers' => array_merge([

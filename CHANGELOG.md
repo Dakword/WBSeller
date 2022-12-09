@@ -1,3 +1,6 @@
+### [3.0.0]
+* Переход на Marketplace V3
+
 ### [2.0.1]
 * Добавлены методы: `Marketplace::getSupplyPdfBarcode()` `Marketplace::getSupplySvgBarcode()`
 
@@ -17,6 +20,7 @@
 ### [1.0.1]
 * Исправлен метод `Content::updateCards()`
 
+[3.0.0]: https://github.com/Dakword/WBSeller/compare/2.0.1...3.0.0
 [2.0.1]: https://github.com/Dakword/WBSeller/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/Dakword/WBSeller/compare/1.1.0...2.0.0
 [1.1.0]: https://github.com/Dakword/WBSeller/compare/1.0.3...1.1.0

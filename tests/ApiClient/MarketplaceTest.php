@@ -3,8 +3,6 @@
 namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\API\Endpoint\Marketplace;
-use Dakword\WBSeller\Enum\OrderStatus;
-use Dakword\WBSeller\Enum\SupplyStatus;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
 use DateTime;
 use InvalidArgumentException;
@@ -19,133 +17,168 @@ class MarketplaceTest extends TestCase
 
     public function test_getSuppliesList()
     {
-        $result = $this->Marketplace()->getSuppliesList('ACTIVE');
-        $this->assertObjectHasAttribute('supplies', $result);
-
-        $result = $this->Marketplace()->getSuppliesList(SupplyStatus::ON_DELIVERY);
+        $result = $this->Marketplace()->getSuppliesList(500);
+        $this->assertObjectHasAttribute('next', $result);
         $this->assertObjectHasAttribute('supplies', $result);
 
         $this->expectException(InvalidArgumentException::class);
-        $result = $this->Marketplace()->getSuppliesList('activ');
+        $this->Marketplace()->getSuppliesList(3000);
+    }
+
+    public function test_getSupply()
+    {
+        $result = $this->Marketplace()->getSupply('WB-GI-123456');
+        $this->assertEquals($result->code, 'NotFound');
+
+        $result1 = $this->Marketplace()->getSuppliesList();
+        if($result1->supplies) {
+            $supply = array_shift($result1->supplies);
+            $id = $supply->id;
+            $result2 = $this->Marketplace()->getSupply($id);
+            $this->assertEquals($id, $result2->id);
+        }
+    }
+
+    public function test_createSupply()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->Marketplace()->createSupply(str_repeat('X', 200));
+    }
+
+    public function test_deleteSupply()
+    {
+        $result = $this->Marketplace()->deleteSupply('WB-GI-123456');
+        $this->assertEquals($result->code, 'SupplyHasOrders');
+    }
+
+    public function test_getSupplyOrders()
+    {
+        $results = $this->Marketplace()->getSuppliesList();
+        if ($results->supplies) {
+            $supply = array_shift($results->supplies);
+            $supplyId = $supply->id;
+            $this->assertObjectHasAttribute('orders', $this->Marketplace()->getSupplyOrders($supplyId));
+        } else {
+            $this->markTestSkipped('No supplies in account');
+        }
     }
 
     public function test_addSupplyOrder()
     {
-        $result = $this->Marketplace()->addSupplyOrder('WB-GI-123456', ['12345']);
-        $this->assertObjectHasAttribute('error', $result);
+        $result = $this->Marketplace()->addSupplyOrder('WB-GI-123456', 123456);
+        $this->assertObjectHasAttribute('code', $result);
+        $this->assertEquals($result->code, 'NotFound');
     }
 
     public function test_closeSupply()
     {
         $result = $this->Marketplace()->closeSupply('WB-GI-123456');
-        $this->assertEquals('Поставка не найдена', $result->errorText);
+        $this->assertEquals($result->code, 'SupplyHasZeroOrders');
+    }
+
+    public function test_getReShipmentOrdersSupplies()
+    {
+        $result = $this->Marketplace()->getReShipmentOrdersSupplies();
+        $this->assertObjectHasAttribute('orders', $result);
     }
 
     public function test_getSupplyBarcode()
     {
-        $results = $this->Marketplace()->getSuppliesList(SupplyStatus::ON_DELIVERY);
-
+        $results = $this->Marketplace()->getSuppliesList();
         if ($results->supplies) {
             $supply = array_shift($results->supplies);
-            $supplyId = $supply->supplyId;
-            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'svg'));
-            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'pdf'));
+            $supplyId = $supply->id;
+            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'svg', '40x30'));
+            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'png', '58x40'));
         }
 
         $this->expectException(InvalidArgumentException::class);
-        $this->Marketplace()->getSupplyBarcode('WB-GI-7693796', 'jpg');
+        $this->Marketplace()->getSupplyBarcode('WB-GI-123456', 'jpg', '40x30');
+        $this->Marketplace()->getSupplyBarcode('WB-GI-123456', 'png', '30x40');
+    }
+    
+    public function test_cancelSupplyOrder()
+    {
+        $result = $this->Marketplace()->cancelSupplyOrder(123456);
+        $this->assertEquals($result->code, 'NotFound');
     }
 
-    public function test_getSupplyOrders()
+    public function test_gerOrdersStatuses()
     {
-        $result = $this->Marketplace()->getSupplyOrders('WB-GI-123456');
-        $this->assertEquals('Поставка не найдена', $result->errorText);
-
-        $results = $this->Marketplace()->getSuppliesList(SupplyStatus::ON_DELIVERY);
-        if ($results->supplies) {
-            $supply = array_shift($results->supplies);
-            $supplyId = $supply->supplyId;
-            $this->assertObjectHasAttribute('orders', $this->Marketplace()->getSupplyOrders($supplyId));
+        $result1 = $this->Marketplace()->getOrders(10);
+        if($result1) {
+            $ids = array_column($result1->orders, 'id');
+            $result2 = $this->Marketplace()->gerOrdersStatuses($ids);
+            $this->assertEquals(count($ids), count($result2->orders));
+        } else {
+            $result2 = $this->Marketplace()->gerOrdersStatuses([]);
+            $this->assertEquals($result2->code, 'IncorrectRequest');
         }
     }
 
-    public function test_getStockList()
+    public function test_getOrders()
     {
-        $result = $this->Marketplace()->getStockList(1, 10);
-        $this->assertObjectHasAttribute('stocks', $result);
-        $this->assertObjectHasAttribute('total', $result);
+        $result1 = $this->Marketplace()->getOrders(10);
+        $this->assertObjectHasAttribute('orders', $result1);
+        $this->assertObjectHasAttribute('next', $result1);
+
+        $date = (new DateTime('2020-01-01'));
+        $result2 = $this->Marketplace()->getOrders(20, 0, $date);
+        $this->assertObjectHasAttribute('orders', $result2);
+        $this->assertObjectHasAttribute('next', $result2);
+        
+        $this->expectException(InvalidArgumentException::class);
+        $this->Marketplace()->getOrders(2000);
+    }
+
+    public function test_getNewOrders()
+    {
+        $result = $this->Marketplace()->getNewOrders();
+        $this->assertObjectHasAttribute('orders', $result);
+    }
+
+    public function test_setOrderKiz()
+    {
+        $result = $this->Marketplace()->setOrderKiz(123456, []);
+        $this->assertObjectHasAttribute('code', $result);
+        $this->assertEquals($result->code, 'IncorrectRequest');
+    }
+
+    public function test_getOrdersStickers()
+    {
+        $result = $this->Marketplace()->getOrdersStickers([], 'svg', '40x30');
+        $this->assertEquals($result->code, 'IncorrectParameter');
+        
+        $this->expectException(InvalidArgumentException::class);
+        $this->Marketplace()->getOrdersStickers([12345], 'foo', '40x30');
+        $this->expectException(InvalidArgumentException::class);
+        $this->Marketplace()->getOrdersStickers([12345], 'png', '30x50');
     }
 
     public function test_getWarehouses()
     {
         $result = $this->Marketplace()->getWarehouses();
-
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
     }
 
-    public function test_getOrders()
+    public function test_updateWarehouseStocks()
     {
-        $date = (new DateTime('2020-01-01'));
-        $result = $this->Marketplace()->getOrders(1, 100, $date);
-
-        $this->assertObjectHasAttribute('orders', $result);
-        $this->assertObjectHasAttribute('total', $result);
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->Marketplace()->getOrders(1, 100, $date, 333);
+        $result = $this->Marketplace()->updateWarehouseStocks(123456, []);
+        $this->assertEquals($result->code, 'IncorrectRequest');
     }
 
-    public function test_getOrder()
+    public function test_deleteWarehouseStocks()
     {
-        $order1 = $this->getRandomOrder();
-
-        $result = $this->Marketplace()->getOrder($order1->orderId);
-        $this->assertObjectHasAttribute('orders', $result);
-        $this->assertObjectHasAttribute('total', $result);
-        $order2 = array_shift($result->orders);
-
-        $this->assertEquals($order1->orderId, $order2->orderId);
+        $result = $this->Marketplace()->deleteWarehouseStocks(123456, []);
+        $this->assertEquals($result->code, 'IncorrectRequest');
     }
 
-    public function test_updateOrderStatus()
+    public function test_getWarehouseStocks()
     {
-        $order = $this->getRandomOrder();
-        $result = $this->Marketplace()->updateOrderStatus([[
-            'orderId' => $order->orderId,
-            'status' => $order->status,
-        ]]);
-        $this->assertFalse($result->error);
-    }
-
-    public function test_getOrdersStickers()
-    {
-        $order = $this->getRandomOrder(OrderStatus::COMPLETED);
-        $result = $this->Marketplace()->getOrdersStickers([(int) $order->orderId]);
-
-        $this->assertFalse($result->error);
-        $this->assertObjectHasAttribute('sticker', $result->data[0]);
-    }
-
-    public function test_getOrdersPdfStickers()
-    {
-        $order = $this->getRandomOrder(OrderStatus::COMPLETED);
-        $result = $this->Marketplace()->getOrdersPdfStickers([(int) $order->orderId]);
-
-        $this->assertFalse($result->error);
-        $this->assertObjectHasAttribute('file', $result->data);
-    }
-
-    private function getRandomOrder($status = -1)
-    {
-        $date = (new DateTime('2020-01-01'));
-        $result = $this->Marketplace()->getOrders(1, 1000, $date, $status);
-
-        $count = count($result->orders);
-        if ($count) {
-            return $result->orders[random_int(0, $count - 1)];
-        }
-
-        $this->markTestSkipped('No completed orders in account');
+        $wareHouses = $this->Marketplace()->getWarehouses();
+        $id = $wareHouses ? $wareHouses[0]->id : 123456;
+        $result = $this->Marketplace()->getWarehouseStocks($id, ['1234567890']);
+        $this->assertObjectHasAttribute('stocks', $result);
     }
 
 }
