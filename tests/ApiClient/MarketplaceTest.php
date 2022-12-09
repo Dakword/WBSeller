@@ -97,9 +97,33 @@ class MarketplaceTest extends TestCase
         $this->Marketplace()->getSupplyBarcode('WB-GI-123456', 'png', '30x40');
     }
     
-    public function test_cancelSupplyOrder()
+    public function test_confirmOrder()
     {
-        $result = $this->Marketplace()->cancelSupplyOrder(123456);
+        $result = $this->Marketplace()->confirmOrder(123456);
+        $this->assertEquals($result->code, 'NotFound');
+    }
+
+    public function test_deliverOrder()
+    {
+        $result = $this->Marketplace()->deliverOrder(123456);
+        $this->assertEquals($result->code, 'NotFound');
+    }
+
+    public function test_receiveOrder()
+    {
+        $result = $this->Marketplace()->receiveOrder(123456);
+        $this->assertEquals($result->code, 'NotFound');
+    }
+
+    public function test_rejectOrder()
+    {
+        $result = $this->Marketplace()->rejectOrder(123456);
+        $this->assertEquals($result->code, 'NotFound');
+    }
+
+    public function test_cancelOrder()
+    {
+        $result = $this->Marketplace()->cancelOrder(123456);
         $this->assertEquals($result->code, 'NotFound');
     }
 

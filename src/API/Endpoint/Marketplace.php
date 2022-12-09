@@ -169,9 +169,65 @@ class Marketplace extends AbstractEndpoint
      * 
      * @return object В случае ошибки {code: string, message: string}
      */
-    public function cancelSupplyOrder(string $orderId)
+    public function cancelOrder(string $orderId)
     {
         return $this->request('/api/v3/orders/' . $orderId . '/cancel', 'PATCH');
+    }
+
+    /**
+     * Подтвердить сборочное задание
+     * 
+     * Переводит сборочное задание в статус confirm ("На сборке").
+     * 
+     * @param string $orderId Идентификатор сборочного задания
+     * 
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function confirmOrder(string $orderId)
+    {
+        return $this->request('/api/v3/orders/' . $orderId . '/confirm', 'PATCH');
+    }
+
+    /**
+     * Передать сборочное задание в доставку
+     * 
+     * Переводит сборочное задание в статус deliver ("В доставке").
+     * 
+     * @param string $orderId Идентификатор сборочного задания
+     * 
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function deliverOrder(string $orderId)
+    {
+        return $this->request('/api/v3/orders/' . $orderId . '/deliver', 'PATCH');
+    }
+
+    /**
+     * Сборочное задание выдано
+     * 
+     * Переводит сборочное задание в статус receive ("Получено клиентом").
+     * 
+     * @param string $orderId Идентификатор сборочного задания
+     * 
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function receiveOrder(string $orderId)
+    {
+        return $this->request('/api/v3/orders/' . $orderId . '/receive', 'PATCH');
+    }
+
+    /**
+     * Отказ от получения сборочного задания
+     * 
+     * Переводит сборочное задание в статус reject ("Отказ при получении").
+     * 
+     * @param string $orderId Идентификатор сборочного задания
+     * 
+     * @return object В случае ошибки {code: string, message: string}
+     */
+    public function rejectOrder(string $orderId)
+    {
+        return $this->request('/api/v3/orders/' . $orderId . '/reject', 'PATCH');
     }
 
     /**
