@@ -29,17 +29,26 @@ abstract class AbstractEndpoint
         $result = $this->Client->request($path, $method, $data, $addonHeaders);
 
         // >>> Exception "401 Unauthorized"
-        $errorMessages = [
+        $errorSensors = [
             '(api-new) can\'t decode supplier key',
             '(api-new) some chars in key are wrong',
             '(api-new) supplier key not found',
             'proxy: invalid token',
             'proxy: unauthorized',
+            'request rejected, unathorized'
         ];
-        if (is_string($result) && in_array($result, $errorMessages)) {
+        $inErrors = function (string $message) use($errorSensors): bool {
+            foreach ($errorSensors as $error) {
+                if (strpos($message, $error) !== false) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        if (is_string($result) && $inErrors($result)) {
             throw new ApiClientException($result, 401);
         }
-        if (is_object($result) && property_exists($result, 'errors') && count($result->errors) && in_array($result->errors[0], $errorMessages)) {
+        if (is_object($result) && property_exists($result, 'errors') && count($result->errors) && $inErrors($result->errors[0])) {
             throw new ApiClientException($result->errors[0], 401);
         }
 
