@@ -8,7 +8,6 @@ use Dakword\WBSeller\API\AbstractEndpoint;
 use DateTime;
 use Exception;
 use InvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
 
 class Statistics extends AbstractEndpoint
 {

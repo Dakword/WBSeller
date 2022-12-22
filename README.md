@@ -1,6 +1,6 @@
 # WBSeller
 
-Библиотека для работы с [Wildberries API 1.5](https://openapi.wb.ru)
+Библиотека для работы с [Wildberries API 1.6](https://openapi.wb.ru)
 
 ⚡ С поддержкой <b>Marketplace V3</b>
 
