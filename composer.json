@@ -1,6 +1,6 @@
 {
     "name": "dakword/wbseller",
-    "description": "Wildberries API v1.4 client for PHP",
+    "description": "Wildberries API client for PHP",
     "keywords": ["wildberries", "api", "openapi", "php"],
     "license": "MIT",
     "type": "library",
