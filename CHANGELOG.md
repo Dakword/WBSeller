@@ -1,3 +1,6 @@
+### [3.1.0]
+* Добавлен метод `AbstractEndpoint::retryOnTooManyRequests()`
+
 ### [3.0.1]
 * Добавлены методы:
 `Marketplace::confirmOrder()` `Marketplace::deliverOrder()` `Marketplace::receiveOrder()`  `Marketplace::rejectOrder()`

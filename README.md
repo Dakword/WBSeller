@@ -37,8 +37,8 @@ var_dump($info);
 $warehouses = $wbSellerAPI->Marketplace()->getWarehouses();
 var_dump($warehouses);
 
-// Заказы, сделанные сегодня
-$orders = $statApi->ordersOnDate(new \DateTime(date('Y-m-d')));
+// Заказы, сделанные сегодня (💡 С автоповтором запросов)
+$orders = $statApi->retryOnTooManyRequests(10, 1000)->ordersOnDate(new \DateTime(date('Y-m-d')));
 var_dump($orders);
 
 // Создание КТ
@@ -58,13 +58,11 @@ try {
             ]
         ],
     ]);
-
     if ($createCardResult->error) {
         echo 'Ошибка создания карточки: ' . $createCardResult->errorText;
     } else {
         echo 'Запрос на создание карточки отправлен в очередь';
     }
-	
 } catch (\Exception $exc) {
     echo 'Исключение при создании карточки: ' . $exc->getMessage();
 }

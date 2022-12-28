@@ -3,6 +3,7 @@
 namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\API;
+use Dakword\WBSeller\API\Endpoint\Statistics;
 use Dakword\WBSeller\Exception\ApiClientException;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
 
@@ -25,6 +26,12 @@ class ApiTest extends TestCase
             'statkey' => 'YYY',
         ]);
         $API->Prices()->getPrices();
+    }
+
+    public function test_Retry()
+    {
+        $Statistics = $this->Statistics();
+        $this->assertInstanceOf(Statistics::class, $Statistics->retryOnTooManyRequests(3, 500));
     }
 
 }

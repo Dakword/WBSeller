@@ -6,7 +6,6 @@ namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
 use DateTime;
-use Exception;
 use InvalidArgumentException;
 
 class Statistics extends AbstractEndpoint
@@ -24,8 +23,8 @@ class Statistics extends AbstractEndpoint
      */
     public function incomes(DateTime $dateFrom): array
     {
-        return $this->sendRequest('/api/v1/supplier/incomes', [
-                'dateFrom' => $dateFrom->format(DATE_RFC3339),
+        return $this->request('/api/v1/supplier/incomes', 'GET', [
+            'dateFrom' => $dateFrom->format(DATE_RFC3339),
         ]);
     }
 
@@ -43,8 +42,8 @@ class Statistics extends AbstractEndpoint
      */
     public function stocks(DateTime $dateFrom): array
     {
-        return $this->sendRequest('/api/v1/supplier/stocks', [
-                'dateFrom' => $dateFrom->format(DATE_RFC3339),
+        return $this->request('/api/v1/supplier/stocks', 'GET', [
+            'dateFrom' => $dateFrom->format(DATE_RFC3339),
         ]);
     }
 
@@ -60,9 +59,9 @@ class Statistics extends AbstractEndpoint
      */
     public function ordersFromDate(DateTime $dateFrom): array
     {
-        return $this->sendRequest('/api/v1/supplier/orders', [
-                'dateFrom' => $dateFrom->format(DATE_RFC3339),
-                'flag' => 0,
+        return $this->request('/api/v1/supplier/orders', 'GET', [
+            'dateFrom' => $dateFrom->format(DATE_RFC3339),
+            'flag' => 0,
         ]);
     }
 
@@ -77,9 +76,9 @@ class Statistics extends AbstractEndpoint
      */
     public function ordersOnDate(DateTime $dateFrom): array
     {
-        return $this->sendRequest('/api/v1/supplier/orders', [
-                'dateFrom' => $dateFrom->format('Y-m-d'),
-                'flag' => 1,
+        return $this->request('/api/v1/supplier/orders', 'GET', [
+            'dateFrom' => $dateFrom->format('Y-m-d'),
+            'flag' => 1,
         ]);
     }
 
@@ -95,9 +94,9 @@ class Statistics extends AbstractEndpoint
      */
     public function salesFromDate(DateTime $dateFrom): array
     {
-        return $this->sendRequest('/api/v1/supplier/sales', [
-                'dateFrom' => $dateFrom->format(DATE_RFC3339),
-                'flag' => 0,
+        return $this->request('/api/v1/supplier/sales', 'GET', [
+            'dateFrom' => $dateFrom->format(DATE_RFC3339),
+            'flag' => 0,
         ]);
     }
 
@@ -113,9 +112,9 @@ class Statistics extends AbstractEndpoint
      */
     public function salesOnDate(DateTime $dateFrom): array
     {
-        return $this->sendRequest('/api/v1/supplier/sales', [
-                'dateFrom' => $dateFrom->format('Y-m-d'),
-                'flag' => 1,
+        return $this->request('/api/v1/supplier/sales', 'GET', [
+            'dateFrom' => $dateFrom->format('Y-m-d'),
+            'flag' => 1,
         ]);
     }
 
@@ -143,12 +142,12 @@ class Statistics extends AbstractEndpoint
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых строк отчета: {$maxLimit}");
         }
-        return ($this->sendRequest('/api/v1/supplier/reportDetailByPeriod', [
-                'dateFrom' => $dateFrom->format(DATE_RFC3339),
-                'dateTo' => $dateTo->format(DATE_RFC3339),
-                'limit' => $limit,
-                'rrdid' => $rrdId,
-            ]) ?? []);
+        return ($this->request('/api/v1/supplier/reportDetailByPeriod', 'GET', [
+            'dateFrom' => $dateFrom->format(DATE_RFC3339),
+            'dateTo' => $dateTo->format(DATE_RFC3339),
+            'limit' => $limit,
+            'rrdid' => $rrdId,
+        ]) ?? []);
     }
 
     /**
@@ -160,38 +159,9 @@ class Statistics extends AbstractEndpoint
      */
     public function exciseGoods(DateTime $dateFrom): array
     {
-        return $this->sendRequest('/api/v1/supplier/excise-goods', [
-                'dateFrom' => $dateFrom->format(DATE_RFC3339),
+        return $this->request('/api/v1/supplier/excise-goods', 'GET', [
+            'dateFrom' => $dateFrom->format(DATE_RFC3339),
         ]);
-    }
-
-    // ---
-
-    private function sendRequest(string $path, array $data = [])
-    {
-        $attempts = 4;
-        $attempt = 1;
-        do {
-            $result = $this->request($path, 'GET', $data, []);
-            if (is_object($result) && property_exists($result, 'errors') && count($result->errors)) {
-                /*
-                 * 	{ errors: ["(api-new) too many requests"] }
-                 */
-                if ($result->errors[0] == '(api-new) too many requests') {
-                    if ($attempt == $attempts) {
-                        throw new Exception('(api-new) too many requests', 429);
-                    }
-                    sleep($attempt * 10);
-                    $attempt++;
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        } while ($attempt <= $attempts);
-
-        return $result;
     }
 
 }
