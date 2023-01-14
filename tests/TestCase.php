@@ -17,14 +17,16 @@ class TestCase extends PHPUnitTestCase
 {
     private string $apiKey;
     private string $statKey;
+    private string $advKey;
 
     public function setUp(): void
     {
         if (file_exists(__DIR__ . '/../../#KEYS.php')) {
-            list($this->apiKey, $this->statKey) = include __DIR__ . '/../../#KEYS.php';
+            list($this->apiKey, $this->statKey, $this->advKey) = include __DIR__ . '/../../#KEYS.php';
         } else {
             $this->apiKey = getenv('APIKEY');
             $this->statKey = getenv('STATKEY');
+            $this->advKey = getenv('ADVKEY');
         }
     }
 
@@ -39,6 +41,13 @@ class TestCase extends PHPUnitTestCase
     protected function Query(): Query
     {
         return new Query($this->API());
+    }
+
+    protected function skipIfNoKeyADV(): void
+    {
+        if (empty($this->advKey)) {
+            $this->markTestSkipped();
+        }
     }
 
     protected function skipIfNoKeyAPI(): void

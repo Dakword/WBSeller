@@ -12,5 +12,6 @@
 	<php>
 		<env name="APIKEY"  value="" />
 		<env name="STATKEY" value="" />
+		<env name="ADVKEY" value="" />
 	</php>
 </phpunit>

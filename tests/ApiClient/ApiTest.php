@@ -24,6 +24,7 @@ class ApiTest extends TestCase
         $API = new API([
             'apikey' => 'XXX',
             'statkey' => 'YYY',
+            'advkey' => 'ZZZ',
         ]);
         $API->Prices()->getPrices();
     }

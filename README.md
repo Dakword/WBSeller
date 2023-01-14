@@ -2,7 +2,8 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-⚡ С поддержкой <b>Marketplace V3</b>
+⚡ <b>Управление рекламой</b>
+⚡ <b>Marketplace V3</b>
 
 ### Работа с API
 ```php
@@ -10,6 +11,7 @@
 $wbSellerAPI = new \Dakword\WBSeller\API([
     'apikey' => 'XXX',
     'statkey' => 'YYY',
+    'advkey' => 'ZZZ',
 ]);
 
 // API контента
@@ -22,6 +24,8 @@ $marketApi = $wbSellerAPI->Marketplace();
 $promoApi = $wbSellerAPI->Promo();
 // API статистики
 $statApi = $wbSellerAPI->Statistics();
+// API рекламы
+$advApi = $wbSellerAPI->Adv();
 
 // Получить список НМ
 $result = $contentApi->getCardsList();

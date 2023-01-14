@@ -26,7 +26,7 @@ abstract class AbstractEndpoint
         }
     }
 
-    protected function request(string $path, string $method, array $data = [], array $addonHeaders = [])
+    protected function request(string $path, string $method = 'GET', array $data = [], array $addonHeaders = [])
     {
         $attempt = 1;
 

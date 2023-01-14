@@ -3,8 +3,8 @@
 namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
-use Dakword\WBSeller\API;
 use Dakword\WBSeller\API\Endpoint\{
+    Adv,
     Content,
     Marketplace,
     Prices,
@@ -14,6 +14,12 @@ use Dakword\WBSeller\API\Endpoint\{
 
 abstract class TestCase extends BaseTestCase
 {
+
+    protected function Adv(): Adv
+    {
+        $this->skipIfNoKeyADV();
+        return $this->API()->Adv();
+    }
 
     protected function Content(): Content
     {

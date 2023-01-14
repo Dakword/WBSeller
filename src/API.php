@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
+    Adv,
     Content,
     Marketplace,
     Prices,
@@ -14,17 +15,27 @@ use Dakword\WBSeller\API\Endpoint\{
 
 class API
 {
-    public const WB_API_VERSION = '1.6';
+    public const WB_API_VERSION = '1.7';
 
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
     private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
+    private string $advBaseUrl = 'https://advert-api.wb.ru';
     private string $apiKey;
     private string $statKey;
+    private string $advKey;
 
+    /**
+     * @param array $options [
+     *     'apikey' => 'XXX',
+     *     'statkey' => 'YYY',
+     *     'advkey' => 'ZZZ',
+     * ]
+     */
     function __construct(array $options)
     {
-        $this->apiKey = $options['apikey'];
-        $this->statKey = $options['statkey'];
+        $this->apiKey = $options['apikey'] ?? '';
+        $this->statKey = $options['statkey'] ?? '';
+        $this->advKey = $options['advkey'] ?? '';
     }
 
     public function setApiBaseUrl(string $baseUrl): void
@@ -35,6 +46,16 @@ class API
     public function setStatBaseUrl(string $baseUrl): void
     {
         $this->statBaseUrl = rtrim($baseUrl, '/');
+    }
+
+    public function setAdvBaseUrl(string $baseUrl): void
+    {
+        $this->advBaseUrl = rtrim($baseUrl, '/');
+    }
+
+    public function Adv(): Adv
+    {
+        return new Adv($this->advBaseUrl, $this->advKey);
     }
 
     public function Content(): Content
