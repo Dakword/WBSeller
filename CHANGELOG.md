@@ -1,3 +1,6 @@
+### 3.2.1
+* Исправлен метод `Marketplace::getOrdersStickers()`
+
 ### 3.2.0
 * Добавлено API рекламы
 

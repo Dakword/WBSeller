@@ -2,7 +2,7 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-⚡ <b>Управление рекламой</b>
+⚡ <b>Управление рекламой</b><br/>
 ⚡ <b>Marketplace V3</b>
 
 ### Работа с API

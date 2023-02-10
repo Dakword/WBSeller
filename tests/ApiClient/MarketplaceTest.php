@@ -171,7 +171,10 @@ class MarketplaceTest extends TestCase
     public function test_getOrdersStickers()
     {
         $result = $this->Marketplace()->getOrdersStickers([], 'svg', '40x30');
-        $this->assertEquals($result->code, 'IncorrectParameter');
+        $this->assertEquals($result->code, 'IncorrectRequest');
+
+        $result = $this->Marketplace()->getOrdersStickers([123456], 'svg', '40x30');
+        $this->assertObjectHasAttribute('stickers', $result);
         
         $this->expectException(InvalidArgumentException::class);
         $this->Marketplace()->getOrdersStickers([12345], 'foo', '40x30');

@@ -138,7 +138,7 @@ class Marketplace extends AbstractEndpoint
      * 
      * Возвращает QR в svg, zplv (вертикальный), zplh (горизонтальный), png.
      * Можно получить, только если поставка передана в доставку.
-     * Доступные размеры: 58х40 и 40х30.
+     * Доступные размеры: 580х400 и 400х300 пикселей.
      * 
      * @param string $supplyId Идентификатор поставки
      * @param string $type     Формат штрихкода ("pdf", "svg", "zplv", "zplh", "png")
@@ -163,7 +163,7 @@ class Marketplace extends AbstractEndpoint
     /**
      * Отменить сборочное задание
      * 
-     * Переводит сборочное задание в статус cancel ("Отменено поставщиком").
+     * Переводит сборочное задание в статус cancel ("Отменено продавцом").
      * 
      * @param string $orderId Идентификатор сборочного задания
      * 
@@ -234,7 +234,7 @@ class Marketplace extends AbstractEndpoint
      * Получить статусы сборочных заданий
      * 
      * Возвращает статусы сборочных заданий по переданному списку идентификаторов сборочных заданий.
-     * supplierStatus - статус сборочного задания, триггером изменения которого является сам поставщик.
+     * supplierStatus - статус сборочного задания, триггером изменения которого является сам продавец.
      * wbStatus - статус сборочного задания в системе Wildberries.
      * 
      * @param array $orders Список идентификаторов сборочных заданий
@@ -279,7 +279,7 @@ class Marketplace extends AbstractEndpoint
     /**
      * Получить список новых сборочных заданий
      * 
-     * Возвращает список всех новых сборочных заданий у поставщика на данный момент.
+     * Возвращает список всех новых сборочных заданий у продавца на данный момент.
      * 
      * @return object {orders: [object, ...]}
      */
@@ -313,6 +313,7 @@ class Marketplace extends AbstractEndpoint
      * Возвращает список этикеток по переданному массиву сборочных заданий.
      * Можно запросить этикетку в формате svg, zplv (вертикальный), zplh (горизонтальный), png.
      * Метод возвращает этикетки только для сборочных заданий, находящихся на сборке (в статусе confirm)
+     * Доступные размеры: 580х400 и 400х300 пикселей.
      * 
      * @param array  $orderIds Идентификаторы сборочных заданий (не более 100)
      * @param string $type     Формат штрихкода ("pdf", "svg", "zplv", "zplh", "png")
@@ -336,11 +337,13 @@ class Marketplace extends AbstractEndpoint
         if (!in_array($size, ['40x30', '58x40'])) {
             throw new InvalidArgumentException('Неизвестный размер этикетки: ' . $type);
         }
-        return $this->request('/api/v3/orders/stickers', 'POST', ['orders' => $orderIds]);
+        return $this->request(
+            '/api/v3/orders/stickers?type=' . $type . '&width=' . explode('x', $size)[0] . '&height=' . explode('x', $size)[1],
+            'POST', ['orders' => $orderIds]);
     }
 
     /**
-     * Cписок складов поставщика
+     * Cписок складов продавца
      * 
      * @return array [{id: int, name: string}, ...]
      */
@@ -352,7 +355,7 @@ class Marketplace extends AbstractEndpoint
     /**
      * Обновление остатков товаров по складу
      * 
-     * @param int   $warehouseId Идентификатор склада поставщика
+     * @param int   $warehouseId Идентификатор склада продавца
      * @param array $stocks      Массив баркодов товаров и их остатков (не более 1000)
      * 
      * @throws InvalidArgumentException Превышение максимального количества обновляемых остатков
@@ -371,7 +374,7 @@ class Marketplace extends AbstractEndpoint
      * 
      * Действие необратимо. Удаленный остаток будет необходимо загрузить повторно для возобновления продаж.
      * 
-     * @param int   $warehouseId Идентификатор склада поставщика
+     * @param int   $warehouseId Идентификатор склада продавца
      * @param array $skus        Массив баркодов (не более 1000)
      * 
      * @throws InvalidArgumentException Превышение максимального количества удаляемых остатков
@@ -388,7 +391,7 @@ class Marketplace extends AbstractEndpoint
     /**
      * Получить остатки товаров по складу
      * 
-     * @param int   $warehouseId Идентификатор склада поставщика
+     * @param int   $warehouseId Идентификатор склада продавца
      * @param array $skus        Массив баркодов (не более 1000)
      * 
      * @return object {stocks: [object, ...]}
