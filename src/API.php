@@ -16,7 +16,7 @@ use Dakword\WBSeller\API\Endpoint\{
 
 class API
 {
-    public const WB_API_VERSION = '1.7';
+    public const WB_API_VERSION = '1.8';
 
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
     private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
@@ -25,14 +25,12 @@ class API
     private string $apiKey;
     private string $statKey;
     private string $advKey;
-    private string $recomKey;
 
     /**
      * @param array $options [
      *     'apikey' => 'XXX',
      *     'statkey' => 'YYY',
      *     'advkey' => 'ZZZ',
-     *     'recomkey' => 'XYZ',
      * ]
      */
     function __construct(array $options)
@@ -40,7 +38,6 @@ class API
         $this->apiKey = $options['apikey'] ?? '';
         $this->statKey = $options['statkey'] ?? '';
         $this->advKey = $options['advkey'] ?? '';
-        $this->recomKey = $options['recomkey'] ?? '';
     }
 
     public function setApiBaseUrl(string $baseUrl): void
