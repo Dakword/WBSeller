@@ -22,13 +22,13 @@ class Content extends AbstractEndpoint
      * исправить описанные ошибки в запросе на создание карточки и отправить его повторно.
      * 
      * @param array $cards [ 
-     * 		{vendorCode: string, characteristics: [ object, object, ...], sizes: [ object, object, ...]},
-     * 		...
+     * 	    {vendorCode: string, characteristics: [ object, object, ...], sizes: [ object, object, ...]},
+     * 	    ...
      *  ]
      * 
      * @return object {
-     * 		data: any,
-     * 		error: bool, errorText: string, additionalErrors: string
+     * 	    data: any,
+     * 	    error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function createCards(array $cards): object
@@ -48,14 +48,14 @@ class Content extends AbstractEndpoint
      * исправить описанные ошибки в запросе на создание карточки и отправить его повторно.
      * 
      * @param array $card {
-     * 		vendorCode: string,
-     * 		characteristics: [ object, object, ...],
-     * 		sizes: [ object, object, ...]
+     *      vendorCode: string,
+     *      characteristics: [ object, object, ...],
+     *      sizes: [ object, object, ...]
      * }
      * 
      * @return object {
-     * 		data: any,
-     * 		error: bool, errorText: string, additionalErrors: string
+     *  	data: any,
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function createCard(array $card): object
@@ -80,15 +80,15 @@ class Content extends AbstractEndpoint
      * 3. В этом массиве вносим необходимые изменения и отправляем его в cards/update
      * 
      * @param array $cards [ 
-     * 		{imtID: integer, nmID: integer, vendorCode: string,
+     *      {imtID: integer, nmID: integer, vendorCode: string,
      *       characteristics: [ object, object, ...],
      *       sizes: [ object, object, ...]
      *      }, ...
      *  ]
      * 
      * @return object {
-     * 		data: any,
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: any,
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function updateCards(array $cards): object
@@ -111,15 +111,15 @@ class Content extends AbstractEndpoint
      *                           ]
      * 
      * @return object {
-     * 		data: any,
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: any,
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function addCardNomenclature(string $vendorCode, array $cards)
     {
         return $this->request('/content/v1/cards/upload/add', 'POST', [
-                'vendorCode' => $vendorCode,
-                'cards' => $cards,
+            'vendorCode' => $vendorCode,
+            'cards' => $cards,
         ]);
     }
 
@@ -138,11 +138,11 @@ class Content extends AbstractEndpoint
      * @param int    $nmId       Номенклатура последней КТ из предыдущего ответа на запрос списка КТ
      * 
      * @return object {
-     * 		data: {
-     * 			cards: [ object, object, ... ],
-     * 			cursor: {updatedAt: string, nmID: int, total: int}
-     * 		},
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: {
+     *          cards: [ object, object, ... ],
+     *          cursor: {updatedAt: string, nmID: int, total: int}
+     *      },
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      * 
      * @throws InvalidArgumentException
@@ -160,20 +160,20 @@ class Content extends AbstractEndpoint
             throw new InvalidArgumentException("Недопустимое поле для сортировки списка карточек: {$sortColumn}. Пока только updatedAt.");
         }
         return $this->request('/content/v1/cards/cursor/list', 'POST', [
+            'sort' => [
+                'cursor' => array_merge(
+                    ['limit' => $limit],
+                    ($updatedAt && $nmId) ? ['updatedAt' => $updatedAt, 'nmID' => $nmId] : []
+                ),
+                'filter' => [
+                    'textSearch' => $textSearch,
+                    'withPhoto' => $withPhoto,
+                ],
                 'sort' => [
-                    'cursor' => array_merge(
-                        ['limit' => $limit],
-                        ($updatedAt && $nmId) ? ['updatedAt' => $updatedAt, 'nmID' => $nmId] : []
-                    ),
-                    'filter' => [
-                        'textSearch' => $textSearch,
-                        'withPhoto' => $withPhoto,
-                    ],
-                    'sort' => [
-                        'sortColumn' => $sortColumn,
-                        'ascending' => $ascending,
-                    ]
+                    'sortColumn' => $sortColumn,
+                    'ascending' => $ascending,
                 ]
+            ]
         ]);
     }
 
@@ -184,8 +184,8 @@ class Content extends AbstractEndpoint
      * Для того чтобы убрать НМ из ошибочных, надо повторно сделать запрос с исправленными ошибками на создание КТ.
      * 
      * @return object {
-     * 		"data": [ {object: string, vendorCode: string, updatedAt: RFC3336, errors: [ string, ... ]}, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      "data": [ {object: string, vendorCode: string, updatedAt: RFC3336, errors: [ string, ... ]}, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * 	}
      */
     public function getErrorCardsList(): object
@@ -202,8 +202,8 @@ class Content extends AbstractEndpoint
      * 									(Максимальное количество в запросе 100)
      * 
      * @return object {
-     * 		data: [ object, object, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ object, object, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      * @throws InvalidArgumentException
      */
@@ -215,7 +215,7 @@ class Content extends AbstractEndpoint
             throw new InvalidArgumentException("Превышение максимального количества переданных артикулов: {$maxCount}");
         }
         return $this->request('/content/v1/cards/filter', 'POST', [
-                'vendorCodes' => $codes,
+            'vendorCodes' => $codes,
         ]);
     }
 
@@ -227,8 +227,8 @@ class Content extends AbstractEndpoint
      * @param int $count Количество баркодов которые надо сгенерировать, максимальное количество - 5000
      * 
      * @return object {
-     * 		data: [ string, string, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ string, string, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      * @throws InvalidArgumentException
      */
@@ -239,7 +239,7 @@ class Content extends AbstractEndpoint
             throw new InvalidArgumentException("Превышение максимального количества запрошенных баркодов: {$maxCount}");
         }
         return $this->request('/content/v1/barcodes', 'POST', [
-                'count' => $count,
+            'count' => $count,
         ]);
     }
 
@@ -252,15 +252,15 @@ class Content extends AbstractEndpoint
      * @param int    $top  Количество запрашиваемых значений
      * 
      * @return object {
-     * 		data: [ {objectName: string, parentName: striing, isVisible: bool}, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {objectName: string, parentName: striing, isVisible: bool}, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function searchCategory(string $name, int $top = 50): object
     {
         return $this->request('/content/v1/object/all', 'GET', [
-                'name' => $name,
-                'top' => $top,
+            'name' => $name,
+            'top' => $top,
         ]);
     }
 
@@ -270,8 +270,8 @@ class Content extends AbstractEndpoint
      * С помощью данного метода можно получить список всех родительских категорий товаров.
      * 
      * @return object {
-     * 		data: [ {name: string, isVisible: bool},	... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {name: string, isVisible: bool},	... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function getParentCategories(): object
@@ -290,19 +290,19 @@ class Content extends AbstractEndpoint
      * @param string $objectName Поиск по наименованию категории
      * 
      * @return object {
-     * 		data: [
-     * 			{
-     * 				objectName: string,	- Наименование подкатегории
-     * 				name: string,		- Наименование характеристики
-     * 				required: bool,		- Характеристика обязательна к заполенению
-     * 				unitName: string,	- Единица имерения (см, гр и т.д.)
-     * 				maxCount: int,		- Максимальное кол-во значений, которое можно присвоить данной характеристике.
-     * 									  Если 0, то нет ограничения.
-     * 				popular:bool,		- Характеристика популярна у пользователей
-     * 				charcType: int		- Тип характеристики (1 - строка или массив строк; 4 - число или массив чисел)
-     * 			}, ...
-     * 		],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [
+     *          {
+     *              objectName: string,	- Наименование подкатегории
+     *              name: string,		- Наименование характеристики
+     *              required: bool,		- Характеристика обязательна к заполенению
+     *              unitName: string,	- Единица имерения (см, гр и т.д.)
+     *              maxCount: int,		- Максимальное кол-во значений, которое можно присвоить данной характеристике.
+     *                                    Если 0, то нет ограничения.
+     *              popular:bool,		- Характеристика популярна у пользователей
+     *              charcType: int		- Тип характеристики (1 - строка или массив строк; 4 - число или массив чисел)
+     *          }, ...
+     *      ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function getCategoryCharacteristics(string $objectName): object
@@ -319,25 +319,25 @@ class Content extends AbstractEndpoint
      * @param string $name Поиск по родительской категории
      * 
      * @return object {
-     * 		data: [
-     * 			{
-     * 				objectName: string,	- Наименование подкатегории
-     * 				name: string,		- Наименование характеристики
-     * 				required: bool,		- Характеристика обязательна к заполенению
-     * 				unitName: string,	- Единица имерения (см, гр и т.д.)
-     * 				maxCount: int,		- Максимальное кол-во значений, которое можно присвоить данной характеристике.
-     * 									  Если 0, то нет ограничения.
-     * 				popular:bool,		- Характеристика популярна у пользователей
-     * 				charcType: int		- Тип характеристики (1 - строка или массив строк; 4 - число или массив чисел)
-     * 			}, ...
-     * 		],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [
+     *          {
+     *              objectName: string,	- Наименование подкатегории
+     *              name: string,		- Наименование характеристики
+     *              required: bool,		- Характеристика обязательна к заполенению
+     *              unitName: string,	- Единица имерения (см, гр и т.д.)
+     *              maxCount: int,		- Максимальное кол-во значений, которое можно присвоить данной характеристике.
+     *                                    Если 0, то нет ограничения.
+     *              popular:bool,		- Характеристика популярна у пользователей
+     *              charcType: int		- Тип характеристики (1 - строка или массив строк; 4 - число или массив чисел)
+     *          }, ...
+     *      ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function getCategoriesCharacteristics(string $name): object
     {
         return $this->request('/content/v1/object/characteristics/list/filter', 'GET', [
-                'name' => $name,
+            'name' => $name,
         ]);
     }
 
@@ -358,8 +358,8 @@ class Content extends AbstractEndpoint
      * @param array  $params Параметры (для некоторых характеристик)
      * 
      * @return object {
-     * 		data: [ object, object, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ object, object, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      * @throws InvalidArgumentException
      */
@@ -377,8 +377,8 @@ class Content extends AbstractEndpoint
      * Получение значений характеристики "Цвет"
      * 
      * @return object {
-     * 		data: [ {name: string, parentName: string}, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {name: string, parentName: string}, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function getDirectoryColors(): object
@@ -390,8 +390,8 @@ class Content extends AbstractEndpoint
      * Получение значений характеристики "Пол"
      * 
      * @return object {
-     * 		data: [ string, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ string, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function getDirectoryKinds(): object
@@ -403,8 +403,8 @@ class Content extends AbstractEndpoint
      * Получение значений характеристики "Страна производства"
      * 
      * @return object {
-     * 		data: [ {name: string, fullName: string }, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {name: string, fullName: string }, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function getDirectoryCountries(): object
@@ -419,15 +419,15 @@ class Content extends AbstractEndpoint
      * @param int    $top     Количество запрашиваемых значений (максимум 5000)
      * 
      * @return object {
-     * 		data: [ {id: int, name: string }, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {id: int, name: string }, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function searchDirectoryCollections(string $pattern, int $top): object
     {
         return $this->getDirectory('collections', [
-                'pattern' => $pattern,
-                'top' => $top
+            'pattern' => $pattern,
+            'top' => $top
         ]);
     }
 
@@ -435,8 +435,8 @@ class Content extends AbstractEndpoint
      * Получение значений характеристики "Сезон"
      * 
      * @return object {
-     * 		data: [ string, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ string, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function getDirectorySeasons(): object
@@ -451,15 +451,15 @@ class Content extends AbstractEndpoint
      * @param int    $top     Количество запрашиваемых значений (максимум 5000)
      * 
      * @return object {
-     * 		data: [ {id: int, name: string }, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {id: int, name: string }, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function searchDirectoryContents(string $pattern, int $top): object
     {
         return $this->getDirectory('contents', [
-                'pattern' => $pattern,
-                'top' => $top
+            'pattern' => $pattern,
+            'top' => $top
         ]);
     }
 
@@ -470,8 +470,8 @@ class Content extends AbstractEndpoint
      * @param int    $top     Количество запрашиваемых значений (максимум 5000)
      * 
      * @return object {
-     * 		data: [ {id: int, name: string }, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {id: int, name: string }, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      * 
      * @throws InvalidArgumentException
@@ -483,8 +483,8 @@ class Content extends AbstractEndpoint
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых значений: {$maxCount}");
         }
         return $this->getDirectory('consists', [
-                'pattern' => $pattern,
-                'top' => $top
+            'pattern' => $pattern,
+            'top' => $top
         ]);
     }
 
@@ -495,8 +495,8 @@ class Content extends AbstractEndpoint
      * @param int    $top     Количество запрашиваемых значений (максимум 5000)
      * 
      * @return object {
-     * 		data: [ string, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ string, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function searchDirectoryBrands(string $pattern, int $top): object
@@ -506,8 +506,8 @@ class Content extends AbstractEndpoint
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых значений: {$maxCount}");
         }
         return $this->getDirectory('brands', [
-                'pattern' => $pattern,
-                'top' => $top
+            'pattern' => $pattern,
+            'top' => $top
         ]);
     }
 
@@ -520,15 +520,15 @@ class Content extends AbstractEndpoint
      * @param int    $tnvedsLike Поиск по коду ТНВЭД
      * 
      * @return object {
-     * 		data: [ {subjectName: string, tnvedName: string, description: string, isKiz: bool }, ... ],
-     * 		error: bool, errorText: string, additionalErrors: string
+     *      data: [ {subjectName: string, tnvedName: string, description: string, isKiz: bool }, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
      * }
      */
     public function searchDirectoryTNVED(string $objectName, string $tnvedsLike = ''): object
     {
         return $this->getDirectory('tnved', [
-                'objectName' => $objectName,
-                'tnvedsLike' => $tnvedsLike
+            'objectName' => $objectName,
+            'tnvedsLike' => $tnvedsLike
         ]);
     }
 
@@ -547,8 +547,8 @@ class Content extends AbstractEndpoint
     public function updateMedia(string $vendorCode, array $mediaList): object
     {
         return $this->request('/content/v1/media/save', 'POST', [
-                'vendorCode' => $vendorCode,
-                'data' => $mediaList,
+            'vendorCode' => $vendorCode,
+            'data' => $mediaList,
         ]);
     }
 
@@ -571,9 +571,9 @@ class Content extends AbstractEndpoint
                     'contents' => $file,
                     'filename' => 'image.jpg',
                 ]
-                ], [
-                'X-Vendor-Code' => $vendorCode,
-                'X-Photo-Number' => $photoNumber,
+            ], [
+            'X-Vendor-Code' => $vendorCode,
+            'X-Photo-Number' => $photoNumber,
         ]);
     }
 

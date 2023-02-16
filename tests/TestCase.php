@@ -5,13 +5,6 @@ namespace Dakword\WBSeller\Tests;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Dakword\WBSeller\API;
 use Dakword\WBSeller\Query;
-use Dakword\WBSeller\API\Endpoint\{
-    Content,
-    Marketplace,
-    Prices,
-    Promo,
-    Statistics
-};
 
 class TestCase extends PHPUnitTestCase
 {
@@ -35,6 +28,7 @@ class TestCase extends PHPUnitTestCase
         return new API([
             'apikey' => $this->apiKey,
             'statkey' => $this->statKey,
+            'advkey' => $this->advKey,
         ]);
     }
 

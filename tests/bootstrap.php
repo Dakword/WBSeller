@@ -19,7 +19,7 @@ if (empty($apiKey) || empty($statKey) || empty($advKey)) {
         fwrite(STDOUT, '|                              |' . PHP_EOL);
         fwrite(STDOUT, '|  Set ADVKEY  in phpunit.xml  |' . PHP_EOL);
     }
-    fwrite(STDOUT, '|                              |' . PHP_EOL);
+        fwrite(STDOUT, '|                              |' . PHP_EOL);
     fwrite(STDOUT, '+------------------------------+' . PHP_EOL);
     fwrite(STDOUT, PHP_EOL);
 }

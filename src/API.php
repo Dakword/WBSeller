@@ -10,6 +10,7 @@ use Dakword\WBSeller\API\Endpoint\{
     Marketplace,
     Prices,
     Promo,
+    Recommendations,
     Statistics
 };
 
@@ -20,15 +21,18 @@ class API
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
     private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
     private string $advBaseUrl = 'https://advert-api.wb.ru';
+    private string $recomBaseUrl = 'https://recommend-api.wb.ru';
     private string $apiKey;
     private string $statKey;
     private string $advKey;
+    private string $recomKey;
 
     /**
      * @param array $options [
      *     'apikey' => 'XXX',
      *     'statkey' => 'YYY',
      *     'advkey' => 'ZZZ',
+     *     'recomkey' => 'XYZ',
      * ]
      */
     function __construct(array $options)
@@ -36,6 +40,7 @@ class API
         $this->apiKey = $options['apikey'] ?? '';
         $this->statKey = $options['statkey'] ?? '';
         $this->advKey = $options['advkey'] ?? '';
+        $this->recomKey = $options['recomkey'] ?? '';
     }
 
     public function setApiBaseUrl(string $baseUrl): void
@@ -51,6 +56,11 @@ class API
     public function setAdvBaseUrl(string $baseUrl): void
     {
         $this->advBaseUrl = rtrim($baseUrl, '/');
+    }
+
+    public function setRecomBaseUrl(string $baseUrl): void
+    {
+        $this->recomBaseUrl = rtrim($baseUrl, '/');
     }
 
     public function Adv(): Adv
@@ -76,6 +86,11 @@ class API
     public function Promo(): Promo
     {
         return new Promo($this->apiBaseUrl, $this->apiKey);
+    }
+
+    public function Recommendations(): Recommendations
+    {
+        return new Recommendations($this->recomBaseUrl, $this->apiKey);
     }
 
     public function Statistics(): Statistics

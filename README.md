@@ -2,8 +2,8 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-⚡ <b>Управление рекламой</b><br/>
-⚡ <b>Marketplace V3</b>
+⚡ <b>Рекомендации</b><br/>
+⚡ <b>Управление рекламой</b>
 
 ### Работа с API
 ```php
@@ -79,6 +79,7 @@ try {
 $wbSellerAPI = new \Dakword\WBSeller\API([
     'apikey' => 'XXX',
     'statkey' => 'YYY',
+    'advkey' => 'ZZZ',
 ]);
 $Query = new \Dakword\WBSeller\Query($wbSellerAPI);
 

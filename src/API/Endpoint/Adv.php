@@ -36,12 +36,12 @@ class Adv extends AbstractEndpoint
             throw new InvalidArgumentException('Неизвестный тип РК: ' . $type);
         }
         return $this->request('/adv/v0/adverts', 'GET', [
-                'status' => $status,
-                'type' => $type,
-                'limit' => $limit,
-                'offset' => $offset,
-                'order' => $order,
-                'direction' => $direction,
+            'status' => $status,
+            'type' => $type,
+            'limit' => $limit,
+            'offset' => $offset,
+            'order' => $order,
+            'direction' => $direction,
         ]);
     }
 
