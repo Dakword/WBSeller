@@ -2,8 +2,9 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\API\Endpoint\Marketplace;
-use Dakword\WBSeller\Tests\ApiClient\TestCase;
+use Dakword\WBSeller\API\Endpoint\Marketplace,
+    Dakword\WBSeller\Exception\ApiTimeRestrictionsException,
+    Dakword\WBSeller\Tests\ApiClient\TestCase;
 use DateTime;
 use InvalidArgumentException;
 

@@ -1,3 +1,9 @@
+### 3.4.0
+* Новое исключение ApiTimeRestrictionsException
+
+### 3.3.0
+* Добавлено API рекомендаций
+
 ### 3.2.1
 * Исправлен метод `Marketplace::getOrdersStickers()`
 

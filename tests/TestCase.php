@@ -40,21 +40,21 @@ class TestCase extends PHPUnitTestCase
     protected function skipIfNoKeyADV(): void
     {
         if (empty($this->advKey)) {
-            $this->markTestSkipped();
+            $this->markTestSkipped('advkey empty');
         }
     }
 
     protected function skipIfNoKeyAPI(): void
     {
         if (empty($this->apiKey)) {
-            $this->markTestSkipped();
+            $this->markTestSkipped('apikey empty');
         }
     }
 
     protected function skipIfNoKeySTAT(): void
     {
         if (empty($this->statKey)) {
-            $this->markTestSkipped();
+            $this->markTestSkipped('statkey empty');
         }
     }
 

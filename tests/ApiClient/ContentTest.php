@@ -4,6 +4,7 @@ namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\API\Endpoint\Content;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
+use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 use InvalidArgumentException;
 
 class ContentTest extends TestCase
@@ -11,8 +12,12 @@ class ContentTest extends TestCase
 
     private function getCardsList($limit = 10)
     {
-        $result = $this->Content()
-            ->getCardsList('', $limit);
+        try {
+            $result = $this->Content()
+                ->getCardsList('', $limit);
+        } catch (ApiTimeRestrictionsException $exc) {
+            $this->markTestSkipped($exc->getMessage());
+        }
 
         $this->assertIsObject($result);
         $this->assertObjectHasAttribute('data', $result);
@@ -32,7 +37,13 @@ class ContentTest extends TestCase
     {
         $limit = 5;
         $Content = $this->Content();
-        $result1 = $Content->getCardsList('', $limit);
+
+        try {
+            $result1 = $Content->getCardsList('', $limit);
+        } catch (ApiTimeRestrictionsException $exc) {
+            $this->markTestSkipped($exc->getMessage());
+        }
+
         $this->assertObjectHasAttribute('data', $result1);
         if ($result1->data && $result1->data->cursor->total == $limit) {
             $result2 = $Content->getCardsList('', $limit, -1, 'updateAt', false, $result1->data->cursor->updatedAt, $result1->data->cursor->nmID);
@@ -42,8 +53,12 @@ class ContentTest extends TestCase
 
     public function test_errorCardsList()
     {
-        $result = $this->Content()
-            ->getErrorCardsList();
+        try {
+            $result = $this->Content()
+                ->getErrorCardsList();
+        } catch (ApiTimeRestrictionsException $exc) {
+            $this->markTestSkipped($exc->getMessage());
+        }
 
         $this->assertIsArray($result->data);
     }
@@ -61,8 +76,12 @@ class ContentTest extends TestCase
 
     public function test_generateBarcodes()
     {
-        $result = $this->Content()
-            ->generateBarcodes(2);
+        try {
+            $result = $this->Content()
+                ->generateBarcodes(2);
+        } catch (ApiTimeRestrictionsException $exc) {
+            $this->markTestSkipped($exc->getMessage());
+        }
 
         $this->assertCount(2, $result->data);
         $this->assertEquals(13, strlen($result->data[0]));

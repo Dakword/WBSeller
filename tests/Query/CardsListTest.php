@@ -2,8 +2,9 @@
 
 namespace Dakword\WBSeller\Tests\Query;
 
-use Dakword\WBSeller\Query\CardsList;
-use Dakword\WBSeller\Exception\ApiClientException;
+use Dakword\WBSeller\Query\CardsList,
+    Dakword\WBSeller\Exception\ApiClientException,
+    Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 use Dakword\WBSeller\Tests\Query\TestCase;
 use InvalidArgumentException;
 
@@ -17,7 +18,12 @@ class CardsListTest extends TestCase
 
     public function test_CardsList()
     {
-        $result = $this->API()->Content()->getCardsList('', 5);
+        try {
+            $result = $this->API()->Content()->getCardsList('', 5);
+        } catch (ApiTimeRestrictionsException $exc) {
+            $this->markTestSkipped($exc->getMessage());
+        }
+
         $cards = $result->data->cards;
 
         if (!$cards) {

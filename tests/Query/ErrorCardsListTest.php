@@ -2,8 +2,10 @@
 
 namespace Dakword\WBSeller\Tests\Query;
 
-use Dakword\WBSeller\Query\ErrorCardsList;
-use Dakword\WBSeller\Tests\Query\TestCase;
+use Dakword\WBSeller\Query\ErrorCardsList,
+    Dakword\WBSeller\Tests\Query\TestCase,
+    Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
+
 
 class ErrorCardsListTest extends TestCase
 {
@@ -15,7 +17,12 @@ class ErrorCardsListTest extends TestCase
 
     public function test_ErrorCardsList()
     {
-        $all = $this->Query()->ErrorCardsList()->getAll();
+        try {
+            $all = $this->Query()->ErrorCardsList()->getAll();
+        } catch (ApiTimeRestrictionsException $exc) {
+            $this->markTestSkipped($exc->getMessage());
+        }
+        
         $this->assertIsArray($all);
         if ($all) {
             $keys = array_keys($all);

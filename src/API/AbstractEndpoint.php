@@ -6,6 +6,7 @@ namespace Dakword\WBSeller\API;
 
 use Dakword\WBSeller\API\Client;
 use Dakword\WBSeller\Exception\ApiClientException;
+use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 
 abstract class AbstractEndpoint
 {
@@ -33,7 +34,13 @@ abstract class AbstractEndpoint
         beginRequest:
         $result = $this->Client->request($path, $method, $data, $addonHeaders);
 
-        if ($this->responseCode() == 401) {
+        if (
+            $this->responseCode() == 400 && property_exists($result, 'error') && $result->error 
+            && mb_strpos(mb_strtolower($result->errorText), 'временные ограничения') !== false
+        ) {
+            throw new ApiTimeRestrictionsException($result->errorText);
+            
+        } elseif ($this->responseCode() == 401) {
             /*
              * "401 Unauthorized"
              * 
