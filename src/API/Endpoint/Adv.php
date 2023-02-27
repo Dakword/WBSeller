@@ -35,7 +35,7 @@ class Adv extends AbstractEndpoint
         if (!in_array($type, AdvertType::all())) {
             throw new InvalidArgumentException('Неизвестный тип РК: ' . $type);
         }
-        return $this->request('/adv/v0/adverts', 'GET', [
+        return $this->request('/adv/v0/adverts', [
             'status' => $status,
             'type' => $type,
             'limit' => $limit,
@@ -54,7 +54,7 @@ class Adv extends AbstractEndpoint
      */
     public function advert(int $id): object
     {
-        return $this->request('/adv/v0/advert', 'GET', ['id' => $id]);
+        return $this->request('/adv/v0/advert', ['id' => $id]);
     }
 
     /**
@@ -78,7 +78,7 @@ class Adv extends AbstractEndpoint
      */
     public function cpm(int $type, int $param): array
     {
-        return $this->request('/adv/v0/cpm', 'GET', [
+        return $this->request('/adv/v0/cpm', [
             'type' => $type,
             'param' => $param,
         ]);
@@ -102,12 +102,12 @@ class Adv extends AbstractEndpoint
         if (!in_array($type, [AdvertType::ON_CARD, AdvertType::ON_SEARCH, AdvertType::ON_HOME_RECOM])) {
             throw new InvalidArgumentException('Недопустимый тип РК: ' . $type);
         }
-        $this->request('/adv/v0/cpm', 'POST', [
+        $this->request('/adv/v0/cpm', [
             'advertId' => $advertId,
             'type' => $type,
             'cpm' => $cpm,
             'param' => $param,
-        ]);
+        ], 'POST');
         return $this->responseCode() == 200;
     }
     
@@ -119,7 +119,7 @@ class Adv extends AbstractEndpoint
      */
     public function start(int $id): bool
     {
-        $this->request('/adv/v0/start', 'GET', ['id' => $id]);
+        $this->request('/adv/v0/start', ['id' => $id]);
         return $this->responseCode() == 200;
     }
 
@@ -131,7 +131,7 @@ class Adv extends AbstractEndpoint
      */
     public function pause(int $id): bool
     {
-        $this->request('/adv/v0/pause', 'GET', ['id' => $id]);
+        $this->request('/adv/v0/pause', ['id' => $id]);
         return $this->responseCode() == 200;
     }
 

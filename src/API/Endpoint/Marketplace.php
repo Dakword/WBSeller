@@ -28,7 +28,7 @@ class Marketplace extends AbstractEndpoint
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых данных: {$maxLimit}");
         }
-        return $this->request('/api/v3/supplies', 'GET', ['limit' => $limit, 'next' => $next]);
+        return $this->request('/api/v3/supplies', ['limit' => $limit, 'next' => $next]);
     }
 
     /**
@@ -46,7 +46,7 @@ class Marketplace extends AbstractEndpoint
         if (mb_strlen($name) > $maxLength) {
             throw new InvalidArgumentException("Превышение максимальной длинны наименования поставки: {$maxLength}");
         }
-        return $this->request('/api/v3/supplies', 'POST', ['name' => $name]);
+        return $this->request('/api/v3/supplies', ['name' => $name], 'POST');
     }
 
     /**
@@ -58,7 +58,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function getSupply(string $supplyId): object
     {
-        return $this->request('/api/v3/supplies/' . $supplyId, 'GET');
+        return $this->request('/api/v3/supplies/' . $supplyId);
     }
 
     /**
@@ -70,7 +70,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function deleteSupply(string $supplyId)
     {
-        return $this->request('/api/v3/supplies/' . $supplyId, 'DELETE');
+        return $this->request('/api/v3/supplies/' . $supplyId, [], 'DELETE');
     }
 
     /**
@@ -82,7 +82,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function getSupplyOrders(string $supplyId): object
     {
-        return $this->request('/api/v3/supplies/' . $supplyId . '/orders', 'GET');
+        return $this->request('/api/v3/supplies/' . $supplyId . '/orders');
     }
 
     /**
@@ -101,7 +101,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function addSupplyOrder(string $supplyId, int $orderId)
     {
-        return $this->request('/api/v3/supplies/' . $supplyId . '/orders/' . $orderId, 'PATCH');
+        return $this->request('/api/v3/supplies/' . $supplyId . '/orders/' . $orderId, [], 'PATCH');
     }
 
     /**
@@ -117,7 +117,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function closeSupply(string $supplyId)
     {
-        return $this->request('/api/v3/supplies/' . $supplyId . '/deliver', 'PATCH');
+        return $this->request('/api/v3/supplies/' . $supplyId . '/deliver', [], 'PATCH');
     }
 
     /**
@@ -130,7 +130,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function getReShipmentOrdersSupplies(): object
     {
-        return $this->request('/api/v3/supplies/orders/reshipment', 'GET');
+        return $this->request('/api/v3/supplies/orders/reshipment');
     }
 
     /**
@@ -157,7 +157,7 @@ class Marketplace extends AbstractEndpoint
         if (!in_array($size, ['40x30', '58x40'])) {
             throw new InvalidArgumentException('Неизвестный размер этикетки: ' . $type);
         }
-        return $this->request('/api/v3/supplies/' . $supplyId . '/barcode', 'GET', ['type' => $type, 'width' => explode('x', $size)[0], 'height' => explode('x', $size)[1]]);
+        return $this->request('/api/v3/supplies/' . $supplyId . '/barcode', ['type' => $type, 'width' => explode('x', $size)[0], 'height' => explode('x', $size)[1]]);
     }
 
     /**
@@ -171,7 +171,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function cancelOrder(string $orderId)
     {
-        return $this->request('/api/v3/orders/' . $orderId . '/cancel', 'PATCH');
+        return $this->request('/api/v3/orders/' . $orderId . '/cancel', [], 'PATCH');
     }
 
     /**
@@ -185,7 +185,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function confirmOrder(string $orderId)
     {
-        return $this->request('/api/v3/orders/' . $orderId . '/confirm', 'PATCH');
+        return $this->request('/api/v3/orders/' . $orderId . '/confirm', [], 'PATCH');
     }
 
     /**
@@ -199,7 +199,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function deliverOrder(string $orderId)
     {
-        return $this->request('/api/v3/orders/' . $orderId . '/deliver', 'PATCH');
+        return $this->request('/api/v3/orders/' . $orderId . '/deliver', [], 'PATCH');
     }
 
     /**
@@ -213,7 +213,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function receiveOrder(string $orderId)
     {
-        return $this->request('/api/v3/orders/' . $orderId . '/receive', 'PATCH');
+        return $this->request('/api/v3/orders/' . $orderId . '/receive', [], 'PATCH');
     }
 
     /**
@@ -227,7 +227,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function rejectOrder(string $orderId)
     {
-        return $this->request('/api/v3/orders/' . $orderId . '/reject', 'PATCH');
+        return $this->request('/api/v3/orders/' . $orderId . '/reject', [], 'PATCH');
     }
 
     /**
@@ -244,7 +244,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function gerOrdersStatuses(array $orders): object
     {
-        return $this->request('/api/v3/orders/status', 'POST', ['orders' => $orders]);
+        return $this->request('/api/v3/orders/status', ['orders' => $orders], 'POST');
     }
 
     /**
@@ -269,7 +269,7 @@ class Marketplace extends AbstractEndpoint
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых строк: {$maxLimit}");
         }
-        return $this->request('/api/v3/orders', 'GET',
+        return $this->request('/api/v3/orders',
             ['limit' => $limit, 'next' => $next]
             + ($dateStart == '' ? [] : ['dateFrom' => $dateStart->getTimestamp()])
             + ($dateEnd == '' ? [] : ['dateTo' => $dateEnd->getTimestamp()])
@@ -285,7 +285,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function getNewOrders(): object
     {
-        return $this->request('/api/v3/orders/new', 'GET');
+        return $this->request('/api/v3/orders/new');
     }
 
     /**
@@ -304,7 +304,7 @@ class Marketplace extends AbstractEndpoint
         if (count($sgtin) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества строк переданного массива: {$maxCount}");
         }
-        return $this->request('/api/v3/orders/' . $orderId . '/meta/sgtin', 'POST', ['sgtin' => $sgtin]);
+        return $this->request('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtin' => $sgtin], 'POST');
     }
 
     /**
@@ -339,7 +339,7 @@ class Marketplace extends AbstractEndpoint
         }
         return $this->request(
             '/api/v3/orders/stickers?type=' . $type . '&width=' . explode('x', $size)[0] . '&height=' . explode('x', $size)[1],
-            'POST', ['orders' => $orderIds]);
+            ['orders' => $orderIds], 'POST');
     }
 
     /**
@@ -349,7 +349,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function getWarehouses(): array
     {
-        return $this->request('/api/v2/warehouses', 'GET');
+        return $this->request('/api/v2/warehouses');
     }
 
     /**
@@ -366,7 +366,7 @@ class Marketplace extends AbstractEndpoint
         if (count($stocks) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества обновляемых остатков: {$maxCount}");
         }
-        return $this->request('/api/v3/stocks/' . $warehouseId, 'PUT', ['stocks' => $stocks]);
+        return $this->request('/api/v3/stocks/' . $warehouseId, ['stocks' => $stocks], 'PUT');
     }
 
     /**
@@ -385,7 +385,7 @@ class Marketplace extends AbstractEndpoint
         if (count($skus) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества удаляемых остатков: {$maxCount}");
         }
-        return $this->request('/api/v3/stocks/' . $warehouseId, 'DELETE', ['skus' => $skus]);
+        return $this->request('/api/v3/stocks/' . $warehouseId, ['skus' => $skus], 'DELETE');
     }
 
     /**
@@ -404,7 +404,7 @@ class Marketplace extends AbstractEndpoint
         if (count($skus) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых остатков: {$maxCount}");
         }
-        return $this->request('/api/v3/stocks/' . $warehouseId, 'POST', ['skus' => $skus]);
+        return $this->request('/api/v3/stocks/' . $warehouseId, ['skus' => $skus], 'POST');
     }
 
 }

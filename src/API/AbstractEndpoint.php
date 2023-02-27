@@ -27,7 +27,7 @@ abstract class AbstractEndpoint
         }
     }
 
-    protected function request(string $path, string $method = 'GET', array $data = [], array $addonHeaders = [])
+    protected function request(string $path, array $data = [], string $method = 'GET', array $addonHeaders = [])
     {
         $attempt = 1;
 
@@ -62,8 +62,12 @@ abstract class AbstractEndpoint
             /* 
              * "429 Too Many Requests"
              * 
+             * { errors: ["Технический перерыв до 16:00"] }
              * { errors: ["(api-new) too many requests"] }
              */
+            if(mb_strpos(mb_strtolower($result->errors[0]), 'технический перерыв') !== false) {
+                throw new ApiTimeRestrictionsException($result->errors[0]);
+            }
             if ($attempt >= $this->attempts) {
                 throw new ApiClientException($result->errors[0], 429);
             }
@@ -72,7 +76,6 @@ abstract class AbstractEndpoint
 
             goto beginRequest;
         }
-
         return $result;
     }
 

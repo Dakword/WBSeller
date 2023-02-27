@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dakword\WBSeller\Exception;
 
-class ApiClientException extends WBSellerException
+class WBSellerException extends \Exception
 {
     
 }

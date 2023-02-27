@@ -33,7 +33,7 @@ class Content extends AbstractEndpoint
      */
     public function createCards(array $cards): object
     {
-        return $this->request('/content/v1/cards/upload', 'POST', array_map(fn($card) => [$card], $cards));
+        return $this->request('/content/v1/cards/upload', array_map(fn($card) => [$card], $cards), 'POST');
     }
 
     /**
@@ -93,7 +93,7 @@ class Content extends AbstractEndpoint
      */
     public function updateCards(array $cards): object
     {
-        return $this->request('/content/v1/cards/update', 'POST', $cards);
+        return $this->request('/content/v1/cards/update', $cards, 'POST');
     }
 
     /**
@@ -117,10 +117,10 @@ class Content extends AbstractEndpoint
      */
     public function addCardNomenclature(string $vendorCode, array $cards)
     {
-        return $this->request('/content/v1/cards/upload/add', 'POST', [
+        return $this->request('/content/v1/cards/upload/add', [
             'vendorCode' => $vendorCode,
             'cards' => $cards,
-        ]);
+        ], 'POST');
     }
 
     /**
@@ -159,7 +159,7 @@ class Content extends AbstractEndpoint
         if ($sortColumn !== 'updateAt') {
             throw new InvalidArgumentException("Недопустимое поле для сортировки списка карточек: {$sortColumn}. Пока только updatedAt.");
         }
-        return $this->request('/content/v1/cards/cursor/list', 'POST', [
+        return $this->request('/content/v1/cards/cursor/list', [
             'sort' => [
                 'cursor' => array_merge(
                     ['limit' => $limit],
@@ -174,7 +174,7 @@ class Content extends AbstractEndpoint
                     'ascending' => $ascending,
                 ]
             ]
-        ]);
+        ], 'POST');
     }
 
     /**
@@ -190,7 +190,7 @@ class Content extends AbstractEndpoint
      */
     public function getErrorCardsList(): object
     {
-        return $this->request('/content/v1/cards/error/list', 'GET');
+        return $this->request('/content/v1/cards/error/list');
     }
 
     /**
@@ -214,9 +214,9 @@ class Content extends AbstractEndpoint
         if (count($codes) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества переданных артикулов: {$maxCount}");
         }
-        return $this->request('/content/v1/cards/filter', 'POST', [
+        return $this->request('/content/v1/cards/filter', [
             'vendorCodes' => $codes,
-        ]);
+        ], 'POST');
     }
 
     /**
@@ -238,9 +238,9 @@ class Content extends AbstractEndpoint
         if ($count > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества запрошенных баркодов: {$maxCount}");
         }
-        return $this->request('/content/v1/barcodes', 'POST', [
+        return $this->request('/content/v1/barcodes', [
             'count' => $count,
-        ]);
+        ], 'POST');
     }
 
     /**
@@ -258,7 +258,7 @@ class Content extends AbstractEndpoint
      */
     public function searchCategory(string $name, int $top = 50): object
     {
-        return $this->request('/content/v1/object/all', 'GET', [
+        return $this->request('/content/v1/object/all', [
             'name' => $name,
             'top' => $top,
         ]);
@@ -276,7 +276,7 @@ class Content extends AbstractEndpoint
      */
     public function getParentCategories(): object
     {
-        return $this->request('/content/v1/object/parent/all', 'GET');
+        return $this->request('/content/v1/object/parent/all');
     }
 
     /**
@@ -307,7 +307,7 @@ class Content extends AbstractEndpoint
      */
     public function getCategoryCharacteristics(string $objectName): object
     {
-        return $this->request('/content/v1/object/characteristics/' . $objectName, 'GET');
+        return $this->request('/content/v1/object/characteristics/' . $objectName);
     }
 
     /**
@@ -336,7 +336,7 @@ class Content extends AbstractEndpoint
      */
     public function getCategoriesCharacteristics(string $name): object
     {
-        return $this->request('/content/v1/object/characteristics/list/filter', 'GET', [
+        return $this->request('/content/v1/object/characteristics/list/filter', [
             'name' => $name,
         ]);
     }
@@ -370,7 +370,7 @@ class Content extends AbstractEndpoint
         if (!in_array($directory, $directories)) {
             throw new InvalidArgumentException("Неизвестная ссылка на характеристику: {$directory}");
         }
-        return $this->request('/content/v1/directory/' . $directory, 'GET', $params);
+        return $this->request('/content/v1/directory/' . $directory, $params);
     }
 
     /**
@@ -546,10 +546,10 @@ class Content extends AbstractEndpoint
      */
     public function updateMedia(string $vendorCode, array $mediaList): object
     {
-        return $this->request('/content/v1/media/save', 'POST', [
+        return $this->request('/content/v1/media/save', [
             'vendorCode' => $vendorCode,
             'data' => $mediaList,
-        ]);
+        ], 'POST');
     }
 
     /**
@@ -565,13 +565,13 @@ class Content extends AbstractEndpoint
      */
     public function uploadMedia(string $vendorCode, int $photoNumber, string $file): object
     {
-        return $this->request('/content/v1/media/file', 'MULTIPART', [
+        return $this->request('/content/v1/media/file', [
                 [
                     'name' => 'uploadfile',
                     'contents' => $file,
                     'filename' => 'image.jpg',
                 ]
-            ], [
+            ], 'MULTIPART', [
             'X-Vendor-Code' => $vendorCode,
             'X-Photo-Number' => $photoNumber,
         ]);

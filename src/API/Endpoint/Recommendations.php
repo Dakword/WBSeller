@@ -20,7 +20,7 @@ class Recommendations extends AbstractEndpoint
      */
     public function list(int $nmId): array
     {
-        return $this->request('/api/v1/sup', 'GET', ['nm' => $nmId]);
+        return $this->request('/api/v1/sup', ['nm' => $nmId]);
     }
 
     /**
@@ -37,12 +37,12 @@ class Recommendations extends AbstractEndpoint
      */
     public function add(array $recom): string
     {
-        return $this->request('/api/v1/ins', 'POST', array_map(
+        return $this->request('/api/v1/ins', array_map(
             function ($key, $value) {
                 return ['nm' => (int) $key, 'recom' => $value];
             },
             array_keys($recom), array_values($recom)
-        ));
+        ), 'POST');
     }
 
     /**
@@ -59,12 +59,12 @@ class Recommendations extends AbstractEndpoint
      */
     public function delete(array $recom): string
     {
-        return $this->request('/api/v1/del', 'POST', array_map(
+        return $this->request('/api/v1/del', array_map(
             function ($key, $value) {
                 return ['nm' => (int) $key, 'recom' => $value];
             },
             array_keys($recom), array_values($recom)
-        ));
+        ), 'POST');
     }
 
 }

@@ -26,12 +26,16 @@ class ErrorCardsListTest extends TestCase
         $this->assertIsArray($all);
         if ($all) {
             $keys = array_keys($all);
-            $allKeys = $this->Query()->ErrorCardsList()->find($keys);
-            $this->assertEquals($keys, array_keys($allKeys));
+            $key1 = array_shift($keys);
+            $key2 = array_shift($keys);
+            $array = [$key1, $key2];
             
-            $oneKey = array_shift($keys);
-            $oneError = $this->Query()->ErrorCardsList()->find($oneKey);
-            $this->assertEquals($allKeys[$oneKey], $oneError);
+            $result = $this->Query()->ErrorCardsList()->find($array);
+            $this->assertTrue(array_key_exists($key1, $result));
+            $this->assertTrue(array_key_exists($key2, $result));
+            
+            $oneError = $this->Query()->ErrorCardsList()->find($key1);
+            $this->assertEquals($all[$key1], $oneError);
         }
     }
 

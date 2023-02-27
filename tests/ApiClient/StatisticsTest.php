@@ -46,9 +46,16 @@ class StatisticsTest extends TestCase
 
     public function test_DetailReport()
     {
-        $result1 = $this->Statistics()->detailReport(new DateTime('2022-10-01'), new DateTime(), 100);
-        $this->assertIsArray($result1);
-
+        try {
+            $result1 = $this->Statistics()->detailReport(new DateTime('2022-10-01'), new DateTime(), 100);
+            $this->assertIsArray($result1);
+        } catch (\Exception $exc) {
+            if($exc instanceof \Dakword\WBSeller\Exception\ApiTimeRestrictionsException) {
+                $this->assertTrue(true);
+            } else {
+                throw $exc;
+            }
+        }
         $this->expectException(InvalidArgumentException::class);
         $this->Statistics()->detailReport(new DateTime('2022-01-01'), new DateTime(), 100_001);
     }
