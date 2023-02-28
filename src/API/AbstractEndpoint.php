@@ -10,17 +10,13 @@ use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 
 abstract class AbstractEndpoint
 {
-    protected string $baseUrl;
-    protected string $apiKey;
-    protected int $attempts = 1;
-    protected int $retryDelay = 0;
+    private int $attempts = 1;
+    private int $retryDelay = 0;
     private Client $Client;
 
     public function __construct(string $baseUrl, string $key)
     {
-        $this->baseUrl = rtrim($baseUrl, '/');
-        $this->apiKey = $key;
-        $this->Client = new Client($baseUrl, $key);
+        $this->Client = new Client(rtrim($baseUrl, '/'), $key);
 
         if (method_exists($this, 'middleware')) {
             $this->Client->addMiddleware($this->middleware());
