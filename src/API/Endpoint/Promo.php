@@ -30,7 +30,7 @@ class Promo extends AbstractEndpoint
         if (count($discounts) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества переданных номенклатур: {$maxCount}");
         }
-        return $this->request('/public/api/v1/updateDiscounts' . (!is_null($activateFrom) ? ('?activateFrom=' . $activateFrom->format('Y-m-d H:i:s')) : ''), $discounts, 'POST');
+        return $this->postRequest('/public/api/v1/updateDiscounts' . (!is_null($activateFrom) ? ('?activateFrom=' . $activateFrom->format('Y-m-d H:i:s')) : ''), $discounts);
     }
 
     /**
@@ -44,7 +44,7 @@ class Promo extends AbstractEndpoint
      */
     public function revokeDiscounts(array $nomenclatures)
     {
-        return $this->request('/public/api/v1/revokeDiscounts', $nomenclatures, 'POST');
+        return $this->postRequest('/public/api/v1/revokeDiscounts', $nomenclatures);
     }
 
 }

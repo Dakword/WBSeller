@@ -58,48 +58,45 @@ class Client
         $this->rawResponse = null;
         $this->response = null;
 
+        $defaultHeaders = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => $this->apiKey,
+        ];
+        
         try {
             switch (strtoupper($method)) {
                 case 'GET':
                     $response = $this->Client->get($this->baseUrl . $path, [
-                        'headers' => array_merge([
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                            'Authorization' => $this->apiKey,
-                            ], $addonHeaders),
+                        'headers' => array_merge($defaultHeaders, $addonHeaders),
                         'query' => $params,
                     ]);
                     break;
 
                 case 'POST':
                     $response = $this->Client->post($this->baseUrl . $path, [
-                        'headers' => array_merge([
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                            'Authorization' => $this->apiKey,
-                            ], $addonHeaders),
+                        'headers' => array_merge($defaultHeaders, $addonHeaders),
                         'body' => json_encode($params)
                     ]);
                     break;
 
                 case 'PUT':
                     $response = $this->Client->put($this->baseUrl . $path, [
-                        'headers' => array_merge([
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                            'Authorization' => $this->apiKey,
-                            ], $addonHeaders),
+                        'headers' => array_merge($defaultHeaders, $addonHeaders),
                         'body' => json_encode($params)
                     ]);
                     break;
 
                 case 'PATCH':
                     $response = $this->Client->patch($this->baseUrl . $path, [
-                        'headers' => array_merge([
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                            'Authorization' => $this->apiKey,
-                            ], $addonHeaders),
+                        'headers' => array_merge($defaultHeaders, $addonHeaders),
+                        'body' => json_encode($params)
+                    ]);
+                    break;
+
+                case 'DELETE':
+                    $response = $this->Client->delete($this->baseUrl . $path, [
+                        'headers' => array_merge($defaultHeaders, $addonHeaders),
                         'body' => json_encode($params)
                     ]);
                     break;
@@ -110,17 +107,6 @@ class Client
                             'Authorization' => $this->apiKey,
                             ], $addonHeaders),
                         'multipart' => $params,
-                    ]);
-                    break;
-
-                case 'DELETE':
-                    $response = $this->Client->delete($this->baseUrl . $path, [
-                        'headers' => array_merge([
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                            'Authorization' => $this->apiKey,
-                            ], $addonHeaders),
-                        'body' => json_encode($params)
                     ]);
                     break;
 

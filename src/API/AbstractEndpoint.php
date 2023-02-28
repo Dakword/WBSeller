@@ -23,56 +23,34 @@ abstract class AbstractEndpoint
         }
     }
 
-    protected function request(string $path, array $data = [], string $method = 'GET', array $addonHeaders = [])
+    protected function getRequest(string $path, array $data = [], array $addonHeaders = [])
     {
-        $attempt = 1;
+        return $this->request($path, $data, 'GET', $addonHeaders);
+    }
 
-        beginRequest:
-        $result = $this->Client->request($path, $method, $data, $addonHeaders);
+    protected function postRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request($path, $data, 'POST', $addonHeaders);
+    }
 
-        if (
-            $this->responseCode() == 400 && property_exists($result, 'error') && $result->error 
-            && mb_strpos(mb_strtolower($result->errorText), 'временные ограничения') !== false
-        ) {
-            throw new ApiTimeRestrictionsException($result->errorText);
-            
-        } elseif ($this->responseCode() == 401) {
-            /*
-             * "401 Unauthorized"
-             * 
-             * (api-new) can\'t decode supplier key
-             * (api-new) some chars in key are wrong
-             * (api-new) supplier key not found
-             * proxy: invalid token
-             * proxy: unauthorized
-             * request rejected, unathorized
-             */
-            if (is_string($result)) {
-                throw new ApiClientException($result, 401);
-            } elseif (is_object($result) && property_exists($result, 'errors') && count($result->errors)) {
-                throw new ApiClientException($result->errors[0], 401);
-            } else {
-                throw new ApiClientException('Unauthorized', 401);
-            }
-        } elseif ($this->responseCode() == 429) {
-            /* 
-             * "429 Too Many Requests"
-             * 
-             * { errors: ["Технический перерыв до 16:00"] }
-             * { errors: ["(api-new) too many requests"] }
-             */
-            if(mb_strpos(mb_strtolower($result->errors[0]), 'технический перерыв') !== false) {
-                throw new ApiTimeRestrictionsException($result->errors[0]);
-            }
-            if ($attempt >= $this->attempts) {
-                throw new ApiClientException($result->errors[0], 429);
-            }
-            usleep($this->retryDelay * 1_000);
-            $attempt++;
+    protected function putRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request($path, $data, 'PUT', $addonHeaders);
+    }
 
-            goto beginRequest;
-        }
-        return $result;
+    protected function patchRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request($path, $data, 'PATCH', $addonHeaders);
+    }
+
+    protected function deleteRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request($path, $data, 'DELETE', $addonHeaders);
+    }
+
+    protected function multipartRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request($path, $data, 'MULTIPART', $addonHeaders);
     }
 
     /**
@@ -122,6 +100,58 @@ abstract class AbstractEndpoint
             'remaining' => $this->Client->rateRemaining,
             'reset' => $this->Client->rateReset,
         ];
+    }
+
+    private function request(string $path, array $data = [], string $method = 'GET', array $addonHeaders = [])
+    {
+        $attempt = 1;
+
+        beginRequest:
+        $result = $this->Client->request($path, $method, $data, $addonHeaders);
+
+        if (
+            $this->responseCode() == 400 && property_exists($result, 'error') && $result->error 
+            && mb_strpos(mb_strtolower($result->errorText), 'временные ограничения') !== false
+        ) {
+            throw new ApiTimeRestrictionsException($result->errorText);
+            
+        } elseif ($this->responseCode() == 401) {
+            /*
+             * "401 Unauthorized"
+             * 
+             * (api-new) can\'t decode supplier key
+             * (api-new) some chars in key are wrong
+             * (api-new) supplier key not found
+             * proxy: invalid token
+             * proxy: unauthorized
+             * request rejected, unathorized
+             */
+            if (is_string($result)) {
+                throw new ApiClientException($result, 401);
+            } elseif (is_object($result) && property_exists($result, 'errors') && count($result->errors)) {
+                throw new ApiClientException($result->errors[0], 401);
+            } else {
+                throw new ApiClientException('Unauthorized', 401);
+            }
+        } elseif ($this->responseCode() == 429) {
+            /* 
+             * "429 Too Many Requests"
+             * 
+             * { errors: ["Технический перерыв до 16:00"] }
+             * { errors: ["(api-new) too many requests"] }
+             */
+            if(mb_strpos(mb_strtolower($result->errors[0]), 'технический перерыв') !== false) {
+                throw new ApiTimeRestrictionsException($result->errors[0]);
+            }
+            if ($attempt >= $this->attempts) {
+                throw new ApiClientException($result->errors[0], 429);
+            }
+            usleep($this->retryDelay * 1_000);
+            $attempt++;
+
+            goto beginRequest;
+        }
+        return $result;
     }
 
 }

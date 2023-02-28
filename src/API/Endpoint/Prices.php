@@ -24,7 +24,7 @@ class Prices extends AbstractEndpoint
         if (!in_array($quantity, [0, 1, 2])) {
             throw new InvalidArgumentException('Задан некорректный параметр фильтрации: ' . $quantity);
         }
-        return $this->request('/public/api/v1/info', ['quantity' => $quantity]);
+        return $this->getRequest('/public/api/v1/info', ['quantity' => $quantity]);
     }
 
     /**
@@ -76,7 +76,7 @@ class Prices extends AbstractEndpoint
         if (count($prices) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества переданных номенклатур: {$maxCount}");
         }
-        return $this->request('/public/api/v1/prices', $prices, 'POST');
+        return $this->postRequest('/public/api/v1/prices', $prices);
     }
 
 }

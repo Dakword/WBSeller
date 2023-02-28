@@ -23,7 +23,7 @@ class Statistics extends AbstractEndpoint
      */
     public function incomes(DateTime $dateFrom): array
     {
-        return $this->request('/api/v1/supplier/incomes', [
+        return $this->getRequest('/api/v1/supplier/incomes', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
         ]);
     }
@@ -42,7 +42,7 @@ class Statistics extends AbstractEndpoint
      */
     public function stocks(DateTime $dateFrom): array
     {
-        return $this->request('/api/v1/supplier/stocks', [
+        return $this->getRequest('/api/v1/supplier/stocks', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
         ]);
     }
@@ -59,7 +59,7 @@ class Statistics extends AbstractEndpoint
      */
     public function ordersFromDate(DateTime $dateFrom): array
     {
-        return $this->request('/api/v1/supplier/orders', [
+        return $this->getRequest('/api/v1/supplier/orders', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
             'flag' => 0,
         ]);
@@ -76,7 +76,7 @@ class Statistics extends AbstractEndpoint
      */
     public function ordersOnDate(DateTime $dateFrom): array
     {
-        return $this->request('/api/v1/supplier/orders', [
+        return $this->getRequest('/api/v1/supplier/orders', [
             'dateFrom' => $dateFrom->format('Y-m-d'),
             'flag' => 1,
         ]);
@@ -94,7 +94,7 @@ class Statistics extends AbstractEndpoint
      */
     public function salesFromDate(DateTime $dateFrom): array
     {
-        return $this->request('/api/v1/supplier/sales', [
+        return $this->getRequest('/api/v1/supplier/sales', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
             'flag' => 0,
         ]);
@@ -112,7 +112,7 @@ class Statistics extends AbstractEndpoint
      */
     public function salesOnDate(DateTime $dateFrom): array
     {
-        return $this->request('/api/v1/supplier/sales', [
+        return $this->getRequest('/api/v1/supplier/sales', [
             'dateFrom' => $dateFrom->format('Y-m-d'),
             'flag' => 1,
         ]);
@@ -142,7 +142,7 @@ class Statistics extends AbstractEndpoint
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых строк отчета: {$maxLimit}");
         }
-        return ($this->request('/api/v1/supplier/reportDetailByPeriod', [
+        return ($this->getRequest('/api/v1/supplier/reportDetailByPeriod', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
             'dateTo' => $dateTo->format(DATE_RFC3339),
             'limit' => $limit,
@@ -159,7 +159,7 @@ class Statistics extends AbstractEndpoint
      */
     public function exciseGoods(DateTime $dateFrom): array
     {
-        return $this->request('/api/v1/supplier/excise-goods', [
+        return $this->getRequest('/api/v1/supplier/excise-goods', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
         ]);
     }
