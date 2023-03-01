@@ -13,14 +13,14 @@ use InvalidArgumentException;
 
 class Client
 {
-    public $responseCode = 0;
-    public $responsePhrase = null;
-    public $responseHeaders = [];
-    public $rawResponse = null;
+    public int $responseCode = 0;
+    public ?string $responsePhrase = null;
+    public array $responseHeaders = [];
+    public ?string $rawResponse = null;
     public $response = null;
-    public $rateLimit = 0;
-    public $rateRemaining = 0;
-    public $rateReset = 0;
+    public int $rateLimit = 0;
+    public int $rateRemaining = 0;
+    public int $rateReset = 0;
     private string $baseUrl;
     private string $apiKey;
     private HttpClient $Client;
@@ -50,7 +50,7 @@ class Client
      * @throws RequestException
      * @throws InvalidArgumentException
      */
-    public function request(string $path, string $method, array $params = [], array $addonHeaders = [])
+    public function request(string $method, string $path, array $params = [], array $addonHeaders = [])
     {
         $this->responseCode = 0;
         $this->responsePhrase = null;
@@ -63,46 +63,48 @@ class Client
             'Content-Type' => 'application/json',
             'Authorization' => $this->apiKey,
         ];
+        $headers = array_merge($defaultHeaders, $addonHeaders);
+        $url = $this->baseUrl . $path;
         
         try {
             switch (strtoupper($method)) {
                 case 'GET':
-                    $response = $this->Client->get($this->baseUrl . $path, [
-                        'headers' => array_merge($defaultHeaders, $addonHeaders),
+                    $response = $this->Client->get($url, [
+                        'headers' => $headers,
                         'query' => $params,
                     ]);
                     break;
 
                 case 'POST':
-                    $response = $this->Client->post($this->baseUrl . $path, [
-                        'headers' => array_merge($defaultHeaders, $addonHeaders),
+                    $response = $this->Client->post($url, [
+                        'headers' => $headers,
                         'body' => json_encode($params)
                     ]);
                     break;
 
                 case 'PUT':
-                    $response = $this->Client->put($this->baseUrl . $path, [
-                        'headers' => array_merge($defaultHeaders, $addonHeaders),
+                    $response = $this->Client->put($url, [
+                        'headers' => $headers,
                         'body' => json_encode($params)
                     ]);
                     break;
 
                 case 'PATCH':
-                    $response = $this->Client->patch($this->baseUrl . $path, [
-                        'headers' => array_merge($defaultHeaders, $addonHeaders),
+                    $response = $this->Client->patch($url, [
+                        'headers' => $headers,
                         'body' => json_encode($params)
                     ]);
                     break;
 
                 case 'DELETE':
-                    $response = $this->Client->delete($this->baseUrl . $path, [
-                        'headers' => array_merge($defaultHeaders, $addonHeaders),
+                    $response = $this->Client->delete($url, [
+                        'headers' => $headers,
                         'body' => json_encode($params)
                     ]);
                     break;
 
                 case 'MULTIPART':
-                    $response = $this->Client->post($this->baseUrl . $path, [
+                    $response = $this->Client->post($url, [
                         'headers' => array_merge([
                             'Authorization' => $this->apiKey,
                             ], $addonHeaders),
@@ -145,9 +147,9 @@ class Client
         $this->responsePhrase = $response->getReasonPhrase();
         $this->responseHeaders = $response->getHeaders();
 
-        $this->rateLimit = $response->getHeaderLine('X-RateLimit-Limit') ?: 0;
-        $this->rateRemaining = $response->getHeaderLine('X-RateLimit-Remaining') ?: 0;
-        $this->rateReset = $response->getHeaderLine('X-RateLimit-Reset') ?: 0;
+        $this->rateLimit = (int)$response->getHeaderLine('X-RateLimit-Limit') ?: 0;
+        $this->rateRemaining = (int)$response->getHeaderLine('X-RateLimit-Remaining') ?: 0;
+        $this->rateReset = (int)$response->getHeaderLine('X-RateLimit-Reset') ?: 0;
 
         $responseContent = $response->getBody()->getContents();
         $this->rawResponse = $responseContent;

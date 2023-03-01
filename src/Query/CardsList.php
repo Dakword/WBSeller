@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Dakword\WBSeller\Query;
 
-use Dakword\WBSeller\API;
-use Dakword\WBSeller\API\Endpoint\Content;
-use Dakword\WBSeller\Exception\ApiClientException;
+use Dakword\WBSeller\API,
+    Dakword\WBSeller\API\Endpoint\Content,
+    Dakword\WBSeller\Exception\ApiClientException;
 
 class CardsList
 {
     private const LIMIT = 1_000;
     private Content $Content;
-    private $limit;
-    private $textSearch;
-    private $withPhoto;
-    private $sort;
+    private int $limit;
+    private string $textSearch;
+    private int $withPhoto;
+    private bool $sort;
 
     public function __construct(API $API)
     {

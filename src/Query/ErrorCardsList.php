@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Dakword\WBSeller\Query;
 
-use Dakword\WBSeller\API;
+use Dakword\WBSeller\API,
+    Dakword\WBSeller\API\Endpoint\Content;
 
 class ErrorCardsList
 {
-    private $Content;
+    private Content $Content;
 
     public function __construct(API $API)
     {

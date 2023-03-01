@@ -23,36 +23,6 @@ abstract class AbstractEndpoint
         }
     }
 
-    protected function getRequest(string $path, array $data = [], array $addonHeaders = [])
-    {
-        return $this->request($path, $data, 'GET', $addonHeaders);
-    }
-
-    protected function postRequest(string $path, array $data = [], array $addonHeaders = [])
-    {
-        return $this->request($path, $data, 'POST', $addonHeaders);
-    }
-
-    protected function putRequest(string $path, array $data = [], array $addonHeaders = [])
-    {
-        return $this->request($path, $data, 'PUT', $addonHeaders);
-    }
-
-    protected function patchRequest(string $path, array $data = [], array $addonHeaders = [])
-    {
-        return $this->request($path, $data, 'PATCH', $addonHeaders);
-    }
-
-    protected function deleteRequest(string $path, array $data = [], array $addonHeaders = [])
-    {
-        return $this->request($path, $data, 'DELETE', $addonHeaders);
-    }
-
-    protected function multipartRequest(string $path, array $data = [], array $addonHeaders = [])
-    {
-        return $this->request($path, $data, 'MULTIPART', $addonHeaders);
-    }
-
     /**
      * Автоматически повторять запросы в случае ответа сервера "429 Too Many Requests"
      * 
@@ -68,22 +38,22 @@ abstract class AbstractEndpoint
         return $this;
     }
 
-    public function responseCode()
+    public function responseCode(): int
     {
         return $this->Client->responseCode;
     }
 
-    public function responsePhrase()
+    public function responsePhrase(): ?string
     {
         return $this->Client->responsePhrase;
     }
 
-    public function responseHeaders()
+    public function responseHeaders(): array
     {
         return $this->Client->responseHeaders;
     }
 
-    public function rawResponse()
+    public function rawResponse(): ?string
     {
         return $this->Client->rawResponse;
     }
@@ -93,7 +63,7 @@ abstract class AbstractEndpoint
         return $this->Client->response;
     }
 
-    public function responseRate()
+    public function responseRate(): array
     {
         return [
             'limit' => $this->Client->rateLimit,
@@ -102,12 +72,42 @@ abstract class AbstractEndpoint
         ];
     }
 
-    private function request(string $path, array $data = [], string $method = 'GET', array $addonHeaders = [])
+    protected function getRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request('GET', $path, $data, $addonHeaders);
+    }
+
+    protected function postRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request('POST', $path, $data, $addonHeaders);
+    }
+
+    protected function putRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request('PUT', $path, $data, $addonHeaders);
+    }
+
+    protected function patchRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request('PATCH', $path, $data, $addonHeaders);
+    }
+
+    protected function deleteRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request('DELETE', $path, $data, $addonHeaders);
+    }
+
+    protected function multipartRequest(string $path, array $data = [], array $addonHeaders = [])
+    {
+        return $this->request('MULTIPART', $path, $data, $addonHeaders);
+    }
+
+    private function request(string $method, string $path, array $data = [], array $addonHeaders = [])
     {
         $attempt = 1;
 
         beginRequest:
-        $result = $this->Client->request($path, $method, $data, $addonHeaders);
+        $result = $this->Client->request($method, $path, $data, $addonHeaders);
 
         if (
             $this->responseCode() == 400 && property_exists($result, 'error') && $result->error 

@@ -22,7 +22,7 @@ class ErrorCardsListTest extends TestCase
         } catch (ApiTimeRestrictionsException $exc) {
             $this->markTestSkipped($exc->getMessage());
         }
-        
+
         $this->assertIsArray($all);
         if ($all) {
             $keys = array_keys($all);
