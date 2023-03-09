@@ -125,6 +125,7 @@ class Client
                       404 Not Found
                       409 Conflict
                       500 Internal Server Error
+                          {["code"] => "InternalServerError", ["message"] => "Внутренняя ошибка сервера"}
                       ...
                      */
                     return $jsonDecoded;

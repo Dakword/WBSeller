@@ -294,9 +294,6 @@ class Marketplace extends AbstractEndpoint
      * @param int   $orderId Идентификатор сборочного задания
      * @param array $sgtin   Массив КиЗов
      * 
-     * @return object {total: int, stocks: [object, ...]}
-     * 
-     * @deprecated since 22.02.2023
      */
     public function setOrderKiz(int $orderId, array $sgtin)
     {
