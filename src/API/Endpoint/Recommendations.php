@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use InvalidArgumentException;
 
 class Recommendations extends AbstractEndpoint
 {
@@ -12,15 +13,38 @@ class Recommendations extends AbstractEndpoint
     /**
      * Получение списка рекомендаций
      * 
-     * Метод позволяет получить список рекомендаций ("Магазин рекомендует") по конкретному товару.
+     * Метод позволяет получить список рекомендаций ("Магазин рекомендует") по нескольким товарам.
      * 
-     * @param int $nmId Идентификатор товара, по которому необходимо получить список рекомендаций
+     * @param array $nmIds Идентификаторы товаров, для которых необходимо получить список рекомендаций (max. 200)
+     * @param int   $limit Ограничение количества рекомендованных nm в ответе (max. 999)
      * 
-     * @return array
+     * @return array !!! РЕСТРУКТУРИРОВАННЫЙ ОТВЕТ
+     *               [
+     *                  nmId => [recomNm1, recomNm2, ...],
+     *                  ...
+     *               ]
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества переданных идентификаторов
+     * @throws InvalidArgumentException Превышение максимального значения параметра limit
      */
-    public function list(int $nmId): array
+    public function list(array $nmIds, int $limit = 0): array
     {
-        return $this->getRequest('/api/v1/sup', ['nm' => $nmId]);
+        $maxCount = 200;
+        if (count($nmIds) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества переданных идентификаторов: {$maxCount}");
+        }
+        $maxLimit = 999;
+        if ($limit >  $maxLimit) {
+            throw new InvalidArgumentException("Превышение максимального значения параметра limit: {$maxLimit}");
+        }
+        $result = $this->getRequest('/api/v1/list', [
+            'nm' => implode(',', $nmIds),
+            'limit' => $limit,
+        ]);
+        return array_reduce($result->data, function ($result, $item) {
+            $result[$item->nm] = $item->list;
+            return $result;
+        });
     }
 
     /**

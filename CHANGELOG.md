@@ -1,3 +1,6 @@
+### 3.5.0
+* Изменения метода `Recommendations::list()`
+
 ### 3.4.0
 * Новое исключение ApiTimeRestrictionsException
 

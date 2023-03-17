@@ -15,8 +15,11 @@ class RecommendationsTest extends TestCase
 
     public function test_list()
     {
-        $result = $this->Recommendations()->list(123456);
+        $nmIds = [1234567, 7654321];
+        $result = $this->Recommendations()->list($nmIds);
         $this->assertIsArray($result);
+        $this->assertTrue(in_array($nmIds[0], array_keys($result)));
+        $this->assertTrue(in_array($nmIds[1], array_keys($result)));
     }
 
     public function test_add()
