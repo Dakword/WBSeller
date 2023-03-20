@@ -10,6 +10,11 @@ namespace Dakword\WBSeller\Enum;
 class AdvertStatus
 {
     /**
+     * @var int Рекламная кампаниязавершена
+     */
+    const DONE = 7;
+
+    /**
      * @var int Идут показы
      */
     const PLAY = 9;

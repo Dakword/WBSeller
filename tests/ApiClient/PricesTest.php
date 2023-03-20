@@ -43,7 +43,7 @@ class PricesTest extends TestCase
      */
     public function test_updatePrices()
     {
-        $result1 = $this->Prices()->getPricesNoStock();
+        $result1 = $this->Prices()->getPrices();
         $item = array_shift($result1);
         if ($item) {
             $result2 = $this->Prices()->updatePrices([

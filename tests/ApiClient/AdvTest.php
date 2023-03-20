@@ -2,13 +2,23 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\API\Endpoint\Adv;
-use Dakword\WBSeller\Enum\AdvertStatus;
-use Dakword\WBSeller\Enum\AdvertType;
+use Dakword\WBSeller\API\Endpoint\Adv,
+    Dakword\WBSeller\Enum\AdvertStatus,
+    Dakword\WBSeller\Enum\AdvertType;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
+use InvalidArgumentException;
 
 class AdvTest extends TestCase
 {
+
+    private $Adv;
+    
+    public function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->Adv = $this->Adv();
+    }
 
     public function test_Class()
     {
@@ -17,8 +27,7 @@ class AdvTest extends TestCase
 
     public function test_count()
     {
-        $Adv = $this->Adv();
-        $result = $Adv->count();
+        $result = $this->Adv->count();
 
         $this->assertIsObject($result);
         $this->assertObjectHasAttribute('all', $result);
@@ -27,16 +36,14 @@ class AdvTest extends TestCase
 
     public function test_advertsList()
     {
-        $Adv = $this->Adv();
-        $result = $Adv->advertsList(AdvertStatus::PLAY, AdvertType::ON_CATALOG, 10, 0);
+        $result = $this->Adv->advertsList(AdvertStatus::PLAY, AdvertType::ON_CATALOG, 10, 0);
 
         $this->assertIsArray($result);
     }
 
     public function test_advert()
     {
-        $Adv = $this->Adv();
-        $result = $Adv->advert(555);
+        $result = $this->Adv->advert(555);
 
         $this->assertIsObject($result);
         $this->assertObjectHasAttribute('advertId', $result);
@@ -45,34 +52,78 @@ class AdvTest extends TestCase
 
     public function test_cpm()
     {
-        $Adv = $this->Adv();
-        $result = $Adv->cpm(AdvertType::ON_SEARCH, 123456);
+        $result = $this->Adv->cpm(AdvertType::ON_SEARCH, 123456);
+
+        $this->assertIsArray($result);
+    }
+
+    public function test_allCpm()
+    {
+        $result = $this->Adv->allCpm(AdvertType::ON_SEARCH, [123456, 7890]);
 
         $this->assertIsArray($result);
     }
 
     public function test_updateCpm()
     {
-        $Adv = $this->Adv();
-        $result = $Adv->updateCpm(123456, AdvertType::ON_HOME_RECOM, 123456, 123456);
+        $result = $this->Adv->updateCpm(123456, AdvertType::ON_HOME_RECOM, 123456, 123456);
 
         $this->assertFalse($result);
     }
 
     public function test_start()
     {
-        $Adv = $this->Adv();
-        $result = $Adv->start(123456);
+        $result = $this->Adv->start(123456);
 
         $this->assertFalse($result);
     }
 
     public function test_pause()
     {
-        $Adv = $this->Adv();
-        $result = $Adv->pause(123456);
+        $result = $this->Adv->pause(123456);
 
         $this->assertFalse($result);
+    }
+
+    public function test_stop()
+    {
+        $result = $this->Adv->stop(123456);
+
+        $this->assertFalse($result);
+    }
+
+    public function test_setActive()
+    {
+        $this->Adv->setActive(123, 456, true);
+
+        $this->assertFalse($result);
+    }
+
+    public function test_dailyBudget()
+    {
+        $this->Adv->dailyBudget(123, 500);
+
+        $this->assertTrue($this->Adv->responseCode() == 400);
+    }
+
+    public function test_setIntervals()
+    {
+        $this->Adv->setIntervals(3344123, 275, [
+            [ 'begin' => 3, 'end' => 5 ]
+        ]);
+
+        $this->assertTrue($this->Adv->responseCode() == 400);
+    }
+
+    public function test_nmActive()
+    {
+        $this->Adv->nmActive(456789, 275, [
+            [ 'nm' => 2116745, 'active' => false ]
+        ]);
+        $this->assertTrue($this->Adv->responseCode() == 400);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->Adv->nmActive(456789, 275, array_fill(0, 50, [ 'nm' => 2116745, 'active' => false ]));
     }
 
 }

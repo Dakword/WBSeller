@@ -32,8 +32,9 @@ class Adv extends AbstractEndpoint
         if (!in_array($status, AdvertStatus::all())) {
             throw new InvalidArgumentException('Неизвестный статус РК: ' . $status);
         }
-        if (!in_array($type, AdvertType::all())) {
-            throw new InvalidArgumentException('Неизвестный тип РК: ' . $type);
+        $this->checkType($type);
+        if (!in_array($order, ["create", "change", "id"])) {
+            throw new InvalidArgumentException('Неизвестный порядок сортировки: ' . $order);
         }
         return $this->getRequest('/adv/v0/adverts', [
             'status' => $status,
@@ -42,7 +43,7 @@ class Adv extends AbstractEndpoint
             'offset' => $offset,
             'order' => $order,
             'direction' => $direction,
-        ]);
+        ]) ?? [];
     }
 
     /**
@@ -68,16 +69,36 @@ class Adv extends AbstractEndpoint
     }
 
     /**
+     * Переименование РК
+     * 
+     * @param type $advertId Идентификатор РК, у которой меняется название
+     * @param type $name     Новое название (максимум 100 символов)
+     * 
+     * @return bool
+     */
+    public function renameAdvert($advertId, $name): bool
+    {
+        return $this->postRequest('/adv/v0/rename', [
+            'advertId' => $advertId,
+            'name' => mb_substr($name, 0, 100)
+        ]);
+    }
+    
+    /**
      * Получение списка ставок для типа размещения
      * 
      * @param int $type  Тип РК
      * @param int $param Параметр запроса, по которому будет получен список ставок активных РК.
-     *                   Должен быть значением menuId, subjectId или setId в зависимости от типа РК.
+     *                   Должен быть значением menuId (для РК в каталоге), subjectId (для РК в поиске и рекомендациях)
+     *                   или setId (для РК в карточке товара).
      * 
      * @return array
+     * 
+     * @throws InvalidArgumentException Неизвестный тип РК
      */
     public function cpm(int $type, int $param): array
     {
+        $this->checkType($type);
         return $this->getRequest('/adv/v0/cpm', [
             'type' => $type,
             'param' => $param,
@@ -92,7 +113,7 @@ class Adv extends AbstractEndpoint
      * @param int $advertId Идентификатор РК
      * @param int $type     Тип РК
      * @param int $cpm      Новое значение ставки
-     * @param int $param    Параметр, для которго будет внесено изменение (является значением subjectId или setId в зависимости от типа РК)
+     * @param int $param    Параметр, для которого будет внесено изменение (является значением subjectId или setId в зависимости от типа РК)
      * 
      * @return bool
      * 
@@ -100,9 +121,7 @@ class Adv extends AbstractEndpoint
      */
     public function updateCpm(int $advertId, int $type, int $cpm, int $param): bool
     {
-        if (!in_array($type, [AdvertType::ON_CARD, AdvertType::ON_SEARCH, AdvertType::ON_HOME_RECOM])) {
-            throw new InvalidArgumentException('Недопустимый тип РК: ' . $type);
-        }
+        $this->checkType($type, [AdvertType::ON_CARD, AdvertType::ON_SEARCH, AdvertType::ON_HOME_RECOM]);
         $this->postRequest('/adv/v0/cpm', [
             'advertId' => $advertId,
             'type' => $type,
@@ -111,11 +130,181 @@ class Adv extends AbstractEndpoint
         ]);
         return $this->responseCode() == 200;
     }
+
+    /**
+     * Получение списка ставок по типу размещения РК
+     * 
+     * @param int   $type  Тип РК
+     * @param array $param Параметр запроса, по которому будет получен список ставок активных РК.
+     *                     Должен быть значением menuId (для РК в каталоге), subjectId (для РК в поиске и рекомендациях)
+     *                     или setId (для РК в карточке товара).
+     * 
+     * @return array
+     */
+    public function allCpm(int $type, array $param): array
+    {
+        $this->checkType($type);
+        return $this->postRequest('/adv/v0/allcpm?type=' . $type, [
+            'param' => $param,
+        ]);
+    }
+
+    /**
+     * Изменение активности предметной группы для РК в поиске
+     * 
+     * @param int  $id        Идентификатор РК
+     * @param int  $subjectId Идентификатор предметной группы, для которой меняется активность
+     * @param bool $status    Новое состояние
+     *                        true - сделать группу активной
+     *                        false - сделать группу неактивной
+     * 
+     * @return bool
+     */
+    public function setActive(int $id, int $subjectId, bool $status): bool
+    {
+        $this->getRequest('/adv/v0/active', [
+            'id' => $id,
+            'subjectId' => $subjectId,
+            'status' => $status,
+        ]);
+        return $this->responseCode() == 200;
+    }
+ 
+    /**
+     *  Изменение временных интервалов показа рекламной кампании
+     * 
+     * @param int   $advertId  Идентификатор РК, у которой меняется интервал
+     * @param int   $param     Параметр, для которого будет внесено изменение,
+     *                         должен быть значением menuId (для РК в каталоге), subjectId (для РК в поиске и рекомендациях)
+     *                         или setId (для РК в карточке товара)
+     * @param array $intervals Массив новых значений для интервалов
+     *                         Максимальное количество интервалов 24.
+     *                         [{"begin": 15, "end": 21}, ...]
+     *                         begin, end - Время начала и окончания показов, по 24 часовой схеме
+     * 
+     * @return bool
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества переданных интервалов
+     */
+    public function setIntervals(int $advertId, int $param, array $intervals): bool
+    {
+        $maxCount = 24;
+        if (count($intervals) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества переданных интервалов: {$maxCount}");
+        }
+        $this->postRequest('/adv/v0/intervals', [
+            'advertId' => $advertId,
+            'param' => $param,
+            'intervals' => $intervals,
+        ]);
+        return $this->responseCode() == 200;
+    }
+    
+    /**
+     * Изменение размера дневного бюджета рекламной кампании
+     * 
+     * @param int $advertId Идентификатор РК, у которой меняется бюджет
+     * @param int $budget   Сумма дневного бюджета
+     *                      Значение должно быть больше 500 или равно 0 в случае, если бюджет не установлен
+     * 
+     * @return bool
+     * 
+     * @throws InvalidArgumentException Некорректное значение суммы дневного бюджета
+     */
+    public function dailyBudget(int $advertId, int $budget): bool
+    {
+        if ($budget > 0 && $budget <= 500 || $budget < 0) {
+            throw new InvalidArgumentException('Некорректное значение суммы дневного бюджета');
+        }
+        $this->postRequest('/adv/v0/dailybudget', [
+            'advertId' => $advertId,
+            'dailyBudget' => $budget,
+        ]);
+        return $this->responseCode() == 200;
+    }
+
+    /**
+     * Изменение активности номенклатур в РК
+     * 
+     * @param int   $advertId Идентификатор РК, у которой меняется бюджет
+     * @param int   $param    Параметр, для которого будет внесено изменение,
+     *                        должен быть значением menuId (для РК в каталоге), subjectId (для РК в поиске и рекомендациях)
+     *                        или setId (для РК в карточке товара)
+     * @param array $active   Массив значений активности для номенклатур.
+     *                        Максимальноe количество номенклатур в запросе 50.
+     *                        [{"nm": 2116745, "active": true}, ...]
+     * 
+     * @return bool
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества номенклатур в запросе
+     */
+    public function nmActive(int $advertId, int $param, array $active): bool
+    {
+        $maxCount = 50;
+        if (count($active) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества номенклатур в запросе: {$maxCount}");
+        }
+        $this->postRequest('/adv/v0/nmactive', [
+            'advertId' => $advertId,
+            'param' => $param,
+            'active' => $active,
+        ]);
+        return $this->responseCode() == 200;
+    }
+    
+    /**
+     * Словарь значений параметра subjectId
+     * 
+     * Метод позволяет получить список значений параметра subjectId.
+     * 
+     * @param int $id Идентификатор предметной группы, для которой создана РК (для РК в поиске и рекомендациях).
+     *                Принимает значение параметра subjectId из РК.
+     *                При пустом параметре вернётся весь список существующих значений.
+     * 
+     * @return array
+     */
+    public function paramSubject(int $id = 0): array
+    {
+        return $this->getRequest('/adv/v0/params/subject', $id ? ['id' => $id] : []);
+    }
+    
+    /**
+     * Словарь значений параметра menuId
+     * 
+     * Метод позволяет получить список значений параметра menuId.
+     * 
+     * @param int $id Идентификатор меню, где размещается РК (для РК в каталоге).
+     *                Принимает значение параметра menuId из РК.
+     *                При пустом параметре вернётся весь список существующих значений.
+     * 
+     * @return array
+     */
+    public function paramMenu(int $id = 0): array
+    {
+        return $this->getRequest('/adv/v0/params/menu', $id ? ['id' => $id] : []);
+    }
+    
+    /**
+     * Словарь значений параметра setId
+     * 
+     * Метод позволяет получить список значений параметра setId
+     * 
+     * @param int $id Идентификатор сочетания предмета и пола (для РК в карточке товара).
+     *                Принимает значение параметра setId из РК.
+     *                При пустом параметре вернётся весь список существующих значений.
+     * 
+     * @return array
+     */
+    public function paramSet(int $id = 0): array
+    {
+        return $this->getRequest('/adv/v0/params/set', $id ? ['id' => $id] : []);
+    }
     
     /**
      * Запуск РК
      * 
      * @param int $id
+     * 
      * @return bool
      */
     public function start(int $id): bool
@@ -128,6 +317,7 @@ class Adv extends AbstractEndpoint
      * Пауза РК
      * 
      * @param int $id
+     * 
      * @return bool
      */
     public function pause(int $id): bool
@@ -136,4 +326,24 @@ class Adv extends AbstractEndpoint
         return $this->responseCode() == 200;
     }
 
+    /**
+     * Пауза РК
+     * 
+     * @param int $id
+     * 
+     * @return bool
+     */
+    public function stop(int $id): bool
+    {
+        $this->getRequest('/adv/v0/stop', ['id' => $id]);
+        return $this->responseCode() == 200;
+    }
+
+    private function checkType(int $type, array $types = [])
+    {
+        if (!in_array($type, $types ?: AdvertType::all())) {
+            throw new InvalidArgumentException('Неизвестный тип РК: ' . $type);
+        }
+    }
+    
 }
