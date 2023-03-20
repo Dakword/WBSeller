@@ -16,12 +16,12 @@ use Dakword\WBSeller\API\Endpoint\{
 
 class API
 {
-    public const WB_API_VERSION = '1.8';
+    public const WB_API_VERSION = '2.0';
 
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
     private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
-    private string $advBaseUrl = 'https://advert-api.wb.ru';
-    private string $recomBaseUrl = 'https://recommend-api.wb.ru';
+    private string $advBaseUrl = 'https://advert-api.wildberries.ru';
+    private string $recomBaseUrl = 'https://recommend-api.wildberries.ru';
     private string $apiKey;
     private string $statKey;
     private string $advKey;
