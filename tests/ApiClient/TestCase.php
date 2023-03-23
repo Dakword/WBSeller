@@ -6,6 +6,7 @@ use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
 use Dakword\WBSeller\API\Endpoint\{
     Adv,
     Content,
+    Feedbacks,
     Marketplace,
     Prices,
     Promo,
@@ -26,6 +27,12 @@ abstract class TestCase extends BaseTestCase
     {
         $this->skipIfNoKeyAPI();
         return $this->API()->Content();
+    }
+
+    protected function Feedbacks(): Feedbacks
+    {
+        $this->skipIfNoKeyAPI();
+        return $this->API()->Feedbacks();
     }
 
     protected function Marketplace(): Marketplace

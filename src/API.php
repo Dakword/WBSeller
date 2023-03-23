@@ -7,6 +7,7 @@ namespace Dakword\WBSeller;
 use Dakword\WBSeller\API\Endpoint\{
     Adv,
     Content,
+    Feedbacks,
     Marketplace,
     Prices,
     Promo,
@@ -16,12 +17,13 @@ use Dakword\WBSeller\API\Endpoint\{
 
 class API
 {
-    public const WB_API_VERSION = '2.0';
+    public const WB_API_VERSION = '2.1';
 
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
     private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
     private string $advBaseUrl = 'https://advert-api.wildberries.ru';
     private string $recomBaseUrl = 'https://recommend-api.wildberries.ru';
+    private string $fbBaseUrl = 'https://feedbacks-api.wildberries.ru';
     private string $apiKey;
     private string $statKey;
     private string $advKey;
@@ -60,6 +62,11 @@ class API
         $this->recomBaseUrl = rtrim($baseUrl, '/');
     }
 
+    public function setFeedBacksBaseUrl(string $baseUrl): void
+    {
+        $this->fbBaseUrl = rtrim($baseUrl, '/');
+    }
+
     public function Adv(): Adv
     {
         return new Adv($this->advBaseUrl, $this->advKey);
@@ -68,6 +75,11 @@ class API
     public function Content(): Content
     {
         return new Content($this->apiBaseUrl, $this->apiKey);
+    }
+
+    public function Feedbacks(): Feedbacks
+    {
+        return new Feedbacks($this->fbBaseUrl, $this->apiKey);
     }
 
     public function Marketplace(): Marketplace
