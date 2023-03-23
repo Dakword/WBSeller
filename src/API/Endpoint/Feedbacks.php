@@ -12,6 +12,20 @@ class Feedbacks extends AbstractEndpoint
 {
 
     /**
+     * Наличие непросмотренных отзывов
+     * 
+     * Метод отображает информацию о наличии у продавца непросмотренных отзывов и вопросов
+     * 
+     * @return object {
+     * 	    data: {hasNewQuestions: bool, hasNewFeedbacks: bool},
+     * 	    error: bool, errorText: string, additionalErrors: ?string
+     */
+    public function hasNew(): object
+    {
+        return $this->getRequest('/api/v1/new-feedbacks-questions');
+    }
+
+    /**
      * Необработанные отзывы
      * 
      * Метод позволяет получить количество необработанных отзывов за сегодня,
@@ -219,7 +233,7 @@ class Feedbacks extends AbstractEndpoint
     /**
      * Создать жалобу на отзыв
      * 
-     * @param string $id         Идентификатор отзыва
+     * @param string $id Идентификатор отзыва
      * 
      * @return bool true - успешно, false - неудача
      */

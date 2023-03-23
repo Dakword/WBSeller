@@ -5,14 +5,8 @@ declare(strict_types=1);
 namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
-    Adv,
-    Content,
-    Feedbacks,
-    Marketplace,
-    Prices,
-    Promo,
-    Recommendations,
-    Statistics
+    Adv, Content, Feedbacks, Marketplace, Prices, Promo,
+    Questions, Recommendations, Statistics
 };
 
 class API
@@ -95,6 +89,11 @@ class API
     public function Promo(): Promo
     {
         return new Promo($this->apiBaseUrl, $this->apiKey);
+    }
+
+    public function Questions(): Questions
+    {
+        return new Questions($this->fbBaseUrl, $this->apiKey);
     }
 
     public function Recommendations(): Recommendations

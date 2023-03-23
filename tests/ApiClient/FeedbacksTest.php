@@ -22,6 +22,18 @@ class FeedbacksTest extends TestCase
         $this->assertInstanceOf(Feedbacks::class, $this->API()->Feedbacks());
     }
 
+    public function test_hasNew()
+    {
+        $result = $this->Feedbacks->hasNew();
+
+        $this->assertFalse($result->error);
+
+        if(!$result->error) {
+            $this->assertObjectHasAttribute('hasNewQuestions', $result->data);
+            $this->assertObjectHasAttribute('hasNewFeedbacks', $result->data);
+        }
+    }
+
     public function test_unansweredCount()
     {
         $result = $this->Feedbacks->unansweredCount();

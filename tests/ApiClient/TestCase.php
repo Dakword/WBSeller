@@ -10,6 +10,7 @@ use Dakword\WBSeller\API\Endpoint\{
     Marketplace,
     Prices,
     Promo,
+    Questions,
     Recommendations,
     Statistics
 };
@@ -51,6 +52,12 @@ abstract class TestCase extends BaseTestCase
     {
         $this->skipIfNoKeyAPI();
         return $this->API()->Promo();
+    }
+
+    protected function Questions(): Questions
+    {
+        $this->skipIfNoKeyAPI();
+        return $this->API()->Questions();
     }
 
     protected function Recommendations(): Recommendations

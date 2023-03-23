@@ -2,7 +2,7 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-⚡ <b>Управление рекламой</b>
+⚡ <b>Работа с вопросами и отзывами</b>
 
 ### Работа с API
 ```php
@@ -25,6 +25,10 @@ $promoApi = $wbSellerAPI->Promo();
 $statApi = $wbSellerAPI->Statistics();
 // API рекламы
 $advApi = $wbSellerAPI->Adv();
+// API вопросов
+$questionsApi = $wbSellerAPI->Questions();
+// API отзывов
+$fbApi = $wbSellerAPI->Feedbacks();
 
 // Получить список НМ
 $result = $contentApi->getCardsList();
@@ -70,4 +74,5 @@ try {
     echo 'Исключение при создании карточки: ' . $exc->getMessage();
 }
 
+и т.д. и т.п. (смотрим тесты)
 ```
