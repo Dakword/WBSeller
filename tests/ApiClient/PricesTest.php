@@ -19,23 +19,15 @@ class PricesTest extends TestCase
     /**
      * @covers ::getPrices()
      * @covers ::getPricesOnStock()
-     * @covers ::getPricesNoStock()
      */
     public function test_getInfo()
     {
         $result1 = $this->Prices()->getPrices();
         $this->assertTrue(is_array($result1));
-        $count_0 = count($result1);
 
         $result2 = $this->Prices()->getPricesOnStock();
         $this->assertTrue(is_array($result2));
-        $count_1 = count($result2);
 
-        $result3 = $this->Prices()->getPricesNoStock();
-        $this->assertTrue(is_array($result3));
-        $count_2 = count($result3);
-
-        $this->assertEquals($count_0, $count_1 + $count_2);
     }
 
     /**

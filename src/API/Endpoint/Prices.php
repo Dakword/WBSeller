@@ -13,7 +13,7 @@ class Prices extends AbstractEndpoint
     /**
      * Получение информации по номенклатурам, их ценам, скидкам и промокодам.
      * 
-     * @param int $quantity Фильтр: 2 - товар с нулевым остатком, 1 - товар с ненулевым остатком, 0 - товар с любым остатком
+     * @param int $quantity Фильтр: 1 - товар с ненулевым остатком, 0 - товар с любым остатком
      * 
      * @return array [{nmId: int, price: number, discount: int, promoCode: number}, ...]
      * 
@@ -21,7 +21,7 @@ class Prices extends AbstractEndpoint
      */
     private function getPricesInfo(int $quantity = 0): array
     {
-        if (!in_array($quantity, [0, 1, 2])) {
+        if (!in_array($quantity, [0, 1])) {
             throw new InvalidArgumentException('Задан некорректный параметр фильтрации: ' . $quantity);
         }
         return $this->getRequest('/public/api/v1/info', ['quantity' => $quantity]);
@@ -46,17 +46,6 @@ class Prices extends AbstractEndpoint
     public function getPricesOnStock(): array
     {
         return $this->getPricesInfo(1);
-    }
-
-    /**
-     * Получение информации по номенклатурам, их ценам, скидкам и промокодам.
-     * Для товаров с нулевым остатком
-     * 
-     * @return array [{nmId: int, price: number, discount: int, promoCode: number}, ...]
-     */
-    public function getPricesNoStock(): array
-    {
-        return $this->getPricesInfo(2);
     }
 
     /**
