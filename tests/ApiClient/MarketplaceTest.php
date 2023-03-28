@@ -166,7 +166,7 @@ class MarketplaceTest extends TestCase
     {
         $result = $this->Marketplace()->setOrderKiz(123456, []);
         $this->assertObjectHasAttribute('code', $result);
-        $this->assertEquals($result->code, 'IncorrectRequest');
+        $this->assertEquals($result->code, 'IncorrectSGTIN');
     }
 
     public function test_getOrdersStickers()

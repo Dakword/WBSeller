@@ -292,12 +292,12 @@ class Marketplace extends AbstractEndpoint
      * Закрепить за сборочным заданием КиЗ (маркировку Честного знака)
      * 
      * @param int   $orderId Идентификатор сборочного задания
-     * @param array $sgtin   Массив КиЗов
+     * @param array $sgtin   Массив КиЗов (У одного сборочного заказа не может быть больше 10 маркировок)
      * 
      */
     public function setOrderKiz(int $orderId, array $sgtin)
     {
-        $maxCount = 1_000;
+        $maxCount = 10;
         if (count($sgtin) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества строк переданного массива: {$maxCount}");
         }
