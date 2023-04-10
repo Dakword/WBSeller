@@ -14,9 +14,9 @@ abstract class AbstractEndpoint
     private int $retryDelay = 0;
     private Client $Client;
 
-    public function __construct(string $baseUrl, string $key)
+    public function __construct(string $baseUrl, string $key, ?string $proxy = null)
     {
-        $this->Client = new Client(rtrim($baseUrl, '/'), $key);
+        $this->Client = new Client(rtrim($baseUrl, '/'), $key, $proxy);
 
         if (method_exists($this, 'middleware')) {
             $this->Client->addMiddleware($this->middleware());

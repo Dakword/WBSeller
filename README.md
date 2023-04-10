@@ -13,6 +13,9 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
     'advkey' => 'ZZZ',
 ]);
 
+// Proxy
+$wbSellerAPI->useProxy('http://122.123.123.123:8088');
+
 // API контента
 $contentApi = $wbSellerAPI->Content();
 // API цен

@@ -21,6 +21,7 @@ class API
     private string $apiKey;
     private string $statKey;
     private string $advKey;
+    private ?string $proxy = null;
 
     /**
      * @param array $options [
@@ -36,6 +37,16 @@ class API
         $this->advKey = $options['advkey'] ?? '';
     }
 
+    /**
+     * Использовать для запросов HTTP-прокси
+     * 
+     * @param string $proxyUrl http://username:password@192.168.16.1:10
+     */
+    public function useProxy(string $proxyUrl)
+    {
+        $this->proxy = $proxyUrl;
+    }
+    
     public function setApiBaseUrl(string $baseUrl): void
     {
         $this->apiBaseUrl = rtrim($baseUrl, '/');
@@ -63,47 +74,47 @@ class API
 
     public function Adv(): Adv
     {
-        return new Adv($this->advBaseUrl, $this->advKey);
+        return new Adv($this->advBaseUrl, $this->advKey, $this->proxy);
     }
 
     public function Content(): Content
     {
-        return new Content($this->apiBaseUrl, $this->apiKey);
+        return new Content($this->apiBaseUrl, $this->apiKey, $this->proxy);
     }
 
     public function Feedbacks(): Feedbacks
     {
-        return new Feedbacks($this->fbBaseUrl, $this->apiKey);
+        return new Feedbacks($this->fbBaseUrl, $this->apiKey, $this->proxy);
     }
 
     public function Marketplace(): Marketplace
     {
-        return new Marketplace($this->apiBaseUrl, $this->apiKey);
+        return new Marketplace($this->apiBaseUrl, $this->apiKey, $this->proxy);
     }
 
     public function Prices(): Prices
     {
-        return new Prices($this->apiBaseUrl, $this->apiKey);
+        return new Prices($this->apiBaseUrl, $this->apiKey, $this->proxy);
     }
 
     public function Promo(): Promo
     {
-        return new Promo($this->apiBaseUrl, $this->apiKey);
+        return new Promo($this->apiBaseUrl, $this->apiKey, $this->proxy);
     }
 
     public function Questions(): Questions
     {
-        return new Questions($this->fbBaseUrl, $this->apiKey);
+        return new Questions($this->fbBaseUrl, $this->apiKey, $this->proxy);
     }
 
     public function Recommendations(): Recommendations
     {
-        return new Recommendations($this->recomBaseUrl, $this->apiKey);
+        return new Recommendations($this->recomBaseUrl, $this->apiKey, $this->proxy);
     }
 
     public function Statistics(): Statistics
     {
-        return new Statistics($this->statBaseUrl, $this->statKey);
+        return new Statistics($this->statBaseUrl, $this->statKey, $this->proxy);
     }
 
 }

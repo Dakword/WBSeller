@@ -26,7 +26,7 @@ class Client
     private HttpClient $Client;
     private HandlerStack $stack;
 
-    function __construct(string $baseUrl, string $apiKey)
+    function __construct(string $baseUrl, string $apiKey, ?string $proxyUrl)
     {
         $this->baseUrl = rtrim($baseUrl, '/');
         $this->apiKey = $apiKey;
@@ -38,6 +38,7 @@ class Client
             'timeout' => 0, // in seconds
             'verify' => false,
             'handler' => $this->stack,
+            'proxy' => $proxyUrl,
         ]);
     }
 
