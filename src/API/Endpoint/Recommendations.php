@@ -91,4 +91,28 @@ class Recommendations extends AbstractEndpoint
         ));
     }
 
+    /**
+     * Управление рекомендациями
+     * 
+     * Метод позволяет добавлять, удалять рекомендации.
+     * Работает по принципу перезаписи, все что указано в recom, ставится взамен того, что было ранее.
+     * Чтобы удалить рекомендации необходимо передать пустой массив recom.
+     * 
+     * @param array $recom [nmId => [nmId1, nmId2, ...], ...]
+     *                     nmId - Идентификатор товара
+     *                     [nmId1, nmId2, ...] - Список идентификаторов товаров,
+     *                                           которые необходимо передать в рекомендуемые
+     * 
+     * @return string
+     */
+    public function update(array $recom): string
+    {
+        return $this->postRequest('/api/v1/del', array_map(
+            function ($key, $value) {
+                return ['nm' => (int) $key, 'recom' => $value];
+            },
+            array_keys($recom), array_values($recom)
+        ));
+    }
+    
 }

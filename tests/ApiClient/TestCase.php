@@ -4,16 +4,11 @@ namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
 use Dakword\WBSeller\API\Endpoint\{
-    Adv,
-    Content,
-    Feedbacks,
-    Marketplace,
-    Prices,
-    Promo,
-    Questions,
-    Recommendations,
-    Statistics
+    Adv, Content, Feedbacks, Marketplace, Prices,
+    Promo, Questions, Recommendations, Statistics
 };
+use Dakword\WBSeller\API\Endpoint\Subpoint\{Tags};
+use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -28,6 +23,12 @@ abstract class TestCase extends BaseTestCase
     {
         $this->skipIfNoKeyAPI();
         return $this->API()->Content();
+    }
+
+    protected function ContentTags(): Tags
+    {
+        $this->skipIfNoKeyAPI();
+        return $this->API()->Content()->Tags();
     }
 
     protected function Feedbacks(): Feedbacks
@@ -71,5 +72,21 @@ abstract class TestCase extends BaseTestCase
         $this->skipIfNoKeySTAT();
         return $this->API()->Statistics();
     }
+
+    protected function getRealNms($limit = 10)
+    {
+        try {
+            $result = $this->Content()
+                ->getCardsList('', $limit);
+        } catch (ApiTimeRestrictionsException $exc) {
+            $this->markTestSkipped($exc->getMessage());
+        }
+
+        if (count($result->data->cards) == 0) {
+            $this->markTestSkipped('No cards in account');
+        }
+        
+        return $list = array_column($result->data->cards, 'nmID');
+    }    
 
 }

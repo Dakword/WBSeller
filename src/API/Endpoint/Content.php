@@ -5,10 +5,30 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Tags;
 use InvalidArgumentException;
 
 class Content extends AbstractEndpoint
 {
+
+    /**
+     * Сервис для работы с тегами КТ.
+     * Теги предназначены для быстрого поиска КТ в вашем лк.
+     * 
+     * @return Tags
+     */
+    public function Tags(): Tags
+    {
+        return new Tags($this);
+    }
+
+    public function __call($method, $parameters)
+    {
+        if(method_exists($this, $method)) {
+            return call_user_func_array([$this, $method], $parameters);
+        }
+        throw new InvalidArgumentException('Magic request methods not exists');
+    }
 
     /**
      * Создание нескольких КТ
@@ -127,15 +147,17 @@ class Content extends AbstractEndpoint
      * Получить список НМ по фильтру (вендор код, баркод, номер номенклатуры) с сортировкой
      * V2
      * 
-     * @param string $textSearch Поиск по номеру НМ, баркоду или артикулу товара
-     * @param int    $limit      Количество запрашиваемых КТ
-     * @param int    $withPhoto  -1 - Показать все КТ
-     *                           0 - Показать КТ без фото
-     *                           1 - Показать КТ с фото
-     * @param string $sortColumn Поле по которому будет сортироваться список КТ (пока что поддерживается только updatedAt)
-     * @param bool   $ascending  Направление сортировки. true - по возрастанию, false - по убыванию.
-     * @param string $updatedAt  Время обновления последней КТ из предыдущего ответа на запрос списка КТ
-     * @param int    $nmId       Номенклатура последней КТ из предыдущего ответа на запрос списка КТ
+     * @param string $textSearch      Поиск по номеру НМ, баркоду или артикулу товара
+     * @param int    $limit           Количество запрашиваемых КТ
+     * @param int    $withPhoto       -1 - Показать все КТ
+     *                                0 - Показать КТ без фото
+     *                                1 - Показать КТ с фото
+     * @param string $sortColumn      Поле по которому будет сортироваться список КТ (пока что поддерживается только updatedAt)
+     * @param bool   $ascending       Направление сортировки. true - по возрастанию, false - по убыванию.
+     * @param string $updatedAt       Время обновления последней КТ из предыдущего ответа на запрос списка КТ
+     * @param int    $nmId            Номенклатура последней КТ из предыдущего ответа на запрос списка КТ
+     * @param bool   $allowedCatsOnly true - показать КТ только из разрешенных к реализации категорий
+     *                                false - показать КТ из всех категорий
      * 
      * @return object {
      *      data: {
@@ -147,7 +169,9 @@ class Content extends AbstractEndpoint
      * 
      * @throws InvalidArgumentException
      */
-    public function getCardsList(string $textSearch = '', int $limit = 1_000, int $withPhoto = -1, string $sortColumn = 'updateAt', bool $ascending = false, string $updatedAt = '', int $nmId = 0): object
+    public function getCardsList(
+        string $textSearch = '', int $limit = 1_000, int $withPhoto = -1, string $sortColumn = 'updateAt',
+        bool $ascending = false, string $updatedAt = '', int $nmId = 0, bool $allowedCatsOnly = false): object
     {
         $maxCount = 1_000;
         if ($limit > $maxCount) {
@@ -168,6 +192,7 @@ class Content extends AbstractEndpoint
                 'filter' => [
                     'textSearch' => $textSearch,
                     'withPhoto' => $withPhoto,
+                    'allowedCategoriesOnly' => $allowedCatsOnly,
                 ],
                 'sort' => [
                     'sortColumn' => $sortColumn,
@@ -198,8 +223,10 @@ class Content extends AbstractEndpoint
      * 
      * Метод позволяет получить полную информацию по КТ с помощью вендор кода(-ов) номенклатуры из КТ (артикулов).
      * 
-     * @param string|array $vendorCodes Идентификатор или массив идентификаторов НМ поставщика
-     * 									(Максимальное количество в запросе 100)
+     * @param string|array $vendorCodes           Идентификатор или массив идентификаторов НМ поставщика
+     * 	                                          (Максимальное количество в запросе 100)
+     * @param bool         $allowedCategoriesOnly true - показать КТ только из разрешенных к реализации категорий
+     *                                            false - показать КТ из всех категорий
      * 
      * @return object {
      *      data: [ object, object, ... ],
@@ -207,7 +234,7 @@ class Content extends AbstractEndpoint
      * }
      * @throws InvalidArgumentException
      */
-    public function getCardsByVendorCodes($vendorCodes): object
+    public function getCardsByVendorCodes($vendorCodes, $allowedCategoriesOnly = false): object
     {
         $maxCount = 100;
         $codes = (is_array($vendorCodes) ? $vendorCodes : [$vendorCodes]);
@@ -216,6 +243,7 @@ class Content extends AbstractEndpoint
         }
         return $this->postRequest('/content/v1/cards/filter', [
             'vendorCodes' => $codes,
+            'allowedCategoriesOnly' => $allowedCategoriesOnly,
         ]);
     }
 
@@ -243,6 +271,56 @@ class Content extends AbstractEndpoint
         ]);
     }
 
+    /**
+     * Лимиты по КТ
+     * 
+     * Метод позволяет получить отдельно бесплатные и платные лимиты продавца на создание карточек товаров
+     * 
+     * @return object {
+     *      data: { freeLimits: int, paidLimits: int },
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     */
+    public function getCardsLimits(): object
+    {
+        return $this->getRequest('/content/v1/cards/limits');
+    }
+
+    /**
+     * Список НМ, находящихся в корзине
+     * 
+     * Метод позволяет получить список НМ, находящихся в корзине
+     * 
+     * Метод позволяет получить список НМ, которые находятся в корзине по фильтру (баркод (skus),
+     * артикул продавца (vendorCode), артикул WB (nmID)) с пагинацией и сортировкой
+     * 
+     * @param int    $page        Номер страницы
+     * @param string $searchValue Значение, по которому будет осуществляться поиск
+     * @param int    $onPage      Количество карточек на странице
+     * @param bool   $ascending   Направление сортировки. true - по возрастанию, false - по убыванию
+     *                            Поле, по которому будет сортироваться список - updateAt
+     * @return object {
+     *      data: { cards: array },
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества запрошенных карточек
+     */
+    public function getTrashList(int $page = 1, string $searchValue = '', int $onPage = 1_000, $ascending = true)
+    {
+        $maxLimit = 1_000;
+        if ($onPage > $maxLimit) {
+            throw new InvalidArgumentException("Превышение максимального количества запрошенных карточек: {$maxLimit}");
+        }
+        return $this->postRequest('/content/v1/cards/trash/list', [
+            'offset' => --$page * $onPage,
+            'limit' => $onPage,
+            'searchValue' => $searchValue,
+            'sortColumn' => 'updateAt',
+            'ascending' => $ascending,
+        ]);
+    }
+    
     /**
      * Категория товаров
      * 
@@ -347,10 +425,7 @@ class Content extends AbstractEndpoint
      * colors		Цвет
      * kinds		Пол
      * countries	Страна производства
-     * collections	Коллекция
      * seasons		Сезон
-     * contents		Комплектация
-     * consists		Состав
      * brands		Бренд
      * tnved		ТНВЭД код
      * 
@@ -365,7 +440,7 @@ class Content extends AbstractEndpoint
      */
     public function getDirectory(string $name, array $params = []): object
     {
-        $directories = ['colors', 'kinds', 'countries', 'collections', 'seasons', 'contents', 'consists', 'brands', 'tnved'];
+        $directories = ['colors', 'kinds', 'countries', 'seasons', 'brands', 'tnved'];
         $directory = ltrim(strtolower($name), '/');
         if (!in_array($directory, $directories)) {
             throw new InvalidArgumentException("Неизвестная ссылка на характеристику: {$directory}");
@@ -413,25 +488,6 @@ class Content extends AbstractEndpoint
     }
 
     /**
-     * Поиск значений характеристики "Коллекция"
-     * 
-     * @param string $pattern Вхождение для поиска
-     * @param int    $top     Количество запрашиваемых значений (максимум 5000)
-     * 
-     * @return object {
-     *      data: [ {id: int, name: string }, ... ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     */
-    public function searchDirectoryCollections(string $pattern, int $top): object
-    {
-        return $this->getDirectory('collections', [
-            'pattern' => $pattern,
-            'top' => $top
-        ]);
-    }
-
-    /**
      * Получение значений характеристики "Сезон"
      * 
      * @return object {
@@ -442,50 +498,6 @@ class Content extends AbstractEndpoint
     public function getDirectorySeasons(): object
     {
         return $this->getDirectory('seasons');
-    }
-
-    /**
-     * Поиск значений характеристики "Комплектация"
-     * 
-     * @param string $pattern Вхождение для поиска по наименованию значения характеристики
-     * @param int    $top     Количество запрашиваемых значений (максимум 5000)
-     * 
-     * @return object {
-     *      data: [ {id: int, name: string }, ... ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     */
-    public function searchDirectoryContents(string $pattern, int $top): object
-    {
-        return $this->getDirectory('contents', [
-            'pattern' => $pattern,
-            'top' => $top
-        ]);
-    }
-
-    /**
-     * Поиск значений характеристики "Состав"
-     * 
-     * @param string $pattern Вхождение для поиска по наименованию значения характеристики
-     * @param int    $top     Количество запрашиваемых значений (максимум 5000)
-     * 
-     * @return object {
-     *      data: [ {id: int, name: string }, ... ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     * 
-     * @throws InvalidArgumentException
-     */
-    public function searchDirectoryConsists(string $pattern, int $top): object
-    {
-        $maxCount = 5_000;
-        if ($top > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых значений: {$maxCount}");
-        }
-        return $this->getDirectory('consists', [
-            'pattern' => $pattern,
-            'top' => $top
-        ]);
     }
 
     /**

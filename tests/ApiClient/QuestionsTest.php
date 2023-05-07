@@ -56,7 +56,6 @@ class QuestionsTest extends TestCase
         if(!$result->error) {
             $this->assertObjectHasAttribute('data', $result);
             $this->assertObjectHasAttribute('products', $result->data);
-            $this->assertIsArray($result->data->products);
         }
     }
 

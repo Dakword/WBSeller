@@ -38,9 +38,9 @@ class StatisticsTest extends TestCase
 
     public function test_Sales()
     {
-        $result1 = $this->Statistics()->salesFromDate(new DateTime('2022-10-01'));
+        $result1 = $this->Statistics()->retryOnTooManyRequests()->salesFromDate(new DateTime('2022-10-01'));
         $this->assertIsArray($result1);
-        $result2 = $this->Statistics()->salesOnDate(new DateTime('2022-10-20'));
+        $result2 = $this->Statistics()->retryOnTooManyRequests()->salesOnDate(new DateTime('2022-10-20'));
         $this->assertIsArray($result2);
     }
 

@@ -15,7 +15,7 @@ class RecommendationsTest extends TestCase
 
     public function test_list()
     {
-        $nmIds = [1234567, 7654321];
+        $nmIds = $this->getRealNms(2);
         $result = $this->Recommendations()->list($nmIds);
         $this->assertIsArray($result);
         $this->assertTrue(in_array($nmIds[0], array_keys($result)));
@@ -34,6 +34,14 @@ class RecommendationsTest extends TestCase
     {
         $recom = $this->Recommendations();
         $recom->delete([123456 => [12345, 67890]]);
+
+        $this->assertEquals(200, $recom->responseCode());
+    }
+
+    public function test_update()
+    {
+        $recom = $this->Recommendations();
+        $recom->update([123456 => [12345, 67890]]);
 
         $this->assertEquals(200, $recom->responseCode());
     }

@@ -3,6 +3,7 @@
 namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\API\Endpoint\Content;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Tags;
 use Dakword\WBSeller\Tests\ApiClient\TestCase;
 use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 use InvalidArgumentException;
@@ -87,11 +88,35 @@ class ContentTest extends TestCase
         $this->assertEquals(13, strlen($result->data[0]));
     }
 
+    public function test_getCardsLimits()
+    {
+        $result = $this->Content()->getCardsLimits();
+        $this->assertFalse($result->error);
+
+        if(!$result->error) {
+            $this->assertObjectHasAttribute('data', $result);
+            $this->assertObjectHasAttribute('freeLimits', $result->data);
+            $this->assertObjectHasAttribute('paidLimits', $result->data);
+        }
+    }
+
+    public function test_getTrashList()
+    {
+        $result = $this->Content()->getTrashList();
+        $this->assertFalse($result->error);
+
+        if(!$result->error) {
+            $this->assertObjectHasAttribute('data', $result);
+            $this->assertObjectHasAttribute('cards', $result->data);
+            $this->assertIsArray($result->data->cards);
+        }
+    }
+
     public function test_addCardNomenclature_ERROR()
     {
         $result = $this->Content()->addCardNomenclature('TEST', []);
         $this->assertTrue($result->error);
-        $this->assertEquals('Внутренняя ошибка', $result->errorText);
+        $this->assertEquals('Неправильный формат запроса, кол-во создаваемых карточек товаров не должно быть 0', $result->errorText);
     }
 
     public function test_createCard_ERROR()
@@ -204,24 +229,9 @@ class ContentTest extends TestCase
         $this->assertTrue(in_array('Индия', array_column($this->Content()->getDirectoryCountries()->data, 'name')));
     }
 
-    public function test_searchDirectoryCollections()
-    {
-        $this->assertTrue(in_array('зима-лето-осень-весна', array_column($this->Content()->searchDirectoryCollections('зима-лето', 100)->data, 'name')));
-    }
-
     public function test_getDirectorySeasons()
     {
         $this->assertTrue(in_array('лето', $this->Content()->getDirectorySeasons()->data));
-    }
-
-    public function test_searchDirectoryContents()
-    {
-        $this->assertTrue(in_array('ситичко для чайника', array_column($this->Content()->searchDirectoryContents('СИТИЧКО', 50)->data, 'name')));
-    }
-
-    public function test_searchDirectoryConsists()
-    {
-        $this->assertTrue(in_array('Без метанола', array_column($this->Content()->searchDirectoryConsists('Метанол', 50)->data, 'name')));
     }
 
     public function test_getDirectoryBrands()

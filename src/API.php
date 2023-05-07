@@ -11,7 +11,7 @@ use Dakword\WBSeller\API\Endpoint\{
 
 class API
 {
-    public const WB_API_VERSION = '2.1';
+    public const WB_API_VERSION = '2.4';
 
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
     private string $statBaseUrl = 'https://statistics-api.wildberries.ru';

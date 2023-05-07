@@ -98,8 +98,8 @@ class FeedbacksTest extends TestCase
 
             if(!$result->error) {
                 $this->assertObjectHasAttribute('data', $result);
-                $this->assertObjectHasAttribute('minRating', $result->data);
-                $this->assertObjectHasAttribute('maxRating', $result->data);
+                $this->assertObjectHasAttribute('productMinRating', $result->data);
+                $this->assertObjectHasAttribute('productMaxRating', $result->data);
             }
         } else {
             $this->markTestSkipped('No products in the account');
@@ -168,7 +168,7 @@ class FeedbacksTest extends TestCase
 
         $this->assertFalse($result);
         $this->assertTrue($response->error);
-        $this->assertEquals('Не удалось исправить отзыв', $response->errorText);
+        $this->assertEquals('Не найден отзыв xxl', $response->errorText);
     }
 
     public function test_sendAnswer()
@@ -178,7 +178,7 @@ class FeedbacksTest extends TestCase
 
         $this->assertFalse($result);
         $this->assertTrue($response->error);
-        $this->assertEquals('Не удалось исправить отзыв', $response->errorText);
+        $this->assertEquals('Не найден отзыв xxl', $response->errorText);
     }
 
     public function test_createComplaint()
