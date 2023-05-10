@@ -138,26 +138,20 @@ class Marketplace extends AbstractEndpoint
      * 
      * Возвращает QR в svg, zplv (вертикальный), zplh (горизонтальный), png.
      * Можно получить, только если поставка передана в доставку.
-     * Доступные размеры: 580х400 и 400х300 пикселей.
      * 
      * @param string $supplyId Идентификатор поставки
      * @param string $type     Формат штрихкода ("pdf", "svg", "zplv", "zplh", "png")
-     * @param string $size     Размер этикетки ("40x30", "58x40")
      * 
      * @return object {barcode: string, file: string}
      * 
      * @throws InvalidArgumentException Неизвестный формат штрихкода
-     * @throws InvalidArgumentException Неизвестный размер этикетки
      */
-    public function getSupplyBarcode(string $supplyId, string $type, string $size): object
+    public function getSupplyBarcode(string $supplyId, string $type): object
     {
         if (!in_array($type, ['svg', 'zplv', 'zplh', 'png'])) {
             throw new InvalidArgumentException('Неизвестный формат штрихкода: ' . $type);
         }
-        if (!in_array($size, ['40x30', '58x40'])) {
-            throw new InvalidArgumentException('Неизвестный размер этикетки: ' . $type);
-        }
-        return $this->getRequest('/api/v3/supplies/' . $supplyId . '/barcode', ['type' => $type, 'width' => explode('x', $size)[0], 'height' => explode('x', $size)[1]]);
+        return $this->getRequest('/api/v3/supplies/' . $supplyId . '/barcode', ['type' => $type]);
     }
 
     /**

@@ -89,13 +89,13 @@ class MarketplaceTest extends TestCase
         if ($results->supplies) {
             $supply = array_shift($results->supplies);
             $supplyId = $supply->id;
-            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'svg', '40x30'));
-            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'png', '58x40'));
+            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'svg'));
+            $this->assertObjectHasAttribute('file', $this->Marketplace()->getSupplyBarcode($supplyId, 'png'));
         }
 
         $this->expectException(InvalidArgumentException::class);
-        $this->Marketplace()->getSupplyBarcode('WB-GI-123456', 'jpg', '40x30');
-        $this->Marketplace()->getSupplyBarcode('WB-GI-123456', 'png', '30x40');
+        $this->Marketplace()->getSupplyBarcode('WB-GI-123456', 'jpg');
+        $this->Marketplace()->getSupplyBarcode('WB-GI-123456', 'png');
     }
     
     public function test_confirmOrder()
