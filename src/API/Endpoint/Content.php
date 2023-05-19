@@ -313,11 +313,13 @@ class Content extends AbstractEndpoint
             throw new InvalidArgumentException("Превышение максимального количества запрошенных карточек: {$maxLimit}");
         }
         return $this->postRequest('/content/v1/cards/trash/list', [
-            'offset' => --$page * $onPage,
-            'limit' => $onPage,
-            'searchValue' => $searchValue,
-            'sortColumn' => 'updateAt',
-            'ascending' => $ascending,
+            'sort' => [
+                'sortColumn' => 'updateAt',
+                'ascending' => $ascending,
+                'searchValue' => $searchValue,
+                'offset' => --$page * $onPage,
+                'limit' => $onPage,
+            ],
         ]);
     }
     
