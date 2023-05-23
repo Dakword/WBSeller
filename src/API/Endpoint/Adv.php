@@ -210,6 +210,8 @@ class Adv extends AbstractEndpoint
      * @return bool
      * 
      * @throws InvalidArgumentException Некорректное значение суммы дневного бюджета
+     * 
+     * @deprecated since 22/05/2023
      */
     public function dailyBudget(int $advertId, int $budget): bool
     {

@@ -179,18 +179,22 @@ class Feedbacks extends AbstractEndpoint
      * Получение отзывов в формате XLSX
      * 
      * Метод позволяет получить XLSX файл с отзывами в кодировке BASE64
+     * За один запрос можно получить 5000 отзывов.
+     * На данный момент всего можно получить 200 000 последних отзывов.
      * 
      * @param bool        $isAnswered           Обработанные отзывы (true) или необработанные отзывы (false)
      * @param bool|null   $hasSupplierComplaint Отзывы с жалобой продавца (true) или без жалобы (false)
+     * @param int         $page                 Номер страницы
      * 
      * @return object {
      * 	    data: {filename: string, contentType: string, file: base64},
      * 	    error: bool, errorText: string, additionalErrors: ?string
      */
-    public function xlsReport(bool $isAnswered = false, ?bool $hasSupplierComplaint = null): object
+    public function xlsReport(bool $isAnswered = false, ?bool $hasSupplierComplaint = null, int $page = 1): object
     {
         return $this->getRequest('/api/v1/feedbacks/report', [
                 'isAnswered' => $isAnswered,
+                'skip' => --$page * 5_000,
             ]
             + (!is_null($hasSupplierComplaint) ? ['hasSupplierComplaint' => $hasSupplierComplaint] : [])
         );
