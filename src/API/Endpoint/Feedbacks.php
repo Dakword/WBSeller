@@ -105,9 +105,9 @@ class Feedbacks extends AbstractEndpoint
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
-    public function list(int $page = 1, int $onPage = 10_000, bool $isAnswered = false, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null): object
+    public function list(int $page = 1, int $onPage = 5_000, bool $isAnswered = false, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null): object
     {
-        $maxCount = 10_000;
+        $maxCount = 5_000;
         if ($onPage > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества запрошенных отзывов: {$maxCount}");
         }
@@ -142,9 +142,9 @@ class Feedbacks extends AbstractEndpoint
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
-    public function archive(int $page = 1, int $onPage= 10_000, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null): object
+    public function archive(int $page = 1, int $onPage= 5_000, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null): object
     {
-        $maxCount = 10_000;
+        $maxCount = 5_000;
         if ($onPage > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества запрошенных отзывов: {$maxCount}");
         }
