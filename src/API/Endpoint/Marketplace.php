@@ -5,11 +5,30 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Warehouses;
 use DateTime;
 use InvalidArgumentException;
 
 class Marketplace extends AbstractEndpoint
 {
+
+    /**
+     * Сервис для работы со складами.
+     * 
+     * @return Warehouses
+     */
+    public function Warehouses(): Warehouses
+    {
+        return new Warehouses($this);
+    }
+
+    public function __call($method, $parameters)
+    {
+        if(method_exists($this, $method)) {
+            return call_user_func_array([$this, $method], $parameters);
+        }
+        throw new InvalidArgumentException('Magic request methods not exists');
+    }
 
     /**
      * Список поставок
@@ -331,16 +350,6 @@ class Marketplace extends AbstractEndpoint
         return $this->postRequest(
             '/api/v3/orders/stickers?type=' . $type . '&width=' . explode('x', $size)[0] . '&height=' . explode('x', $size)[1],
             ['orders' => $orderIds]);
-    }
-
-    /**
-     * Cписок складов продавца
-     * 
-     * @return array [{id: int, name: string}, ...]
-     */
-    public function getWarehouses(): array
-    {
-        return $this->getRequest('/api/v2/warehouses');
     }
 
     /**

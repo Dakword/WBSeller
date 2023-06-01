@@ -287,6 +287,35 @@ class Content extends AbstractEndpoint
     }
 
     /**
+     * Объединение НМ
+     * 
+     * Метод позволяет объединить номенклатуры (nmID) под одним imtID.
+     * Объединить можно только номенклатуры с одинаковыми предметами.
+     * В одной КТ (под одним imtID) не может быть больше 30 номенклатур (nmID).
+     * 
+     * @param int   $targetImt imtID, под которым необходимо объединить НМ
+     * @param array $nmIds     nmID, которые необходимо объединить
+     * 
+     * @return object {
+     *      data: { },
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества номенклатур
+     */
+    public function moveNms(int $targetImt, array $nmIds): object
+    {
+        $maxCount = 30;
+        if (count($nmIds) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества номенклатур: {$maxCount}");
+        }
+        return $this->postRequest('/content/v1/cards/moveNm', [
+            'targetIMT' => $targetImt,
+            'nmIDs' => $nmIds,
+        ]);
+    }
+    
+    /**
      * Список НМ, находящихся в корзине
      * 
      * Метод позволяет получить список НМ, находящихся в корзине

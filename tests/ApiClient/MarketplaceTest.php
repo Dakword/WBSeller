@@ -183,12 +183,6 @@ class MarketplaceTest extends TestCase
         $this->Marketplace()->getOrdersStickers([12345], 'png', '30x50');
     }
 
-    public function test_getWarehouses()
-    {
-        $result = $this->Marketplace()->getWarehouses();
-        $this->assertIsArray($result);
-    }
-
     public function test_updateWarehouseStocks()
     {
         $result = $this->Marketplace()->updateWarehouseStocks(123456, []);

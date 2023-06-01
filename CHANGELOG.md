@@ -1,3 +1,8 @@
+### 3.9.0
+* Новые методы API Marketplace: Склады
+* Выделение методов работы со складами в подкласс `Marketplace()->Warehouses()`
+* Новый метод API контента: `Content::moveNms()`
+
 ### 3.8.0
 * Изменения метода `Marketplace::getSupplyBarcode()`
 
