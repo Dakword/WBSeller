@@ -6,11 +6,22 @@ namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Warehouses;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Passes;
 use DateTime;
 use InvalidArgumentException;
 
 class Marketplace extends AbstractEndpoint
 {
+
+    /**
+     * Сервис для работы с попусками.
+     * 
+     * @return Passes
+     */
+    public function Passes(): Passes
+    {
+        return new Passes($this);
+    }
 
     /**
      * Сервис для работы со складами.
