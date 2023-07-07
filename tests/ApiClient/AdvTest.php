@@ -94,7 +94,7 @@ class AdvTest extends TestCase
 
     public function test_setActive()
     {
-        $this->Adv->setActive(123, 456, true);
+        $result = $this->Adv->setActive(123, 456, true);
 
         $this->assertFalse($result);
     }
@@ -126,4 +126,13 @@ class AdvTest extends TestCase
         $this->Adv->nmActive(456789, 275, array_fill(0, 50, [ 'nm' => 2116745, 'active' => false ]));
     }
 
+    public function test_balance()
+    {
+        $result = $this->Adv->balance();
+
+        $this->assertIsObject($result);
+        $this->assertObjectHasAttribute('balance', $result);
+        $this->assertObjectHasAttribute('net', $result);
+        $this->assertObjectHasAttribute('bonus', $result);
+    }
 }

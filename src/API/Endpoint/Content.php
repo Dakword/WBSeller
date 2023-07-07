@@ -314,6 +314,31 @@ class Content extends AbstractEndpoint
             'nmIDs' => $nmIds,
         ]);
     }
+
+    /**
+     * Разъединение НМ
+     * 
+     * Метод позволяет отсоединить номенклатуры (nmID) от карточки товара.
+     * 
+     * @param array $nmIds nmID, которые необходимо отсоединить (не более 30)
+     * 
+     * @return object {
+     *      data: { },
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества номенклатур
+     */
+    public function removeNms(array $nmIds): object
+    {
+        $maxCount = 30;
+        if (count($nmIds) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества номенклатур: {$maxCount}");
+        }
+        return $this->postRequest('/content/v1/cards/moveNm', [
+            'nmIDs' => $nmIds,
+        ]);
+    }
     
     /**
      * Список НМ, находящихся в корзине

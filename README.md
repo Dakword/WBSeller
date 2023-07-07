@@ -2,8 +2,6 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-⚡ <b>Пропуска</b>
-
 ### Работа с API
 ```php
 
@@ -44,7 +42,7 @@ $info = $pricesApi->getPricesOnStock();
 var_dump($info);
 
 // Cписок складов поставщика
-$warehouses = $wbSellerAPI->Marketplace()->getWarehouses();
+$warehouses = $wbSellerAPI->Marketplace()->Warehouses()->list();
 var_dump($warehouses);
 
 // Заказы, сделанные сегодня (💡 С автоповтором запросов)

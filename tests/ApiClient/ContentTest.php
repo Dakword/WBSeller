@@ -265,4 +265,12 @@ class ContentTest extends TestCase
         $this->assertEquals('Указан несуществующий imt', $result->errorText);
     }
 
+    public function test_removeNms()
+    {
+        $result = $this->Content()->removeNms([123, 456, 789]);
+
+        $this->assertTrue($result->error);
+        $this->assertEquals('Указан несуществующий nmID карточки товара', $result->errorText);
+    }
+
 }

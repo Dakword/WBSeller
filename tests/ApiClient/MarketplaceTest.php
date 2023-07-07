@@ -197,7 +197,7 @@ class MarketplaceTest extends TestCase
 
     public function test_getWarehouseStocks()
     {
-        $wareHouses = $this->Marketplace()->getWarehouses();
+        $wareHouses = $this->Marketplace()->Warehouses()->list();
         $id = $wareHouses ? $wareHouses[0]->id : 123456;
         $result = $this->Marketplace()->getWarehouseStocks($id, ['1234567890']);
         $this->assertObjectHasAttribute('stocks', $result);

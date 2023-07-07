@@ -345,6 +345,18 @@ class Adv extends AbstractEndpoint
         return $this->responseCode() == 200;
     }
 
+    /**
+     * Баланс
+     * 
+     * Метод позволяет получать информацию о счёте, балансе и бонусах продавца
+     * 
+     * @return object {balance: int, net: int, bonus: int}
+     */
+    public function balance(): object
+    {
+        return $this->getRequest('/adv/v1/balance');
+    }
+
     private function checkType(int $type, array $types = [])
     {
         if (!in_array($type, $types ?: AdvertType::all())) {

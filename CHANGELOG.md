@@ -1,3 +1,9 @@
+### 3.11.0
+* Новый метод API контента: `Content::removeNms()`
+* Новый метод API рекламы: `Adv::balance()`
+* Новые методы API вопросов: `Questions::unansweredCountByPeriod()`, `Questions::answeredCountByPeriod()`
+* Новые методы API отзывов: `Feedbacks::unansweredCountByPeriod()`, `Feedbacks::answeredCountByPeriod()`
+
 ### 3.10.0
 * Добавлено API Marketplace/Пропуска
 

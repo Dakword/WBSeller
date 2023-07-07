@@ -22,6 +22,28 @@ class QuestionsTest extends TestCase
         $this->assertInstanceOf(Questions::class, $this->API()->Questions());
     }
 
+    public function test_unansweredCountByPeriod()
+    {
+        $result = $this->Questions->unansweredCountByPeriod(new \DateTime('2023-07-01'), new \DateTime('2023-07-20 23:59:59'));
+
+        $this->assertFalse($result->error);
+
+        if(!$result->error) {
+            $this->assertIsInt($result->data);
+        }
+    }
+
+    public function test_answeredCountByPeriod()
+    {
+        $result = $this->Questions->answeredCountByPeriod(new \DateTime('2023-07-01'), new \DateTime('2023-07-20 23:59:59'));
+
+        $this->assertFalse($result->error);
+
+        if(!$result->error) {
+            $this->assertIsInt($result->data);
+        }
+    }
+
     public function test_unansweredCount()
     {
         $result = $this->Questions->unansweredCount();

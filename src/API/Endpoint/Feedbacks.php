@@ -97,6 +97,8 @@ class Feedbacks extends AbstractEndpoint
      * @param int         $nmId                 Идентификатор номенклатуры 
      * @param bool|null   $hasSupplierComplaint Отзывы с жалобой продавца (true) или без жалобы (false)
      * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
+     * @param DateTime    $dateFrom             Дата начала периода
+     * @param DateTime    $dateTo               Дата окончания периода
      * 
      * @return object {
      * 	    data: {countUnanswered: int, countArchive: int, feedbacks: [object, ...]},
@@ -105,7 +107,9 @@ class Feedbacks extends AbstractEndpoint
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
-    public function list(int $page = 1, int $onPage = 5_000, bool $isAnswered = false, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null): object
+    public function list(int $page = 1, int $onPage = 5_000, bool $isAnswered = false, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null,
+        ?\DateTime $dateFrom = null, ?\DateTime $dateTo = null
+    ): object
     {
         $maxCount = 5_000;
         if ($onPage > $maxCount) {
@@ -120,6 +124,8 @@ class Feedbacks extends AbstractEndpoint
             + ($nmId ? ['nmId' => $nmId] : [])
             + (!is_null($hasSupplierComplaint) ? ['hasSupplierComplaint' => $hasSupplierComplaint] : [])
             + (!is_null($order) ? ['order' => $order] : [])
+            + (!is_null($dateFrom) ? ['dateFrom' => $dateFrom->getTimestamp()] : [])
+            + (!is_null($dateTo) ? ['dateTo' => $dateTo->getTimestamp()] : [])
         );
     }
     

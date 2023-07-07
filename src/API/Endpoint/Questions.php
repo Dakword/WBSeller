@@ -12,10 +12,47 @@ class Questions extends AbstractEndpoint
 {
 
     /**
-     * Неотвеченные вопросы
+     * Количество необработанных вопросов за период
      * 
-     * Метод позволяет получить количество неотвеченных вопросов
-     * за сегодня и за всё время
+     * @param DateTime $dateFrom Дата начала периода
+     * @param DateTime $dateTo   Дата окончания периода
+     * 
+     * @return object {
+     * 	    data: int,
+     * 	    error: bool, errorText: string, additionalErrors: ?string
+     * }
+     */
+    public function unansweredCountByPeriod(\DateTime $dateFrom, \DateTime $dateTo): object
+    {
+        return $this->getRequest('/api/v1/questions/count', [
+            'dateFrom' => $dateFrom->getTimestamp(),
+            'dateTo' => $dateTo->getTimestamp(),
+            'isAnswered' => false,
+        ]);
+    }
+
+    /**
+     * Количество обработанных вопросов за период
+     * 
+     * @param DateTime $dateFrom Дата начала периода
+     * @param DateTime $dateTo   Дата окончания периода
+     * 
+     * @return object {
+     * 	    data: int,
+     * 	    error: bool, errorText: string, additionalErrors: ?string
+     * }
+     */
+    public function answeredCountByPeriod(\DateTime $dateFrom, \DateTime $dateTo): object
+    {
+        return $this->getRequest('/api/v1/questions/count', [
+            'dateFrom' => $dateFrom->getTimestamp(),
+            'dateTo' => $dateTo->getTimestamp(),
+            'isAnswered' => true,
+        ]);
+    }
+
+    /**
+     * Неотвеченные вопросы за сегодня и за всё время
      * 
      * @return object {
      * 	    data: {countUnanswered: int, countUnansweredToday: int, valuation: string},
@@ -73,6 +110,8 @@ class Questions extends AbstractEndpoint
      * @param bool        $isAnswered           Отвеченные вопросы (true) или неотвеченные вопросы (false)
      * @param int         $nmId                 Идентификатор номенклатуры 
      * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
+     * @param DateTime    $dateFrom             Дата начала периода
+     * @param DateTime    $dateTo               Дата окончания периода
      * 
      * @return object {
      * 	    data: {countUnanswered: int, countArchive: int, questions: [object, ...]},
@@ -81,7 +120,9 @@ class Questions extends AbstractEndpoint
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
-    public function list(int $page = 1, int $onPage = 10_000, bool $isAnswered = false, int $nmId = 0, ?string $order = null): object
+    public function list(int $page = 1, int $onPage = 10_000, bool $isAnswered = false, int $nmId = 0, ?string $order = null,
+        ?\DateTime $dateFrom = null, ?\DateTime $dateTo = null
+    ): object
     {
         $maxCount = 10_000;
         if ($onPage > $maxCount) {
@@ -97,6 +138,8 @@ class Questions extends AbstractEndpoint
             ]
             + ($nmId ? ['nmId' => $nmId] : [])
             + (!is_null($order) ? ['order' => $order] : [])
+            + (!is_null($dateFrom) ? ['dateFrom' => $dateFrom->getTimestamp()] : [])
+            + (!is_null($dateTo) ? ['dateTo' => $dateTo->getTimestamp()] : [])
         );
     }
 
