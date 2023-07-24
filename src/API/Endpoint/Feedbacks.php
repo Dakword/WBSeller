@@ -275,6 +275,22 @@ class Feedbacks extends AbstractEndpoint
         return $this->responseCode() == 200;
     }
 
+    /**
+     * Получить отзыв
+     * 
+     * @param string $id Идентификатор отзыва
+     * 
+     * @return object {
+     * 	    data: object,
+     * 	    error: bool, errorText: string, additionalErrors: any
+     * }
+     */
+    public function get(string $id): object
+    {
+        return $this->getRequest('/api/v1/feedback', [
+            'id' => $id,
+        ]);
+    }
     
     private function checkOrder($order)
     {
@@ -282,4 +298,5 @@ class Feedbacks extends AbstractEndpoint
             throw new InvalidArgumentException("Недопустимое значение для сортировки результатов: {$order}");
         }
     }
+
 }

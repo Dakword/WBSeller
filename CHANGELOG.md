@@ -1,3 +1,7 @@
+### 3.12.1
+* Новый метод API вопросов: `Questions::get()`
+* Новый метод API отзывов: `Feedbacks::get()`
+
 ### 3.12.0
 * Добавлено API Questions/Шаблоны
 * Добавлено API Feedbacks/Шаблоны

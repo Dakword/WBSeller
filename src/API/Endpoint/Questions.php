@@ -91,6 +91,7 @@ class Questions extends AbstractEndpoint
      * @return object {
      * 	    data: {hasNewQuestions: bool, hasNewFeedbacks: bool},
      * 	    error: bool, errorText: string, additionalErrors: ?string
+     * }
      */
     public function hasNew(): object
     {
@@ -105,7 +106,7 @@ class Questions extends AbstractEndpoint
      * @return object {
      * 	    data: {products: [object, ...]},
      * 	    error: bool, errorText: string, additionalErrors: ?string
-     * 
+     * }
      * @throws InvalidArgumentException Превышение максимального количества запрошенных результатов
      */
     public function productRating(int $limit = 100): object
@@ -135,7 +136,7 @@ class Questions extends AbstractEndpoint
      * @return object {
      * 	    data: {countUnanswered: int, countArchive: int, questions: [object, ...]},
      * 	    error: bool, errorText: string, additionalErrors: ?string
-     * 
+     * }
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
@@ -172,6 +173,7 @@ class Questions extends AbstractEndpoint
      * @return object {
      * 	    data: {filename: string, contentType: string, file: base64},
      * 	    error: bool, errorText: string, additionalErrors: ?string
+     * }
      */
     public function xlsReport(bool $isAnswered = false): object
     {
@@ -238,6 +240,23 @@ class Questions extends AbstractEndpoint
             'state' => 'none',
         ]);
         return $this->responseCode() == 200;
+    }
+
+    /**
+     * Получить вопрос
+     * 
+     * @param string $id Идентификатор вопроса
+     * 
+     * @return object {
+     * 	    data: object,
+     * 	    error: bool, errorText: string, additionalErrors: any
+     * }
+     */
+    public function get(string $id): object
+    {
+        return $this->getRequest('/api/v1/question', [
+            'id' => $id,
+        ]);
     }
 
 }

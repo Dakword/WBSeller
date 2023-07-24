@@ -140,4 +140,20 @@ class QuestionsTest extends TestCase
         $this->assertEquals('Не найдены вопросы по поставщику', $response->errorText);
     }
 
+    public function test_get()
+    {
+        $result = $this->Questions->list(1, 10, true);
+
+        if(!$result->error) {
+            $questions = $result->data->questions;
+            if($questions) {
+                $question = array_shift($questions);
+                $result = $this->Questions->get($question->id);
+
+                $this->assertEquals($question->id, $result->data->id);
+            } else {
+                $this->markTestSkipped('No questions');
+            }
+        }
+    }
 }

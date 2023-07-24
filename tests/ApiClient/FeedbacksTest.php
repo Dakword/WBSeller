@@ -191,4 +191,20 @@ class FeedbacksTest extends TestCase
         $this->assertEquals('Не удалось получить отзыв', $response->errorText);
     }
 
+    public function test_get()
+    {
+        $result = $this->Feedbacks->list(1, 10, true);
+
+        if(!$result->error) {
+            $feedbacks = $result->data->feedbacks;
+            if($feedbacks) {
+                $feedback = array_shift($feedbacks);
+                $result = $this->Feedbacks->get($feedback->id);
+
+                $this->assertEquals($feedback->id, $result->data->id);
+            } else {
+                $this->markTestSkipped('No feedbacks');
+            }
+        }
+    }
 }
