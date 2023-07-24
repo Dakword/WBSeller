@@ -1,3 +1,7 @@
+### 3.12.0
+* Добавлено API Questions/Шаблоны
+* Добавлено API Feedbacks/Шаблоны
+
 ### 3.11.0
 * Новый метод API контента: `Content::removeNms()`
 * Новый метод API рекламы: `Adv::balance()`

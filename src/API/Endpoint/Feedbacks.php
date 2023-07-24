@@ -5,11 +5,30 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Templates;
 use InvalidArgumentException;
 
 
 class Feedbacks extends AbstractEndpoint
 {
+
+    /**
+     * Сервис для работы с шаблонами ответов.
+     * 
+     * @return Templates
+     */
+    public function Templates(): Templates
+    {
+        return new Templates($this);
+    }
+
+    public function __call($method, $parameters)
+    {
+        if(method_exists($this, $method)) {
+            return call_user_func_array([$this, $method], $parameters);
+        }
+        throw new InvalidArgumentException('Magic request methods not exists');
+    }
 
     /**
      * Наличие непросмотренных отзывов

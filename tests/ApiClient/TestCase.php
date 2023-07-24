@@ -7,7 +7,7 @@ use Dakword\WBSeller\API\Endpoint\{
     Adv, Content, Feedbacks, Marketplace, Prices,
     Promo, Questions, Recommendations, Statistics
 };
-use Dakword\WBSeller\API\Endpoint\Subpoint\{Passes, Tags, Warehouses};
+use Dakword\WBSeller\API\Endpoint\Subpoint\{Passes, Tags, Templates, Warehouses};
 use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 
 abstract class TestCase extends BaseTestCase
@@ -35,6 +35,12 @@ abstract class TestCase extends BaseTestCase
     {
         $this->skipIfNoKeyAPI();
         return $this->API()->Feedbacks();
+    }
+
+    protected function FeedbacksTemplates(): Templates
+    {
+        $this->skipIfNoKeyAPI();
+        return $this->API()->Feedbacks()->Templates();
     }
 
     protected function Marketplace(): Marketplace
@@ -71,6 +77,12 @@ abstract class TestCase extends BaseTestCase
     {
         $this->skipIfNoKeyAPI();
         return $this->API()->Questions();
+    }
+
+    protected function QuestionsTemplates(): Templates
+    {
+        $this->skipIfNoKeyAPI();
+        return $this->API()->Questions()->Templates();
     }
 
     protected function Recommendations(): Recommendations
