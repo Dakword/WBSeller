@@ -1,3 +1,12 @@
+### 3.13.0
+* Удалены методы API Marketplace: `confirmOrder()`, `deliverOrder()`, `receiveOrder()`, `rejectOrder()`
+* Новые методы API Marketplace:
+`setOrderUin()`, `setOrderIMEI()`, `setOrderGTIN()`, `getOrderMeta()`, `deleteOrderMeta()`, `getOrdersExternalStickers()`,
+`getSupplyBoxes()`, `addSupplyBoxes()`, `deleteSupplyBoxes()`, `addBoxOrders()`, `deleteBoxOrder()`, `getSupplyBoxStickers()`
+* Удалены методы API Feedbacks: `createComplaint()`
+* Новый метод API Feedbacks: `count()`
+* Изменения в параметрах методов: `Feedbacks::list()`, `Feedbacks::archive()`, `Feedbacks::xlsReport()`
+
 ### 3.12.1
 * Новый метод API вопросов: `Questions::get()`
 * Новый метод API отзывов: `Feedbacks::get()`

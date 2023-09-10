@@ -262,7 +262,7 @@ class ContentTest extends TestCase
         $result = $this->Content()->moveNms(123456, [123, 456, 789]);
 
         $this->assertTrue($result->error);
-        $this->assertEquals('Указан несуществующий imt', $result->errorText);
+        $this->assertEquals('Внутренняя ошибка', $result->errorText);
     }
 
     public function test_removeNms()

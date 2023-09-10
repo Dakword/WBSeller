@@ -150,7 +150,6 @@ class FeedbacksTest extends TestCase
     public function test_xlsReport()
     {
         $result = $this->Feedbacks->xlsReport();
-
         $this->assertFalse($result->error);
 
         if(!$result->error) {
@@ -181,16 +180,6 @@ class FeedbacksTest extends TestCase
         $this->assertEquals('Не найден отзыв xxl', $response->errorText);
     }
 
-    public function test_createComplaint()
-    {
-        $result = $this->Feedbacks->createComplaint('xxl');
-        $response = $this->Feedbacks->response();
-
-        $this->assertFalse($result);
-        $this->assertTrue($response->error);
-        $this->assertEquals('Не удалось получить отзыв', $response->errorText);
-    }
-
     public function test_get()
     {
         $result = $this->Feedbacks->list(1, 10, true);
@@ -207,4 +196,16 @@ class FeedbacksTest extends TestCase
             }
         }
     }
+
+    public function test_count()
+    {
+        $result = $this->Feedbacks->count();
+        
+        $this->assertFalse($result->error);
+
+        if(!$result->error) {
+            $this->assertObjectHasAttribute('data', $result);
+        }
+    }
+
 }

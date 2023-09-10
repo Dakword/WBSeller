@@ -14,7 +14,7 @@ class Marketplace extends AbstractEndpoint
 {
 
     /**
-     * Сервис для работы с попусками.
+     * Сервис для работы с пропусками.
      * 
      * @return Passes
      */
@@ -170,7 +170,7 @@ class Marketplace extends AbstractEndpoint
      * Можно получить, только если поставка передана в доставку.
      * 
      * @param string $supplyId Идентификатор поставки
-     * @param string $type     Формат штрихкода ("pdf", "svg", "zplv", "zplh", "png")
+     * @param string $type     Формат штрихкода ("svg", "zplv", "zplh", "png")
      * 
      * @return object {barcode: string, file: string}
      * 
@@ -189,69 +189,13 @@ class Marketplace extends AbstractEndpoint
      * 
      * Переводит сборочное задание в статус cancel ("Отменено продавцом").
      * 
-     * @param string $orderId Идентификатор сборочного задания
+     * @param int $orderId Идентификатор сборочного задания
      * 
      * @return object В случае ошибки {code: string, message: string}
      */
-    public function cancelOrder(string $orderId)
+    public function cancelOrder(int $orderId)
     {
         return $this->patchRequest('/api/v3/orders/' . $orderId . '/cancel');
-    }
-
-    /**
-     * Подтвердить сборочное задание
-     * 
-     * Переводит сборочное задание в статус confirm ("На сборке").
-     * 
-     * @param string $orderId Идентификатор сборочного задания
-     * 
-     * @return object В случае ошибки {code: string, message: string}
-     */
-    public function confirmOrder(string $orderId)
-    {
-        return $this->patchRequest('/api/v3/orders/' . $orderId . '/confirm');
-    }
-
-    /**
-     * Передать сборочное задание в доставку
-     * 
-     * Переводит сборочное задание в статус deliver ("В доставке").
-     * 
-     * @param string $orderId Идентификатор сборочного задания
-     * 
-     * @return object В случае ошибки {code: string, message: string}
-     */
-    public function deliverOrder(string $orderId)
-    {
-        return $this->patchRequest('/api/v3/orders/' . $orderId . '/deliver');
-    }
-
-    /**
-     * Сборочное задание выдано
-     * 
-     * Переводит сборочное задание в статус receive ("Получено клиентом").
-     * 
-     * @param string $orderId Идентификатор сборочного задания
-     * 
-     * @return object В случае ошибки {code: string, message: string}
-     */
-    public function receiveOrder(string $orderId)
-    {
-        return $this->patchRequest('/api/v3/orders/' . $orderId . '/receive');
-    }
-
-    /**
-     * Отказ от получения сборочного задания
-     * 
-     * Переводит сборочное задание в статус reject ("Отказ при получении").
-     * 
-     * @param string $orderId Идентификатор сборочного задания
-     * 
-     * @return object В случае ошибки {code: string, message: string}
-     */
-    public function rejectOrder(string $orderId)
-    {
-        return $this->patchRequest('/api/v3/orders/' . $orderId . '/reject');
     }
 
     /**
@@ -266,8 +210,12 @@ class Marketplace extends AbstractEndpoint
      * @return object (orders: [{id: int, supplierStatus: string, wbStatus: string}, ...])
      * @return object В случае ошибки {code: string, message: string}
      */
-    public function gerOrdersStatuses(array $orders): object
+    public function getOrdersStatuses(array $orders): object
     {
+        $maxCount = 1_000;
+        if (count($orders) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых статусов сборочных заданий: {$maxCount}");
+        }
         return $this->postRequest('/api/v3/orders/status', ['orders' => $orders]);
     }
 
@@ -329,6 +277,95 @@ class Marketplace extends AbstractEndpoint
     }
 
     /**
+     * Закрепить за сборочным заданием УИН
+     * 
+     * Обновляет УИН (уникальный идентификационный номер) сборочного задания.
+     * У одного сборочного задания может быть только один УИН.
+     * Добавлять маркировку можно только для заказов в статусе confirm. 
+     * 
+     * @param int    $orderId Идентификатор сборочного задания
+     * @param string $uin     УИН (16 символов)
+     * 
+     * @return bool
+     */
+    public function setOrderUin(int $orderId, string $uin): bool 
+    {
+        $this->putRequest('/api/v3/orders/' . $orderId . '/meta/uin', ['uin' => $uin]);
+        return $this->responseCode() == 204;
+    }
+
+    /**
+     * Закрепить за сборочным заданием IMEI
+     * 
+     * Обновляет IMEI сборочного задания.
+     * У одного сборочного задания может быть только один IMEI.
+     * Добавлять маркировку можно только для заказов в статусе confirm. 
+     * 
+     * @param int    $orderId Идентификатор сборочного задания
+     * @param string $imei    IMEI (15 символов)
+     * 
+     * @return bool
+     */
+    public function setOrderIMEI(int $orderId, string $imei): bool 
+    {
+        $this->putRequest('/api/v3/orders/' . $orderId . '/meta/imei', ['imei' => $imei]);
+        return $this->responseCode() == 204;
+    }
+
+    /**
+     * Закрепить за сборочным заданием GTIN
+     * 
+     * Обновляет GTIN сборочного задания.
+     * У одного сборочного задания может быть только один GTIN.
+     * Добавлять маркировку можно только для заказов в статусе confirm. 
+     * 
+     * @param int    $orderId Идентификатор сборочного задания
+     * @param string $gtin    УИН (13 символов)
+     * 
+     * @return bool
+     */
+    public function setOrderGTIN(int $orderId, string $gtin): bool 
+    {
+        $this->putRequest('/api/v3/orders/' . $orderId . '/meta/gtin', ['gtin' => $gtin]);
+        return $this->responseCode() == 204;
+    }
+
+    /**
+     * Получить метаданные сборочного задания
+     * 
+     * Возвращает метаданные заказа (imei, uin, gtin)
+     * 
+     * @param int $orderId Идентификатор сборочного задания
+     * 
+     * @return object {meta: {imei: string, uin: string, gtin: string}}
+     */
+    public function getOrderMeta(int $orderId): object
+    {
+        return $this->getRequest('/api/v3/orders/' . $orderId . '/meta');
+    }    
+
+    /**
+     * Удалить метаданные сборочного задания
+     * 
+     * @param int     $orderId Идентификатор сборочного задания
+     * @param string $key      Название метаданных для удаления (imei, uin, gtin)
+     * 
+     * @return bool
+     * 
+     * @throws InvalidArgumentException Неизвестное название метаданных
+     */
+    public function deleteOrderMeta(int $orderId, string $key): bool
+    {
+        if (!in_array($key, ['imei', 'uin', 'gtin'])) {
+            throw new InvalidArgumentException('Неизвестное название метаданных: ' . $key);
+        }
+        $this->deleteRequest('/api/v3/orders/' . $orderId . '/meta', [
+            'key' => $key
+        ]);
+        return $this->responseCode() == 204;
+    }    
+    
+    /**
      * Получить этикетки для сборочных заданий
      * 
      * Возвращает список этикеток по переданному массиву сборочных заданий.
@@ -337,7 +374,7 @@ class Marketplace extends AbstractEndpoint
      * Доступные размеры: 580х400 и 400х300 пикселей.
      * 
      * @param array  $orderIds Идентификаторы сборочных заданий (не более 100)
-     * @param string $type     Формат штрихкода ("pdf", "svg", "zplv", "zplh", "png")
+     * @param string $type     Формат штрихкода ("svg", "zplv", "zplh", "png")
      * @param string $size     Размер этикетки ("40x30", "58x40")
      * 
      * @return object {stickers: [object, ...]}
@@ -361,6 +398,29 @@ class Marketplace extends AbstractEndpoint
         return $this->postRequest(
             '/api/v3/orders/stickers?type=' . $type . '&width=' . explode('x', $size)[0] . '&height=' . explode('x', $size)[1],
             ['orders' => $orderIds]);
+    }
+
+    /**
+     * Получить список ссылок на этикетки для сборочных заданий,
+     * которые требуются при кроссбордере
+     * 
+     * Возвращает список ссылок на этикетки для сборочных заданий, которые требуются при кроссбордере.
+     * 
+     * Метод возвращает этикетки только для сборочных заданий, находящихся на сборке (в статусе confirm).
+     * 
+     * @param array  $orderIds Идентификаторы сборочных заданий (не более 100)
+     * 
+     * @return object {stickers: [object, ...]}
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества запрашиваемых этикеток
+     */
+    public function getOrdersExternalStickers(array $orderIds): object
+    {
+        $maxCount = 100;
+        if (count($orderIds) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых этикеток: {$maxCount}");
+        }
+        return $this->postRequest('/api/v3/files/orders/external-stickers', ['orders' => $orderIds]);
     }
 
     /**
@@ -418,4 +478,113 @@ class Marketplace extends AbstractEndpoint
         return $this->postRequest('/api/v3/stocks/' . $warehouseId, ['skus' => $skus]);
     }
 
+    /**
+     * Получить список коробов поставки
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * 
+     * @return object {trbxes: [object, ...]}
+     */
+    public function getSupplyBoxes(string $supplyId): object
+    {
+        return $this->getRequest('/api/v3/supplies/' . $supplyId . '/trbx');
+    }
+ 
+    /**
+     * Добавить короба к поставке
+     * 
+     * Добавляет требуемое количество коробов в поставку.
+     * Можно добавить, только пока поставка на сборке.
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * @param int    $amount   Количество коробов, которые необходимо добавить к поставке
+     * 
+     * @return object {trbxIds: [string, ...]}
+     * 
+     * @throws InvalidArgumentException ревышение максимального количества добавляемых коробов
+     */
+    public function addSupplyBoxes(string $supplyId, int $amount = 1): object
+    {
+        $maxCount = 1_000;
+        if ($amount > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества добавляемых коробов: {$maxCount}");
+        }
+        return $this->postRequest('/api/v3/supplies/' . $supplyId . '/trbx', ['amount' => $amount]);
+    }
+
+    /**
+     * Удалить короба из поставки
+     * 
+     * Убирает заказы из перечисленных коробов поставки и удаляет короба.
+     * Можно удалить, только пока поставка на сборке. 
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * @param array  $boxeIds Список ID коробов, которые необходимо удалить
+     * 
+     * @return bool
+     */
+    public function deleteSupplyBoxes(string $supplyId, array $boxeIds): bool
+    {
+        $this->deleteRequest('/api/v3/supplies/' . $supplyId . '/trbx', ['trbxIds' => $boxeIds]);
+        return $this->responseCode() == 204;
+    }
+    
+    /**
+     * Добавить заказы к коробу
+     * 
+     * Добавляет заказы в короб для выбранной поставки.
+     * Можно добавить, только пока поставка на сборке.
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * @param string $boxId    ID короба
+     * @param array  $orderIds Список заказов, которые необходимо добавить в короб
+     * 
+     * @return bool
+     */
+    public function addBoxOrders(string $supplyId, string $boxId, array $orderIds): bool
+    {
+        $this->patchRequest('/api/v3/supplies/' . $supplyId . '/trbx/' . $boxId, ['orderIds' => $orderIds]);
+        return $this->responseCode() == 204;
+    }
+    
+    /**
+     * Удалить заказ из короба
+     * 
+     * Удаляет заказ из короба выбранной поставки.
+     * Можно удалить, только пока поставка на сборке.
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * @param string $boxId    ID короба
+     * @param int    $orderId  ID сборочного задания
+     * 
+     * @return bool
+     */
+    public function deleteBoxOrder(string $supplyId, string $boxId, int $orderId): bool
+    {
+        $this->deleteRequest('/api/v3/supplies/' . $supplyId . '/trbx/' . $boxId . '/orders/' . $orderId);
+        return $this->responseCode() == 204;
+    }
+    
+    /**
+     * Получить стикеры коробов поставки
+     * 
+     * Возвращает стикеры QR в svg, zplv (вертикальный), zplh (горизонтальный), png.
+     * Можно получить, только если в коробе есть заказы.
+     * Размер стикеров: 580x400 пикселей
+     * 
+     * @param string $supplyId Идентификатор поставки
+     * @param array  $boxIds   Список ID коробов, по которым необходимо вернуть стикеры
+     * @param string $type     Формат штрихкода ("svg", "zplv", "zplh", "png")
+     * 
+     * @return object {stickers: {}}
+     * 
+     * @throws InvalidArgumentException Неизвестный формат штрихкода
+     */
+    public function getSupplyBoxStickers(string $supplyId, array $boxIds, string $type = 'svg')
+    {
+        if (!in_array($type, ['svg', 'zplv', 'zplh', 'png'])) {
+            throw new InvalidArgumentException('Неизвестный формат штрихкода: ' . $type);
+        }
+        return $this->postRequest('/api/v3/supplies/' . $supplyId . '/trbx/stickers?type=' . $type, ['trbxIds' => $boxIds]);
+    }
 }

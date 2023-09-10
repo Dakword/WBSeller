@@ -37,10 +37,7 @@ class Recommendations extends AbstractEndpoint
         if ($limit >  $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального значения параметра limit: {$maxLimit}");
         }
-        $result = $this->getRequest('/api/v1/list', [
-            'nm' => implode(',', $nmIds),
-            'limit' => $limit,
-        ]);
+        $result = $this->postRequest('/api/v1/list', $nmIds, ['limit' => $limit]);
         return array_reduce($result->data, function ($result, $item) {
             $result[$item->nm] = $item->list;
             return $result;
@@ -107,7 +104,7 @@ class Recommendations extends AbstractEndpoint
      */
     public function update(array $recom): string
     {
-        return $this->postRequest('/api/v1/del', array_map(
+        return $this->postRequest('/api/v1/set', array_map(
             function ($key, $value) {
                 return ['nm' => (int) $key, 'recom' => $value];
             },

@@ -7,7 +7,7 @@ namespace Dakword\WBSeller\API\Endpoint;
 use Dakword\WBSeller\API\AbstractEndpoint;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Templates;
 use InvalidArgumentException;
-
+use DateTime;
 
 class Feedbacks extends AbstractEndpoint
 {
@@ -38,12 +38,36 @@ class Feedbacks extends AbstractEndpoint
      * @return object {
      * 	    data: {hasNewQuestions: bool, hasNewFeedbacks: bool},
      * 	    error: bool, errorText: string, additionalErrors: ?string
+     * }
      */
     public function hasNew(): object
     {
         return $this->getRequest('/api/v1/new-feedbacks-questions');
     }
 
+    /**
+     * Количество отзывов
+     * 
+     * @param bool          $isAnswered Обработанные отзывы (true) или необработанные отзывы (false)
+     *                                  Если не указать, вернутся необработанные отзывы
+     * @param DateTime|null $dateStart  Дата начала периода
+     * @param DateTime|null $dateEnd    Дата конца периода
+     * 
+     * @return object {
+     * 	    data: {hasNewQuestions: bool, hasNewFeedbacks: bool},
+     * 	    error: bool, errorText: string, additionalErrors: ?string
+     * }
+     */
+    public function count(bool $isAnswered = false, ?DateTime $dateStart = null, ?DateTime $dateEnd = null): object
+    {
+        return $this->getRequest('/api/v1/feedbacks/count', [
+                'isAnswered' => $isAnswered
+            ]
+            + ($dateStart == '' ? [] : ['dateFrom' => $dateStart->getTimestamp()])
+            + ($dateEnd == '' ? [] : ['dateTo' => $dateEnd->getTimestamp()])
+        );
+    }
+    
     /**
      * Необработанные отзывы
      * 
@@ -114,7 +138,6 @@ class Feedbacks extends AbstractEndpoint
      * @param int         $onPage               Количество отзывов на странице
      * @param bool        $isAnswered           Обработанные отзывы (true) или необработанные отзывы (false)
      * @param int         $nmId                 Идентификатор номенклатуры 
-     * @param bool|null   $hasSupplierComplaint Отзывы с жалобой продавца (true) или без жалобы (false)
      * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
      * @param DateTime    $dateFrom             Дата начала периода
      * @param DateTime    $dateTo               Дата окончания периода
@@ -126,7 +149,7 @@ class Feedbacks extends AbstractEndpoint
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
-    public function list(int $page = 1, int $onPage = 5_000, bool $isAnswered = false, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null,
+    public function list(int $page = 1, int $onPage = 5_000, bool $isAnswered = false, int $nmId = 0, ?string $order = null,
         ?\DateTime $dateFrom = null, ?\DateTime $dateTo = null
     ): object
     {
@@ -141,7 +164,6 @@ class Feedbacks extends AbstractEndpoint
                 'take' => $onPage,
             ]
             + ($nmId ? ['nmId' => $nmId] : [])
-            + (!is_null($hasSupplierComplaint) ? ['hasSupplierComplaint' => $hasSupplierComplaint] : [])
             + (!is_null($order) ? ['order' => $order] : [])
             + (!is_null($dateFrom) ? ['dateFrom' => $dateFrom->getTimestamp()] : [])
             + (!is_null($dateTo) ? ['dateTo' => $dateTo->getTimestamp()] : [])
@@ -157,7 +179,6 @@ class Feedbacks extends AbstractEndpoint
      * @param int         $page                 Номер страницы
      * @param int         $onPage               Количество отзывов на странице
      * @param int         $nmId                 Идентификатор номенклатуры 
-     * @param bool|null   $hasSupplierComplaint Отзывы с жалобой продавца (true) или без жалобы (false)
      * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
      * 
      * @return object {
@@ -167,7 +188,7 @@ class Feedbacks extends AbstractEndpoint
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
-    public function archive(int $page = 1, int $onPage= 5_000, int $nmId = 0, ?bool $hasSupplierComplaint = null, ?string $order = null): object
+    public function archive(int $page = 1, int $onPage= 5_000, int $nmId = 0, ?string $order = null): object
     {
         $maxCount = 5_000;
         if ($onPage > $maxCount) {
@@ -179,7 +200,6 @@ class Feedbacks extends AbstractEndpoint
                 'take' => $onPage,
             ]
             + ($nmId ? ['nmId' => $nmId] : [])
-            + (!is_null($hasSupplierComplaint) ? ['hasSupplierComplaint' => $hasSupplierComplaint] : [])
             + (!is_null($order) ? ['order' => $order] : [])
         );
     }
@@ -208,21 +228,18 @@ class Feedbacks extends AbstractEndpoint
      * На данный момент всего можно получить 200 000 последних отзывов.
      * 
      * @param bool        $isAnswered           Обработанные отзывы (true) или необработанные отзывы (false)
-     * @param bool|null   $hasSupplierComplaint Отзывы с жалобой продавца (true) или без жалобы (false)
      * @param int         $page                 Номер страницы
      * 
      * @return object {
      * 	    data: {filename: string, contentType: string, file: base64},
      * 	    error: bool, errorText: string, additionalErrors: ?string
      */
-    public function xlsReport(bool $isAnswered = false, ?bool $hasSupplierComplaint = null, int $page = 1): object
+    public function xlsReport(bool $isAnswered = false,int $page = 1): object
     {
         return $this->getRequest('/api/v1/feedbacks/report', [
                 'isAnswered' => $isAnswered,
                 'skip' => --$page * 5_000,
-            ]
-            + (!is_null($hasSupplierComplaint) ? ['hasSupplierComplaint' => $hasSupplierComplaint] : [])
-        );
+            ]);
     }
     
     /**
@@ -255,22 +272,6 @@ class Feedbacks extends AbstractEndpoint
         $this->patchRequest('/api/v1/feedbacks', [
             'id' => $id,
             'text' => $answerText,
-        ]);
-        return $this->responseCode() == 200;
-    }
-
-    /**
-     * Создать жалобу на отзыв
-     * 
-     * @param string $id Идентификатор отзыва
-     * 
-     * @return bool true - успешно, false - неудача
-     */
-    public function createComplaint(string $id): bool
-    {
-        $this->patchRequest('/api/v1/feedbacks', [
-            'id' => $id,
-            'createSupplierComplaint' => true,
         ]);
         return $this->responseCode() == 200;
     }
