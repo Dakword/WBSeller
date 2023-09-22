@@ -482,7 +482,6 @@ class Content extends AbstractEndpoint
      * kinds		Пол
      * countries	Страна производства
      * seasons		Сезон
-     * brands		Бренд
      * tnved		ТНВЭД код
      * 
      * @param string $name   Имя характеристики
@@ -496,7 +495,7 @@ class Content extends AbstractEndpoint
      */
     public function getDirectory(string $name, array $params = []): object
     {
-        $directories = ['colors', 'kinds', 'countries', 'seasons', 'brands', 'tnved'];
+        $directories = ['colors', 'kinds', 'countries', 'seasons', 'tnved'];
         $directory = ltrim(strtolower($name), '/');
         if (!in_array($directory, $directories)) {
             throw new InvalidArgumentException("Неизвестная ссылка на характеристику: {$directory}");
@@ -554,29 +553,6 @@ class Content extends AbstractEndpoint
     public function getDirectorySeasons(): object
     {
         return $this->getDirectory('seasons');
-    }
-
-    /**
-     * Поиск значений характеристики "Бренд"
-     * 
-     * @param string $pattern Вхождение для поиска по наименованию значения характеристики
-     * @param int    $top     Количество запрашиваемых значений (максимум 5000)
-     * 
-     * @return object {
-     *      data: [ string, ... ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     */
-    public function searchDirectoryBrands(string $pattern, int $top): object
-    {
-        $maxCount = 5_000;
-        if ($top > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых значений: {$maxCount}");
-        }
-        return $this->getDirectory('brands', [
-            'pattern' => $pattern,
-            'top' => $top
-        ]);
     }
 
     /**

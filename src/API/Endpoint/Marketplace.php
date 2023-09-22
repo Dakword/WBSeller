@@ -38,7 +38,7 @@ class Marketplace extends AbstractEndpoint
         if(method_exists($this, $method)) {
             return call_user_func_array([$this, $method], $parameters);
         }
-        throw new InvalidArgumentException('Magic request methods not exists');
+        throw new InvalidArgumentException('Magic request method ' . $method . ' not exists');
     }
 
     /**

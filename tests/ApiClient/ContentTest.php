@@ -200,15 +200,10 @@ class ContentTest extends TestCase
 
     public function test_getDirectories()
     {
-        $result1 = $this->Content()
-            ->getDirectory('/brands', ['pattern' => 'app', 'top' => 500]);
-
-        $this->assertTrue(in_array('Apple', $result1->data));
-
-        $result2 = $this->Content()
+        $result = $this->Content()
             ->getDirectory('colors');
 
-        $this->assertTrue(in_array('черный', array_column($result2->data, 'name')));
+        $this->assertTrue(in_array('черный', array_column($result->data, 'name')));
 
         $this->expectException(InvalidArgumentException::class);
         $this->Content()->getDirectory('foo');
@@ -232,11 +227,6 @@ class ContentTest extends TestCase
     public function test_getDirectorySeasons()
     {
         $this->assertTrue(in_array('лето', $this->Content()->getDirectorySeasons()->data));
-    }
-
-    public function test_getDirectoryBrands()
-    {
-        $this->assertTrue(in_array('LTD Corp.Ink', $this->Content()->searchDirectoryBrands('ltd', 100)->data));
     }
 
     public function test_getDirectoryTNVED()

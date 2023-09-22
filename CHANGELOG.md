@@ -1,3 +1,6 @@
+### 3.14.0
+* Удален метод `Content::searchDirectoryBrands()`
+
 ### 3.13.0
 * Удалены методы API Marketplace: `confirmOrder()`, `deliverOrder()`, `receiveOrder()`, `rejectOrder()`
 * Новые методы API Marketplace:
