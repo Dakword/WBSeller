@@ -139,12 +139,20 @@ abstract class AbstractEndpoint
              * 
              * { errors: ["Технический перерыв до 16:00"] }
              * { errors: ["(api-new) too many requests"] }
+             * { code: 429, message: "" }
              */
-            if(mb_strpos(mb_strtolower($result->errors[0]), 'технический перерыв') !== false) {
+            if(property_exists($result, 'errors')) {
+                $message = $result->errors[0];
+            } elseif(property_exists($result, 'message')) {
+                $message = $result->message;
+            } else {
+                $message = 'Too many requests';
+            }
+            if(mb_strpos(mb_strtolower($message), 'технический перерыв') !== false) {
                 throw new ApiTimeRestrictionsException($result->errors[0]);
             }
             if ($attempt >= $this->attempts) {
-                throw new ApiClientException($result->errors[0], 429);
+                throw new ApiClientException($message, 429);
             }
             usleep($this->retryDelay * 1_000);
             $attempt++;
