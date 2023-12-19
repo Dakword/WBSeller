@@ -1,3 +1,21 @@
+### 4.0.0
+* Новая версия API Контента
+* Персональные ключи для каждого API при создании класса (<b>keys</b>).<br/>
+  Один универсальный - <b>masterkey</b>. Будет использован при отсутствии персонального.
+* Удален класс `Query`
+* Изменения в параметрах метода `Content::addCardNomenclature()`
+* Изменения в параметрах метода `Content::searchCategory()`
+* Изменения в параметрах метода `Content::getCategoryCharacteristics()`
+* Изменения в параметрах метода `Content::searchDirectoryTNVED`
+* Новый метод `Content::getDirectoryNDS()`
+* Новый метод `Content::getCardByNmID()`
+* Удален метод `Content::getCategoriesCharacteristics()`
+* Переименование метода `Content::updateCards()` в `Content::updateCard()`
+* Переименование метода `Content::getCardsByVendorCodes()` в `Content::getCardByVendorCode()`
+* Выделение методов работы с корзиной в подкласс `Content()->Trash()`
+* Новые методы работы с корзиной `Trash::add()`, `Trash::recover()`
+* Использование переменной окружения WBSELLER_LOCALE для выбора языка ответа (ru, en, zh)
+
 ### 3.14.1
 * Обработка нового ответа с кодом 429
 

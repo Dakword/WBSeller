@@ -117,7 +117,7 @@ class QuestionsTest extends TestCase
 
         $this->assertFalse($result);
         $this->assertTrue($response->error);
-        $this->assertEquals('Не удалось исправить вопрос', $response->errorText);
+        $this->assertEquals('Вопрос не найден', $response->errorText);
     }
 
     public function test_sendAnswer()
@@ -127,7 +127,7 @@ class QuestionsTest extends TestCase
 
         $this->assertFalse($result);
         $this->assertTrue($response->error);
-        $this->assertEquals('Не удалось исправить вопрос', $response->errorText);
+        $this->assertEquals('Вопрос не найден', $response->errorText);
     }
 
     public function test_reject()
@@ -137,7 +137,7 @@ class QuestionsTest extends TestCase
 
         $this->assertFalse($result);
         $this->assertTrue($response->error);
-        $this->assertEquals('Не удалось исправить вопрос', $response->errorText);
+        $this->assertEquals('Вопрос не найден', $response->errorText);
     }
 
     public function test_get()

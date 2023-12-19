@@ -23,6 +23,7 @@ class Tags
      * При снятии тега с КТ сам тег не удаляется.
      * Чтобы добавить теги к уже имеющимся в КТ, необходимо в запросе
      * передать новые теги и теги, которые уже есть в КТ.
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Tegi/paths/~1content~1v2~1tag~1nomenclature~1link/post
      * 
      * @param int   $nmID Артикул WB
      * @param array $tags Массив числовых идентификаторов тегов (К карточке можно добавить 8 тегов)
@@ -37,7 +38,7 @@ class Tags
         if (count($tags) > $maxTags) {
             throw new InvalidArgumentException("Превышение максимального количества тегов: {$maxTags}");
         }
-        return $this->Content->postRequest('/content/v1/tag/nomenclature/link', [
+        return $this->Content->postRequest('/content/v2/tag/nomenclature/link', [
             'nmID' => $nmID,
             'tagsIDs' => $tags,
         ]);
@@ -48,18 +49,20 @@ class Tags
      * Список тегов
      * 
      * Метод позволяет получить список существующих тегов продавца
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Tegi/paths/~1content~1v2~1tags/get
      * 
-     * @return object
+     * @return object {data: [object, ...], error: bool, errorText: string, additionalErrors: string}
      */
     public function list(): object
     {
-        return $this->Content->getRequest('/content/v1/tags');
+        return $this->Content->getRequest('/content/v2/tags');
     }
 
     /**
      * Создание тега
      * 
      * Метод позволяет создать тег.
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Tegi/paths/~1content~1v2~1tag/post
      * 
      * @param string $name  Имя тега (Максимальная длина 15 символов)
      * @param string $color Цвет тега
@@ -75,7 +78,7 @@ class Tags
     {
         $this->checkName($name);
         $this->checkColor($color);
-        return $this->Content->postRequest('/content/v1/tag', [
+        return $this->Content->postRequest('/content/v2/tag', [
             'name' => $name,
             'color' => $color,
         ]);
@@ -83,6 +86,7 @@ class Tags
  
     /**
      * Удаление тега
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Tegi/paths/~1content~1v2~1tag~1{id}/delete
      * 
      * @param int $id Числовой идентификатор тега
      * 
@@ -95,6 +99,7 @@ class Tags
     
     /**
      * Изменение тега
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Tegi/paths/~1content~1v2~1tag~1{id}/patch
      * 
      * Метод позволяет изменять информацию о теге (имя и цвет)
      * 
@@ -113,7 +118,7 @@ class Tags
     {
         $this->checkName($name);
         $this->checkColor($color);
-        return $this->Content->patchRequest('/content/v1/tag/' . $id, [
+        return $this->Content->patchRequest('/content/v2/tag/' . $id, [
             'name' => $name,
             'color' => $color,
         ]);

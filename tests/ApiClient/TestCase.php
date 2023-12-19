@@ -15,7 +15,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function Adv(): Adv
     {
-        $this->skipIfNoKeyADV();
+        $this->skipIfNoKeyAPI();
         return $this->API()->Adv();
     }
 
@@ -93,7 +93,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function Statistics(): Statistics
     {
-        $this->skipIfNoKeySTAT();
+        $this->skipIfNoKeyAPI();
         return $this->API()->Statistics();
     }
 
@@ -106,11 +106,11 @@ abstract class TestCase extends BaseTestCase
             $this->markTestSkipped($exc->getMessage());
         }
 
-        if (count($result->data->cards) == 0) {
+        if (count($result->cards) == 0) {
             $this->markTestSkipped('No cards in account');
         }
         
-        return $list = array_column($result->data->cards, 'nmID');
+        return $list = array_column($result->cards, 'nmID');
     }    
 
 }

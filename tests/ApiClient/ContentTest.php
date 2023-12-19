@@ -14,19 +14,18 @@ class ContentTest extends TestCase
     private function getCardsList($limit = 10)
     {
         try {
-            $result = $this->Content()
-                ->getCardsList('', $limit);
+            $result = $this->Content()->getCardsList('', $limit);
         } catch (ApiTimeRestrictionsException $exc) {
             $this->markTestSkipped($exc->getMessage());
         }
 
         $this->assertIsObject($result);
-        $this->assertObjectHasAttribute('data', $result);
+        $this->assertObjectHasAttribute('cards', $result);
 
-        if (count($result->data->cards) == 0) {
+        if (count($result->cards) == 0) {
             $this->markTestSkipped('No cards in account');
         }
-        return $result->data->cards;
+        return $result->cards;
     }
 
     public function test_Class()
@@ -45,10 +44,10 @@ class ContentTest extends TestCase
             $this->markTestSkipped($exc->getMessage());
         }
 
-        $this->assertObjectHasAttribute('data', $result1);
-        if ($result1->data && $result1->data->cursor->total == $limit) {
-            $result2 = $Content->getCardsList('', $limit, -1, 'updateAt', false, $result1->data->cursor->updatedAt, $result1->data->cursor->nmID);
-            $this->assertObjectHasAttribute('cursor', $result2->data);
+        $this->assertObjectHasAttribute('cards', $result1);
+        if ($result1->cursor->total == $limit) {
+            $result2 = $Content->getCardsList('', $limit, $result1->cursor->updatedAt, $result1->cursor->nmID);
+            $this->assertObjectHasAttribute('cursor', $result2);
         }
     }
 
@@ -64,15 +63,14 @@ class ContentTest extends TestCase
         $this->assertIsArray($result->data);
     }
 
-    public function test_getCardsByVendorCodes()
+    public function test_getCardByVendorCode()
     {
-        $cards = $this->getCardsList();
+        $cards = $this->getCardsList(1);
         $card = array_shift($cards);
 
-        $result1 = $this->Content()
-            ->getCardsByVendorCodes($card->vendorCode);
+        $result1 = $this->Content()->getCardByVendorCode($card->vendorCode);
 
-        $this->assertTrue(in_array($card->vendorCode, array_column($result1->data, 'vendorCode')));
+        $this->assertTrue(in_array($card->vendorCode, array_column($result1->cards, 'vendorCode')));
     }
 
     public function test_generateBarcodes()
@@ -102,21 +100,16 @@ class ContentTest extends TestCase
 
     public function test_getTrashList()
     {
-        $result = $this->Content()->getTrashList();
-        $this->assertFalse($result->error);
-
-        if(!$result->error) {
-            $this->assertObjectHasAttribute('data', $result);
-            $this->assertObjectHasAttribute('cards', $result->data);
-            $this->assertIsArray($result->data->cards);
-        }
+        $result = $this->Content()->Trash()->list();
+        $this->assertObjectHasAttribute('cards', $result);
+        $this->assertObjectHasAttribute('cursor', $result);
+        $this->assertIsArray($result->cards);
     }
 
     public function test_addCardNomenclature_ERROR()
     {
         $result = $this->Content()->addCardNomenclature('TEST', []);
-        $this->assertTrue($result->error);
-        $this->assertEquals('Неправильный формат запроса, кол-во создаваемых карточек товаров не должно быть 0', $result->errorText);
+        $this->assertEquals('See https://openapi.wb.ru', $result);
     }
 
     public function test_createCard_ERROR()
@@ -125,21 +118,24 @@ class ContentTest extends TestCase
 
         $result1 = $Content->createCard([
             'vendorCode' => 'test',
-            'characteristics' => [],
-            'sizes' => []
+            'variants' => [],
         ]);
         $this->assertTrue($result1->error);
-        $this->assertEquals('Характеристика Предмет обязательна для заполнения', $result1->errorText);
+        $this->assertEquals('The request format is incorrect, the number of product items created should not be 0', $result1->errorText);
 
         $result2 = $Content->createCards([
             [
-                'vendorCode' => 'test1',
-                'characteristics' => [],
-                'sizes' => []
-            ], [
-                'vendorCode' => 'test2',
-                'characteristics' => [],
-                'sizes' => []
+                'subjectID' => 105,
+                'variants' => [[
+                    'vendorCode' => 'test2',
+                    'title' => 'test2',
+                    'description' => 'test2',
+                    'description' => 'test2',
+                    'brand' => 'test2',
+                    'dimensions' => [],
+                    'characteristics' => [],
+                    'sizes' => [],
+                ]],
             ]
         ]);
         $this->assertTrue($result2->error);
@@ -149,12 +145,11 @@ class ContentTest extends TestCase
     {
         $listCards = $this->getCardsList();
         $listCard = array_shift($listCards);
-        $cardsList = $this->Content()->getCardsByVendorCodes($listCard->vendorCode);
-        $cards = array_filter($cardsList->data, fn($card) => $card->vendorCode == $listCard->vendorCode);
+        $cardsList = $this->Content()->getCardByVendorCode($listCard->vendorCode);
+        $cards = array_filter($cardsList->cards, fn($card) => $card->vendorCode == $listCard->vendorCode);
         $card = array_shift($cards);
-        
         if($card) {
-            $result = $this->Content()->updateCards([$card]);
+            $result = $this->Content()->updateCard((array)$card);
             $this->assertFalse($result->error);
         } else {
             $this->markTestSkipped('No card found');
@@ -167,7 +162,7 @@ class ContentTest extends TestCase
             ->searchCategory('СекС');
 
         $this->assertFalse($result->error);
-        $this->assertTrue(in_array('Секс куклы', array_column($result->data, 'objectName')));
+        $this->assertTrue(in_array('Секс куклы', array_column($result->data, 'subjectName')));
     }
 
     public function test_getParentCategories()
@@ -182,20 +177,10 @@ class ContentTest extends TestCase
     public function test_getCategoryCharacteristics()
     {
         $result = $this->Content()
-            ->getCategoryCharacteristics('Секс машины');
+            ->getCategoryCharacteristics(105);
 
         $this->assertFalse($result->error);
-        $this->assertTrue(in_array('Упаковка', array_column($result->data, 'name')));
-    }
-
-    public function test_searchCategoryCharacteristics()
-    {
-        $result = $this->Content()
-            ->getCategoriesCharacteristics('Товары для взрослых');
-
-        $this->assertFalse($result->error);
-        $this->assertTrue(in_array('Секс куклы', array_column($result->data, 'objectName')));
-        $this->assertTrue(in_array('Упаковка', array_column($result->data, 'name')));
+        $this->assertTrue(in_array(4, array_column($result->data, 'charcID')));
     }
 
     public function test_getDirectories()
@@ -231,20 +216,7 @@ class ContentTest extends TestCase
 
     public function test_getDirectoryTNVED()
     {
-        $this->assertTrue(in_array('6405100009', array_column($this->Content()->searchDirectoryTNVED('Кроссовки')->data, 'tnvedName')));
-        $this->assertCount(2, $this->Content()->searchDirectoryTNVED('Кроссовки', '64059')->data);
-        $this->assertCount(1, $this->Content()->searchDirectoryTNVED('Кроссовки', '6405909000')->data);
-    }
-
-    public function test_updateMedia()
-    {
-        $cards = $this->getCardsList();
-        $card = array_shift($cards);
-
-        $mediaFiles = $card->mediaFiles;
-        $result = $this->Content()->updateMedia($card->vendorCode, $mediaFiles);
-
-        $this->assertFalse($result->error);
+        $this->assertFalse($this->Content()->searchDirectoryTNVED(105)->error);
     }
 
     public function test_moveNms()
@@ -252,7 +224,7 @@ class ContentTest extends TestCase
         $result = $this->Content()->moveNms(123456, [123, 456, 789]);
 
         $this->assertTrue($result->error);
-        $this->assertEquals('Внутренняя ошибка', $result->errorText);
+        $this->assertEquals('target imt not found', $result->errorText);
     }
 
     public function test_removeNms()
@@ -260,7 +232,7 @@ class ContentTest extends TestCase
         $result = $this->Content()->removeNms([123, 456, 789]);
 
         $this->assertTrue($result->error);
-        $this->assertEquals('Указан несуществующий nmID карточки товара', $result->errorText);
+        $this->assertEquals('Invalid item card ID specified', $result->errorText);
     }
 
 }

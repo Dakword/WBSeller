@@ -54,9 +54,9 @@ class Recommendations extends AbstractEndpoint
      *                     [nmId1, nmId2, ...] - Список идентификаторов товаров,
      *                                           которые необходимо добавить в рекомендуемые
      * 
-     * @return string
+     * @return object|string
      */
-    public function add(array $recom): string
+    public function add(array $recom)
     {
         return $this->postRequest('/api/v1/ins', array_map(
             function ($key, $value) {
@@ -76,9 +76,9 @@ class Recommendations extends AbstractEndpoint
      *                     [nmId1, nmId2, ...] - Список идентификаторов товаров,
      *                                           которые необходимо удалить из рекомендуемых
      * 
-     * @return string
+     * @return string|object
      */
-    public function delete(array $recom): string
+    public function delete(array $recom)
     {
         return $this->postRequest('/api/v1/del', array_map(
             function ($key, $value) {
@@ -100,9 +100,9 @@ class Recommendations extends AbstractEndpoint
      *                     [nmId1, nmId2, ...] - Список идентификаторов товаров,
      *                                           которые необходимо передать в рекомендуемые
      * 
-     * @return string
+     * @return string|object
      */
-    public function update(array $recom): string
+    public function update(array $recom)
     {
         return $this->postRequest('/api/v1/set', array_map(
             function ($key, $value) {

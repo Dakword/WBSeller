@@ -18,25 +18,37 @@ class API
     private string $advBaseUrl = 'https://advert-api.wildberries.ru';
     private string $recomBaseUrl = 'https://recommend-api.wildberries.ru';
     private string $fbBaseUrl = 'https://feedbacks-api.wildberries.ru';
-    private string $apiKey;
-    private string $statKey;
-    private string $advKey;
+    private array $apiKeys;
+    private string $masterKey;
     private ?string $proxy = null;
 
     /**
      * @param array $options [
-     *     'apikey' => 'XXX',
-     *     'statkey' => 'YYY',
-     *     'advkey' => 'ZZZ',
+     *  'keys' => [
+     *     'adv' => '',
+     *     'content' => 'Content_key',
+     *     'feedbacks' => 'FB_key',
+     *     'marketplace' => 'Marketplace_key',
+     *     'prices' => '',
+     *     'promo' => '',
+     *     'questions' => 'FB_key',
+     *     'recommendations' => '',
+     *     'statistics' => '',
+     *   ],
+     *   'masterkey' => 'alternative_universal_key'
      * ]
      */
     function __construct(array $options)
     {
-        $this->apiKey = $options['apikey'] ?? '';
-        $this->statKey = $options['statkey'] ?? '';
-        $this->advKey = $options['advkey'] ?? '';
+        $this->apiKeys = $options['keys'] ?? [];
+        $this->masterKey = $options['masterkey'] ?? '';
     }
 
+    private function getKey($keyName): string
+    {
+        return isset($this->apiKeys[$keyName]) && $this->apiKeys[$keyName] ? $this->apiKeys[$keyName] : $this->masterKey;
+    }
+    
     /**
      * Использовать для запросов HTTP-прокси
      * 
@@ -45,6 +57,11 @@ class API
     public function useProxy(string $proxyUrl)
     {
         $this->proxy = $proxyUrl;
+    }
+    
+    public function getProxy()
+    {
+        return $this->proxy;
     }
     
     public function setApiBaseUrl(string $baseUrl): void
@@ -74,47 +91,47 @@ class API
 
     public function Adv(): Adv
     {
-        return new Adv($this->advBaseUrl, $this->advKey, $this->proxy);
+        return new Adv($this->advBaseUrl, $this->getKey('adv'), $this->proxy);
     }
 
     public function Content(): Content
     {
-        return new Content($this->apiBaseUrl, $this->apiKey, $this->proxy);
+        return new Content($this->apiBaseUrl, $this->getKey('content'), $this->proxy);
     }
 
     public function Feedbacks(): Feedbacks
     {
-        return new Feedbacks($this->fbBaseUrl, $this->apiKey, $this->proxy);
+        return new Feedbacks($this->fbBaseUrl, $this->getKey('feedbacks'), $this->proxy);
     }
 
     public function Marketplace(): Marketplace
     {
-        return new Marketplace($this->apiBaseUrl, $this->apiKey, $this->proxy);
+        return new Marketplace($this->apiBaseUrl, $this->getKey('marketplace'), $this->proxy);
     }
 
     public function Prices(): Prices
     {
-        return new Prices($this->apiBaseUrl, $this->apiKey, $this->proxy);
+        return new Prices($this->apiBaseUrl, $this->getKey('prices'), $this->proxy);
     }
 
     public function Promo(): Promo
     {
-        return new Promo($this->apiBaseUrl, $this->apiKey, $this->proxy);
+        return new Promo($this->apiBaseUrl, $this->getKey('promo'), $this->proxy);
     }
 
     public function Questions(): Questions
     {
-        return new Questions($this->fbBaseUrl, $this->apiKey, $this->proxy);
+        return new Questions($this->fbBaseUrl, $this->getKey('questions'), $this->proxy);
     }
 
     public function Recommendations(): Recommendations
     {
-        return new Recommendations($this->recomBaseUrl, $this->apiKey, $this->proxy);
+        return new Recommendations($this->recomBaseUrl, $this->getKey('recommendations'), $this->proxy);
     }
 
     public function Statistics(): Statistics
     {
-        return new Statistics($this->statBaseUrl, $this->statKey, $this->proxy);
+        return new Statistics($this->statBaseUrl, $this->getKey('statistics'), $this->proxy);
     }
 
 }

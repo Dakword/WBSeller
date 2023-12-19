@@ -6,6 +6,7 @@ namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Tags;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Trash;
 use InvalidArgumentException;
 
 class Content extends AbstractEndpoint
@@ -20,6 +21,16 @@ class Content extends AbstractEndpoint
     public function Tags(): Tags
     {
         return new Tags($this);
+    }
+
+    /**
+     * Сервис для работы с корзиной.
+     * 
+     * @return Tags
+     */
+    public function Trash(): Trash
+    {
+        return new Trash($this);
     }
 
     public function __call($method, $parameters)
@@ -40,24 +51,35 @@ class Content extends AbstractEndpoint
      * Если запрос на создание прошел успешно, а карточка не создалась, то необходимо в первую очередь проверить
      * наличие карточки в методе cards/error/list. Если карточка попала в ответ к этому методу, то необходимо
      * исправить описанные ошибки в запросе на создание карточки и отправить его повторно.
+     * За раз можно создать 100 КТ по 30 вариантов товара (НМ) в каждой.
      * 
-     * @param array $cards [ 
-     * 	    {vendorCode: string, characteristics: [ object, object, ...], sizes: [ object, object, ...]},
-     * 	    ...
-     *  ]
+     * @param array $cards  Массив КТ [ [
+     *                        subjectID: int, variants: [
+     *                           {
+     *                              vendorCode: string, title: string, description: string, brand: string,
+     *                              dimensions: object, characteristics: [object, ...], sizes: [object, ...]
+     *                           }, ...
+     *                        ] ], ...
+     *                      ] 
      * 
      * @return object {
-     * 	    data: any,
-     * 	    error: bool, errorText: string, additionalErrors: string
+     * 	    data: null,
+     * 	    error: bool, errorText: string, additionalErrors: object
      * }
+     * 
+     * @throws InvalidArgumentException
      */
     public function createCards(array $cards): object
     {
-        return $this->postRequest('/content/v1/cards/upload', array_map(fn($card) => [$card], $cards));
+        $maxCountCards = 100;
+        if (count($cards) > $maxCountCards) {
+            throw new InvalidArgumentException("Превышение максимального количества КТ: {$maxCountCards}");
+        }
+        return $this->postRequest('/content/v2/cards/upload', $cards);
     }
 
     /**
-     * Создание одной КТ
+     * Создание КТ
      * 
      * Создание карточки товара происходит асинхронно, при отправке запроса на создание КТ ваш запрос становится
      * в очередь на создание КТ.
@@ -67,15 +89,18 @@ class Content extends AbstractEndpoint
      * наличие карточки в методе cards/error/list. Если карточка попала в ответ к этому методу, то необходимо
      * исправить описанные ошибки в запросе на создание карточки и отправить его повторно.
      * 
-     * @param array $card {
-     *      vendorCode: string,
-     *      characteristics: [ object, object, ...],
-     *      sizes: [ object, object, ...]
-     * }
+     * @param array $card  [ 
+     *                        subjectID: int, variants: [
+     *                           {
+     *                              vendorCode: string, title: string, description: string, brand: string,
+     *                              dimensions: object, characteristics: [object, ...], sizes: [object, ...]
+     *                           }, ...
+     *                        ] 
+     *                      ] 
      * 
      * @return object {
-     *  	data: any,
-     *      error: bool, errorText: string, additionalErrors: string
+     * 	    data: null,
+     * 	    error: bool, errorText: string, additionalErrors: object
      * }
      */
     public function createCard(array $card): object
@@ -84,36 +109,37 @@ class Content extends AbstractEndpoint
     }
 
     /**
-     * Редактирование нескольких КТ
+     * Редактирование КТ
      * 
-     * Метод позволяет отредактировать несколько карточек за раз.
+     * Метод позволяет отредактировать 1 КТ за раз.
      * Редактирование КТ происходит асинхронно, после отправки запрос становится в очередь на обработку.
-     * Важно: Баркоды (skus) не подлежат удалению или замене. Попытка заменить существующий баркод приведет
-     * к добавлению нового баркода к существующему.
-     * Номенклатуры, содержащие ошибки, не обновляются и попадают в раздел "Список несозданных НМ с ошибками"
-     * с описанием допущенной ошибки. Для того, чтобы убрать НМ из ошибочных, необходимо повторно сделать запрос
-     * с исправленными ошибками
+     * Важно: Баркоды редактированию/удалению не подлежат. Добавить баркод к уже существующему можно.
+     * photos, video и tags в запросе передавать не обязательно, редактирование и удаление этих структур
+     * данным методом не предусмотрено.
+     * Если запрос прошел успешно, а информация в карточке не обновилась, значит были допущены ошибки
+     * и карточка попала в Список несозданных НМ с ошибками (метод cards/error/list) с описанием ошибок.
+     * Необходимо исправить ошибки в запросе и отправить его повторно.
      * 
      * Для успешного обновления карточки рекомендуем Вам придерживаться следующего порядка действий:
-     * 1. Сначала существующую карточку необходимо запросить методом cards/filter.
-     * 2. Забираем из ответа массив data.
-     * 3. В этом массиве вносим необходимые изменения и отправляем его в cards/update
+     * 1. Сначала существующую карточку необходимо запросить методом get/card/full.
+     * 2. Забираем из ответа данные карточки, до поля createdAt.
+     * 3. Данные помещаем в массив.
+     * 4. В этом массиве вносим необходимые изменения и отправляем его в cards/update.
      * 
-     * @param array $cards [ 
-     *      {imtID: integer, nmID: integer, vendorCode: string,
-     *       characteristics: [ object, object, ...],
-     *       sizes: [ object, object, ...]
-     *      }, ...
+     * @param array $card [ 
+     *      imtID: integer, nmID: integer, vendorCode: string, ...
+     *      characteristics: [ object, object, ...],
+     *      sizes: [ object, object, ...]
      *  ]
      * 
      * @return object {
-     *      data: any,
+     *      data: null,
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
-    public function updateCards(array $cards): object
+    public function updateCard(array $card): object
     {
-        return $this->postRequest('/content/v1/cards/update', $cards);
+        return $this->postRequest('/content/v2/cards/update', [$card]);
     }
 
     /**
@@ -125,165 +151,22 @@ class Content extends AbstractEndpoint
      * "Список несозданных НМ с ошибками". Для того чтобы убрать НМ из ошибочных, необходимо повторно сделать запрос
      * с исправленными ошибками.
      * 
-     * @param string $vendorCode Артикул существующей НМ в КТ
-     * @param array  $cards      Массив НМ которые хотим добавить к КТ [
-     * 		                       {vendorCode: string, characteristics: [ object, object, ...], sizes: [ object, object, ...]}, ...
-     *                           ]
+     * @param int    $imtID imtID КТ, к которой добавляется НМ
+     * @param array  $cards Массив НМ которые хотим добавить к КТ [
+     * 		                  { vendorCode: string, characteristics: [ object, object, ...], sizes: [ object, object, ...] }, ...
+     *                      ]
      * 
      * @return object {
-     *      data: any,
+     *      data: null,
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
-    public function addCardNomenclature(string $vendorCode, array $cards)
+    public function addCardNomenclature(string $imtID, array $cards)
     {
-        return $this->postRequest('/content/v1/cards/upload/add', [
-            'vendorCode' => $vendorCode,
-            'cards' => $cards,
+        return $this->postRequest('/content/v2/cards/upload/add', [
+            'imtID' => $imtID,
+            'cardsToAdd' => $cards,
         ]);
-    }
-
-    /**
-     * Получить список НМ по фильтру (вендор код, баркод, номер номенклатуры) с сортировкой
-     * V2
-     * 
-     * @param string $textSearch      Поиск по номеру НМ, баркоду или артикулу товара
-     * @param int    $limit           Количество запрашиваемых КТ
-     * @param int    $withPhoto       -1 - Показать все КТ
-     *                                0 - Показать КТ без фото
-     *                                1 - Показать КТ с фото
-     * @param string $sortColumn      Поле по которому будет сортироваться список КТ (пока что поддерживается только updatedAt)
-     * @param bool   $ascending       Направление сортировки. true - по возрастанию, false - по убыванию.
-     * @param string $updatedAt       Время обновления последней КТ из предыдущего ответа на запрос списка КТ
-     * @param int    $nmId            Номенклатура последней КТ из предыдущего ответа на запрос списка КТ
-     * @param bool   $allowedCatsOnly true - показать КТ только из разрешенных к реализации категорий
-     *                                false - показать КТ из всех категорий
-     * 
-     * @return object {
-     *      data: {
-     *          cards: [ object, object, ... ],
-     *          cursor: {updatedAt: string, nmID: int, total: int}
-     *      },
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     * 
-     * @throws InvalidArgumentException
-     */
-    public function getCardsList(
-        string $textSearch = '', int $limit = 1_000, int $withPhoto = -1, string $sortColumn = 'updateAt',
-        bool $ascending = false, string $updatedAt = '', int $nmId = 0, bool $allowedCatsOnly = false): object
-    {
-        $maxCount = 1_000;
-        if ($limit > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества запрошенных карточек: {$maxCount}");
-        }
-        if (!in_array($withPhoto, [-1, 0, 1])) {
-            throw new InvalidArgumentException("Недопустимое значение параметра withPhoto: {$withPhoto}");
-        }
-        if ($sortColumn !== 'updateAt') {
-            throw new InvalidArgumentException("Недопустимое поле для сортировки списка карточек: {$sortColumn}. Пока только updatedAt.");
-        }
-        return $this->postRequest('/content/v1/cards/cursor/list', [
-            'sort' => [
-                'cursor' => array_merge(
-                    ['limit' => $limit],
-                    ($updatedAt && $nmId) ? ['updatedAt' => $updatedAt, 'nmID' => $nmId] : []
-                ),
-                'filter' => [
-                    'textSearch' => $textSearch,
-                    'withPhoto' => $withPhoto,
-                    'allowedCategoriesOnly' => $allowedCatsOnly,
-                ],
-                'sort' => [
-                    'sortColumn' => $sortColumn,
-                    'ascending' => $ascending,
-                ]
-            ]
-        ]);
-    }
-
-    /**
-     * Список несозданных НМ с ошибками
-     * 
-     * Метод позволяет получить список НМ и список ошибок которые произошли во время создания КТ.
-     * Для того чтобы убрать НМ из ошибочных, надо повторно сделать запрос с исправленными ошибками на создание КТ.
-     * 
-     * @return object {
-     *      "data": [ {object: string, vendorCode: string, updatedAt: RFC3336, errors: [ string, ... ]}, ... ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * 	}
-     */
-    public function getErrorCardsList(): object
-    {
-        return $this->getRequest('/content/v1/cards/error/list');
-    }
-
-    /**
-     * Получение КТ по вендор кодам (артикулам)
-     * 
-     * Метод позволяет получить полную информацию по КТ с помощью вендор кода(-ов) номенклатуры из КТ (артикулов).
-     * 
-     * @param string|array $vendorCodes           Идентификатор или массив идентификаторов НМ поставщика
-     * 	                                          (Максимальное количество в запросе 100)
-     * @param bool         $allowedCategoriesOnly true - показать КТ только из разрешенных к реализации категорий
-     *                                            false - показать КТ из всех категорий
-     * 
-     * @return object {
-     *      data: [ object, object, ... ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     * @throws InvalidArgumentException
-     */
-    public function getCardsByVendorCodes($vendorCodes, $allowedCategoriesOnly = false): object
-    {
-        $maxCount = 100;
-        $codes = (is_array($vendorCodes) ? $vendorCodes : [$vendorCodes]);
-        if (count($codes) > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества переданных артикулов: {$maxCount}");
-        }
-        return $this->postRequest('/content/v1/cards/filter', [
-            'vendorCodes' => $codes,
-            'allowedCategoriesOnly' => $allowedCategoriesOnly,
-        ]);
-    }
-
-    /**
-     * Генерация баркодов
-     * 
-     * Метод позволяет сгенерировать массив уникальных баркодов для создания размера НМ в КТ.
-     * 
-     * @param int $count Количество баркодов которые надо сгенерировать, максимальное количество - 5000
-     * 
-     * @return object {
-     *      data: [ string, string, ... ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     * @throws InvalidArgumentException
-     */
-    public function generateBarcodes(int $count): object
-    {
-        $maxCount = 5_000;
-        if ($count > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества запрошенных баркодов: {$maxCount}");
-        }
-        return $this->postRequest('/content/v1/barcodes', [
-            'count' => $count,
-        ]);
-    }
-
-    /**
-     * Лимиты по КТ
-     * 
-     * Метод позволяет получить отдельно бесплатные и платные лимиты продавца на создание карточек товаров
-     * 
-     * @return object {
-     *      data: { freeLimits: int, paidLimits: int },
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     */
-    public function getCardsLimits(): object
-    {
-        return $this->getRequest('/content/v1/cards/limits');
     }
 
     /**
@@ -309,7 +192,7 @@ class Content extends AbstractEndpoint
         if (count($nmIds) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества номенклатур: {$maxCount}");
         }
-        return $this->postRequest('/content/v1/cards/moveNm', [
+        return $this->postRequest('/content/v2/cards/moveNm', [
             'targetIMT' => $targetImt,
             'nmIDs' => $nmIds,
         ]);
@@ -341,60 +224,188 @@ class Content extends AbstractEndpoint
     }
     
     /**
-     * Список НМ, находящихся в корзине
+     * Генерация баркодов
      * 
-     * Метод позволяет получить список НМ, находящихся в корзине
+     * Метод позволяет сгенерировать массив уникальных баркодов для создания размера НМ в КТ.
      * 
-     * Метод позволяет получить список НМ, которые находятся в корзине по фильтру (баркод (skus),
-     * артикул продавца (vendorCode), артикул WB (nmID)) с пагинацией и сортировкой
+     * @param int $count Количество баркодов которые надо сгенерировать, максимальное количество - 5000
      * 
-     * @param int    $page        Номер страницы
-     * @param string $searchValue Значение, по которому будет осуществляться поиск
-     * @param int    $onPage      Количество карточек на странице
-     * @param bool   $ascending   Направление сортировки. true - по возрастанию, false - по убыванию
-     *                            Поле, по которому будет сортироваться список - updateAt
      * @return object {
-     *      data: { cards: array },
+     *      data: [ string, string, ... ],
      *      error: bool, errorText: string, additionalErrors: string
      * }
-     * 
-     * @throws InvalidArgumentException Превышение максимального количества запрошенных карточек
+     * @throws InvalidArgumentException
      */
-    public function getTrashList(int $page = 1, string $searchValue = '', int $onPage = 1_000, $ascending = true)
+    public function generateBarcodes(int $count): object
     {
-        $maxLimit = 1_000;
-        if ($onPage > $maxLimit) {
-            throw new InvalidArgumentException("Превышение максимального количества запрошенных карточек: {$maxLimit}");
+        $maxCount = 5_000;
+        if ($count > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества запрошенных баркодов: {$maxCount}");
         }
-        return $this->postRequest('/content/v1/cards/trash/list', [
-            'sort' => [
-                'sortColumn' => 'updateAt',
-                'ascending' => $ascending,
-                'searchValue' => $searchValue,
-                'offset' => --$page * $onPage,
-                'limit' => $onPage,
-            ],
+        return $this->postRequest('/content/v2/barcodes', [
+            'count' => $count,
         ]);
     }
     
     /**
-     * Категория товаров
+     * Получить список НМ по фильтру
      * 
-     * С помощью данного метода можно получить список категорий товаров по текстовому фильтру (названию категории).
+     * Карточки, находящиеся в корзине, в ответе метода не выдаются
      * 
-     * @param string $name Поиск по названию категории
-     * @param int    $top  Количество запрашиваемых значений
+     * @param string $textSearch Поиск по артикулу продавца, артикулу WB
+     * @param int    $limit      Количество запрашиваемых КТ
+     * @param string $updatedAt  Время обновления последней КТ из предыдущего ответа на запрос списка КТ
+     * @param int    $nmId       Номенклатура последней КТ из предыдущего ответа на запрос списка КТ
+     * @param bool   $ascending  Направление сортировки по updatedAt. true - по возрастанию, false - по убыванию.
+     * @param int    $withPhoto  -1 - Выдать все КТ
+     *                            0 - Выдать КТ без фото
+     *                            1 - Выдать КТ с фото
+     * @param array  $tagIDs     Поиск по id тегов
      * 
      * @return object {
-     *      data: [ {objectName: string, parentName: striing, isVisible: bool}, ... ],
+     *      data: {
+     *          cards: [ object, object, ... ],
+     *          cursor: {updatedAt: string, nmID: int, total: int}
+     *      },
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     * 
+     * @throws InvalidArgumentException
+     */
+    public function getCardsList(
+        string $textSearch = '', int $limit = 1_000, string $updatedAt = '', int $nmId = 0,
+        bool $ascending = false, int $withPhoto = -1, array $objectIDs = [], array $brands = [], array $tagIDs = [], int $imtID = 0,
+        bool $allowedCategoriesOnly = false): object
+    {
+        $maxCount = 1_000;
+        if ($limit > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества запрошенных карточек: {$maxCount}");
+        }
+        if (!in_array($withPhoto, [-1, 0, 1])) {
+            throw new InvalidArgumentException("Недопустимое значение параметра withPhoto: {$withPhoto}");
+        }
+        return $this->postRequest('/content/v2/get/cards/list?locale=' . (getenv('WBSELLER_LOCALE')?:'ru'), [
+            'settings' => [
+                'cursor' => array_merge(
+                    ['limit' => $limit],
+                    ($updatedAt && $nmId) ? ['updatedAt' => $updatedAt, 'nmID' => $nmId] : []
+                ),
+                'filter' => array_merge(
+                    ['withPhoto' => $withPhoto],
+                    ['allowedCategoriesOnly' => $allowedCategoriesOnly],
+                    $textSearch ? ['textSearch' => $textSearch] : [],
+                    $objectIDs ? ['objectIDs' => $objectIDs] : [],
+                    $brands ? ['brands' => $brands] : [],
+                    $tagIDs ? ['tagIDs' => $tagIDs] : [],
+                    $imtID ? ['imtID' => $imtID] : [],
+                ),
+                'sort' => [
+                    'ascending' => $ascending,
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Список несозданных НМ с ошибками
+     * 
+     * Метод позволяет получить список НМ и список ошибок которые произошли во время создания КТ.
+     * Для того чтобы убрать НМ из ошибочных, надо повторно сделать запрос с исправленными ошибками на создание КТ.
+     * 
+     * @return object {
+     *      "data": [ {object: string, vendorCode: string, updatedAt: RFC3336, errors: [ string, ... ]}, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
+     * 	}
+     */
+    public function getErrorCardsList(): object
+    {
+        return $this->getRequest('/content/v2/cards/error/list', ['locale' => getenv('WBSELLER_LOCALE')?:'ru']);
+    }
+
+    /**
+     * Получение КТ по артикулу продавца
+     * (Перенаправление на метод getCardsList "Получить список НМ по фильтру")
+     * 
+     * Метод позволяет получить полную информацию по КТ.
+     * Карточки, находящиеся в корзине, в ответе метода не выдаются.
+     * 
+     * @param string $vendorCode Артикул продавца
+     * 
+     * @return object {
+     *      data: {
+     *          cards: [ object, object, ... ],
+     *          cursor: {updatedAt: string, nmID: int, total: int}
+     *      },
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
-    public function searchCategory(string $name, int $top = 50): object
+    public function getCardByVendorCode($vendorCode): object
     {
-        return $this->getRequest('/content/v1/object/all', [
+        return $this->getCardsList($vendorCode);
+    }
+
+    /**
+     * Получение КТ по артикулу WB
+     * (Перенаправление на метод getCardsList "Получить список НМ по фильтру")
+     * 
+     * Метод позволяет получить полную информацию по КТ.
+     * Карточки, находящиеся в корзине, в ответе метода не выдаются.
+     * 
+     * @param string $nmId Артикул WB
+     * 
+     * @return object {
+     *      data: {
+     *          cards: [ object, object, ... ],
+     *          cursor: {updatedAt: string, nmID: int, total: int}
+     *      },
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     */
+    public function getCardByNmID($nmId): object
+    {
+        return $this->getCardsList($nmId);
+    }
+
+    /**
+     * Лимиты по КТ
+     * 
+     * Метод позволяет получить отдельно бесплатные и платные лимиты продавца на создание карточек товаров
+     * 
+     * @return object {
+     *      data: { freeLimits: int, paidLimits: int },
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     */
+    public function getCardsLimits(): object
+    {
+        return $this->getRequest('/content/v2/cards/limits');
+    }
+
+    /**
+     * Список предметов
+     * 
+     * С помощью данного метода можно получить список всех доступных предметов,
+     * родительских категорий преметов, и их идентификаторов. 
+     * 
+     * @param string $name     Поиск по наименованию предмета (Носки), поиск работает по подстроке,
+     *                         искать можно на любом из поддерживаемых языков
+     * @param int    $parentId Идентификатор родительской категории предмета
+     * @param int    $offset   Номер позиции, с которой необходимо получить ответ
+     * @param int    $limit    Ограничение по количеству выдваемых предметов
+     * 
+     * @return object {
+     *      data: [ {objectName: string, parentName: striing, isVisible: bool, ...}, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     */
+    public function searchCategory(string $name = '', int $parentId = 0, int $offset = 0, int $limit = 1_000): object
+    {
+        return $this->getRequest('/content/v2/object/all', [
             'name' => $name,
-            'top' => $top,
+            'offset' => $offset,
+            'limit' => $limit,
+            'parentID' => $parentId,
+            'locale' => getenv('WBSELLER_LOCALE')?:'ru',
         ]);
     }
 
@@ -410,79 +421,35 @@ class Content extends AbstractEndpoint
      */
     public function getParentCategories(): object
     {
-        return $this->getRequest('/content/v1/object/parent/all');
+        return $this->getRequest('/content/v2/object/parent/all?locale=' . (getenv('WBSELLER_LOCALE')?:'ru'));
     }
 
     /**
      * Характеристики для создания КТ для категории товара
      * 
-     * С помощью данного метода можно получить список характеристик, которые можно или нужно заполнить при создании КТ
-     * для определенной категории товаров.
-     * Важно: обязательная к заполнению характеристика при создании карточки любого товара - Предмет.
-     * Значение характеристики Предмет соответствует значению параметра objectName в запросе.
+     * С помощью данного метода можно получить список характеристик для определенной категории товаров.
      * 
-     * @param string $objectName Поиск по наименованию категории
+     * @param string $objectId Идентификатор предмета
      * 
      * @return object {
-     *      data: [
-     *          {
-     *              objectName: string,	- Наименование подкатегории
-     *              name: string,		- Наименование характеристики
-     *              required: bool,		- Характеристика обязательна к заполенению
-     *              unitName: string,	- Единица имерения (см, гр и т.д.)
-     *              maxCount: int,		- Максимальное кол-во значений, которое можно присвоить данной характеристике.
-     *                                    Если 0, то нет ограничения.
-     *              popular:bool,		- Характеристика популярна у пользователей
-     *              charcType: int		- Тип характеристики (1 - строка или массив строк; 4 - число или массив чисел)
-     *          }, ...
-     *      ],
+     *      data: [object, ...],
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
-    public function getCategoryCharacteristics(string $objectName): object
+    public function getCategoryCharacteristics(int $objectId): object
     {
-        return $this->getRequest('/content/v1/object/characteristics/' . $objectName);
-    }
-
-    /**
-     * Характеристики для создания КТ по всем подкатегориям
-     * 
-     * С помощью данного метода можно получить список характеристик которые можно или нужно заполнить при создании КТ
-     * в подкатегории определенной родительской категории.
-     * 
-     * @param string $name Поиск по родительской категории
-     * 
-     * @return object {
-     *      data: [
-     *          {
-     *              objectName: string,	- Наименование подкатегории
-     *              name: string,		- Наименование характеристики
-     *              required: bool,		- Характеристика обязательна к заполенению
-     *              unitName: string,	- Единица имерения (см, гр и т.д.)
-     *              maxCount: int,		- Максимальное кол-во значений, которое можно присвоить данной характеристике.
-     *                                    Если 0, то нет ограничения.
-     *              popular:bool,		- Характеристика популярна у пользователей
-     *              charcType: int		- Тип характеристики (1 - строка или массив строк; 4 - число или массив чисел)
-     *          }, ...
-     *      ],
-     *      error: bool, errorText: string, additionalErrors: string
-     * }
-     */
-    public function getCategoriesCharacteristics(string $name): object
-    {
-        return $this->getRequest('/content/v1/object/characteristics/list/filter', [
-            'name' => $name,
-        ]);
+        return $this->getRequest('/content/v2/object/charcs/' . $objectId . '?locale=' . (getenv('WBSELLER_LOCALE')?:'ru'));
     }
 
     /**
      * Получение значений характеристики
      * 
-     * colors		Цвет
-     * kinds		Пол
-     * countries	Страна производства
-     * seasons		Сезон
-     * tnved		ТНВЭД код
+     * colors       Цвет
+     * kinds        Пол
+     * countries    Страна производства
+     * seasons      Сезон
+     * tnved        ТНВЭД код
+     * vat          Ставка НДС
      * 
      * @param string $name   Имя характеристики
      * @param array  $params Параметры (для некоторых характеристик)
@@ -495,12 +462,12 @@ class Content extends AbstractEndpoint
      */
     public function getDirectory(string $name, array $params = []): object
     {
-        $directories = ['colors', 'kinds', 'countries', 'seasons', 'tnved'];
+        $directories = ['colors', 'kinds', 'countries', 'seasons', 'tnved', 'vat'];
         $directory = ltrim(strtolower($name), '/');
         if (!in_array($directory, $directories)) {
             throw new InvalidArgumentException("Неизвестная ссылка на характеристику: {$directory}");
         }
-        return $this->getRequest('/content/v1/directory/' . $directory, $params);
+        return $this->getRequest('/content/v2/directory/' . $directory, array_merge(['locale' => getenv('WBSELLER_LOCALE')?:'ru'], $params));
     }
 
     /**
@@ -556,23 +523,38 @@ class Content extends AbstractEndpoint
     }
 
     /**
-     * Поиск значений характеристики "ТНВЭД код"
+     * Ставка НДС
      * 
-     * С помощью данного метода можно получить список ТНВЭД кодов по имени категории и фильтру по тнвэд коду
-     * 
-     * @param string $objectName Наименование категории
-     * @param int    $tnvedsLike Поиск по коду ТНВЭД
+     * С помощью данного метода можно получить список значений для характеристики Ставка НДС.
      * 
      * @return object {
-     *      data: [ {subjectName: string, tnvedName: string, description: string, isKiz: bool }, ... ],
+     *      data: [ string, ... ],
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
-    public function searchDirectoryTNVED(string $objectName, string $tnvedsLike = ''): object
+    public function getDirectoryNDS(): object
+    {
+        return $this->getDirectory('vat');
+    }
+
+    /**
+     * Поиск значений характеристики "ТНВЭД код"
+     * 
+     * С помощью данного метода можно получить список ТНВЭД кодов по ID предмета и фильтру по тнвэд коду.
+     * 
+     * @param string $subjectID Идентификатор предмета
+     * @param int    $search    Поиск по ТНВЭД-коду. Работает только в паре с subjectID
+     * 
+     * @return object {
+     *      data: [object, ... ],
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     */
+    public function searchDirectoryTNVED(int $subjectID, string $search = ''): object
     {
         return $this->getDirectory('tnved', [
-            'objectName' => $objectName,
-            'tnvedsLike' => $tnvedsLike
+            '$subjectID' => $subjectID,
+            'search' => $search,
         ]);
     }
 
@@ -582,6 +564,11 @@ class Content extends AbstractEndpoint
      * Метод позволяет изменить порядок изображений или удалить медиафайлы с НМ в КТ,
      * а также загрузить изображения в НМ со сторонних ресурсов по URL.
      * Текущие изображения заменяются на переданные в массиве.
+     * Если хотя бы одно изображение в запросе не соответствует требованиям к медиафайлам,
+     * то даже при коде ответа 200 ни одно изображение не загрузится в КТ.
+     * Всё, что передаётся в массиве data полностью заменяет собой содержимое массива photos в КТ.
+     * Если Вы добавляете фото к уже имеющимся в КТ, то вместе с новыми передайте в запросе все ссылки на фото и видео,
+     * которые уже содержатся в КТ. В противном случае в карточке окажутся только передаваемые фото.
      * 
      * @param string $vendorCode Артикул номенклатуры
      * @param array  $mediaList  Ссылки на изображения в том порядке, в котором мы хотим их увидеть в карточке товара
@@ -590,7 +577,7 @@ class Content extends AbstractEndpoint
      */
     public function updateMedia(string $vendorCode, array $mediaList): object
     {
-        return $this->postRequest('/content/v1/media/save', [
+        return $this->postRequest('/content/v2/media/save', [
             'vendorCode' => $vendorCode,
             'data' => $mediaList,
         ]);
@@ -598,6 +585,7 @@ class Content extends AbstractEndpoint
 
     /**
      * Добавление медиа контента в КТ
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Mediafajly/paths/~1content~1v2~1media~1file/post
      * 
      * Метод позволяет загрузить и добавить медиафайл к НМ в КТ.
      * 
@@ -609,7 +597,7 @@ class Content extends AbstractEndpoint
      */
     public function uploadMedia(string $vendorCode, int $photoNumber, string $file): object
     {
-        return $this->multipartRequest('/content/v1/media/file', [[
+        return $this->multipartRequest('/content/v2/media/file', [[
                 'name' => 'uploadfile',
                 'contents' => $file,
                 'filename' => 'image.jpg',
