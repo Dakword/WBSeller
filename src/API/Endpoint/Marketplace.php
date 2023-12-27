@@ -273,7 +273,7 @@ class Marketplace extends AbstractEndpoint
         if (count($sgtin) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества строк переданного массива: {$maxCount}");
         }
-        return $this->postRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtin' => $sgtin]);
+        return $this->putRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtin' => $sgtin]);
     }
 
     /**
@@ -333,7 +333,7 @@ class Marketplace extends AbstractEndpoint
     /**
      * Получить метаданные сборочного задания
      * 
-     * Возвращает метаданные заказа (imei, uin, gtin)
+     * Возвращает метаданные заказа (imei, uin, gtin, sgtin)
      * 
      * @param int $orderId Идентификатор сборочного задания
      * 
@@ -348,7 +348,7 @@ class Marketplace extends AbstractEndpoint
      * Удалить метаданные сборочного задания
      * 
      * @param int     $orderId Идентификатор сборочного задания
-     * @param string $key      Название метаданных для удаления (imei, uin, gtin)
+     * @param string $key      Название метаданных для удаления (imei, uin, gtin, sgtin)
      * 
      * @return bool
      * 
@@ -356,7 +356,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function deleteOrderMeta(int $orderId, string $key): bool
     {
-        if (!in_array($key, ['imei', 'uin', 'gtin'])) {
+        if (!in_array($key, ['imei', 'uin', 'gtin', 'sgtin'])) {
             throw new InvalidArgumentException('Неизвестное название метаданных: ' . $key);
         }
         $this->deleteRequest('/api/v3/orders/' . $orderId . '/meta', [

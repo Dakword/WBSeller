@@ -292,6 +292,74 @@ class Feedbacks extends AbstractEndpoint
             'id' => $id,
         ]);
     }
+
+    /**
+     * Получить список оценок
+     * 
+     * @return object {
+     * 	    data: {feedbackValuations: object, productValuations: object},
+     * 	    error: bool, errorText: string, additionalErrors: any
+     * }
+     */
+    public function ratesList(): object
+    {
+        return $this->getRequest('/api/v1/supplier-valuations', [], [
+            'X-Locale' => getenv('WBSELLER_LOCALE')?:'ru'
+        ]);
+    }
+    
+    /**
+     * Оценить отзыв
+     * 
+     * @param string $id             Идентификатор отзыва
+     * @param int    $feedbackRateId Оценка отзыва
+     * 
+     * @return bool
+     */
+    public function rateFeedback(string $id, int $feedbackRateId): bool
+    {
+        $this->patchRequest('/api/v1/feedbacks', [
+            'id' => $id,
+            'supplierFeedbackValuation' => $feedbackRateId,
+        ]);
+        return $this->responseCode() == 200;
+    }
+
+    /**
+     * Оценить товар
+     * 
+     * @param string $id            Идентификатор отзыва
+     * @param int    $productRateId Оценка товара
+     * 
+     * @return bool
+     */
+    public function rateProduct(string $id, int $productRateId): bool
+    {
+        $this->patchRequest('/api/v1/feedbacks', [
+            'id' => $id,
+            'supplierProductValuation' => $productRateId,
+        ]);
+        return $this->responseCode() == 200;
+    }
+    
+    /**
+     * Оценить отзыв и товар
+     * 
+     * @param string $id             Идентификатор отзыва
+     * @param int    $feedbackRateId Оценка отзыва
+     * @param int    $productRateId  Оценка товара
+     * 
+     * @return bool
+     */
+    public function rate(string $id, int $feedbackRateId, int $productRateId): bool
+    {
+        $this->patchRequest('/api/v1/feedbacks', [
+            'id' => $id,
+            'supplierFeedbackValuation' => $feedbackRateId,
+            'supplierProductValuation' => $productRateId,
+        ]);
+        return $this->responseCode() == 200;
+    }
     
     private function checkOrder($order)
     {

@@ -6,9 +6,8 @@
 
 ### Работа с API
 ```php
-
 $wbSellerAPI = new \Dakword\WBSeller\API([
-	'keys' => [
+    'keys' => [
         'adv' => '',
         'content' => 'Content_key',
         'feedbacks' => 'FB_key',
@@ -19,7 +18,7 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
         'recommendations' => '',
         'statistics' => '',
     ],
-	'masterkey' => 'combo_key'
+    'masterkey' => 'combo_key'
 ]);
 
 // Proxy
@@ -58,7 +57,7 @@ var_dump($info);
 $warehouses = $wbSellerAPI->Marketplace()->Warehouses()->list();
 var_dump($warehouses);
 
-// Заказы FBS (💡 С автоповтором запросов)
+// Заказы FBS (С автоповтором запросов 💡)
 $orders = $marketApi->retryOnTooManyRequests(10, 1000)->getOrders();
 var_dump($orders);
 
@@ -67,40 +66,40 @@ try {
     $createCardResult = $contentApi->createCard([
         'subjectID' => 105,
 		'variants' => [
-			[
-				'vendorCode' => 'A0001',
-				'title' => 'Наименование',
-				'description' => 'Описание',
-				'brand' => 'Бренд',
-				'dimensions' => [
-					'length' => 55,
-					'width' => 40,
-					'height' => 15,
-				],
-				'characteristics' => [
-					[
-						'id' => 12,
-						'value' => 'свободный крой',
-					],
-					[
-						'id' => 88952,
-						'value' => 200,
-					],
-					[
-						'id' => 14177449,
-						'value' => ['red'],
-					],
-				],
-				'sizes' => [
-					[
-						'techSize' => '39',
-						'wbSize' => '',
-						'price' => (int) 3999.99,
-						'skus' => [ '1000000001' ]
-					]
-				],
-			],
-		]
+            [
+                'vendorCode' => 'A0001',
+                'title' => 'Наименование',
+                'description' => 'Описание',
+                'brand' => 'Бренд',
+                'dimensions' => [
+                    'length' => 55,
+                    'width' => 40,
+                    'height' => 15,
+                ],
+                'characteristics' => [
+                    [
+                        'id' => 12,
+                        'value' => 'свободный крой',
+                    ],
+                    [
+                        'id' => 88952,
+                        'value' => 200,
+                    ],
+                    [
+                        'id' => 14177449,
+                        'value' => ['red'],
+                    ],
+                ],
+                'sizes' => [
+                    [
+                        'techSize' => '39',
+                        'wbSize' => '',
+                        'price' => (int) 3999.99,
+                        'skus' => [ '1000000001' ]
+                    ]
+                ],
+            ],
+        ]
     ]);
     if ($createCardResult->error) {
         echo 'Ошибка создания карточки: ' . $createCardResult->errorText;
@@ -110,5 +109,4 @@ try {
 } catch (\Dakword\WBSeller\Exception\WBSellerException $exc) {
     echo 'Исключение при создании карточки: ' . $exc->getMessage();
 }
-
 ```

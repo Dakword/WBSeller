@@ -202,10 +202,36 @@ class FeedbacksTest extends TestCase
         $result = $this->Feedbacks->count();
         
         $this->assertFalse($result->error);
-
         if(!$result->error) {
             $this->assertObjectHasAttribute('data', $result);
         }
     }
 
+    public function test_ratesList()
+    {
+        $result = $this->Feedbacks->ratesList();
+
+        $this->assertFalse($result->error);
+        if(!$result->error) {
+            $this->assertObjectHasAttribute('feedbackValuations', $result->data);
+            $this->assertObjectHasAttribute('productValuations', $result->data);
+        }
+    }
+
+    public function test_rateFeedback()
+    {
+        $result = $this->Feedbacks->rateFeedback('a2X3e4wB-uQDHp63D36M', 1);
+
+        $this->assertTrue($result->error);
+        $this->assertEquals('Не удалось оценить отзыв', $result->errorText);
+    }
+
+    public function test_rateProduct()
+    {
+        $result = $this->Feedbacks->rateProduct('a2X3e4wB-uQDHp63D36M', 1);
+
+        $this->assertFalse($result);
+    }
+
 }
+

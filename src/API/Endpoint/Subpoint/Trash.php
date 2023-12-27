@@ -32,8 +32,8 @@ class Trash
      * @param bool   $ascending  Направление сортировки. true - по возрастанию, false - по убыванию
      *                           Поле, по которому будет сортироваться список - trashedAt
      * @return object {
-     *      data: { cards: array },
-     *      error: bool, errorText: string, additionalErrors: string
+     *      cards: [object, object, ...],
+     *      cursor: { trashedAt: datetime, nmID: int, total: int }
      * }
      * 
      * @throws InvalidArgumentException Превышение максимального количества запрошенных карточек

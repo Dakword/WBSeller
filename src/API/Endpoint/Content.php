@@ -263,11 +263,8 @@ class Content extends AbstractEndpoint
      * @param array  $tagIDs     Поиск по id тегов
      * 
      * @return object {
-     *      data: {
-     *          cards: [ object, object, ... ],
-     *          cursor: {updatedAt: string, nmID: int, total: int}
-     *      },
-     *      error: bool, errorText: string, additionalErrors: string
+     *     cards: [ object, object, ... ],
+     *     cursor: {updatedAt: string, nmID: int, total: int}
      * }
      * 
      * @throws InvalidArgumentException
