@@ -6,18 +6,17 @@ namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
     Adv, Content, Feedbacks, Marketplace, Prices, Promo,
-    Questions, Recommendations, Statistics
+    Questions, Recommendations, Statistics, Tariffs
 };
 
 class API
 {
-    public const WB_API_VERSION = '2.12';
-
     private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
     private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
     private string $advBaseUrl = 'https://advert-api.wildberries.ru';
     private string $recomBaseUrl = 'https://recommend-api.wildberries.ru';
     private string $fbBaseUrl = 'https://feedbacks-api.wildberries.ru';
+    private string $commonBaseUrl = 'https://common-api.wildberries.ru';
     private array $apiKeys;
     private string $masterKey;
     private ?string $proxy = null;
@@ -38,7 +37,7 @@ class API
      *   'masterkey' => 'alternative_universal_key'
      * ]
      */
-    function __construct(array $options)
+    function __construct(array $options = [])
     {
         $this->apiKeys = $options['keys'] ?? [];
         $this->masterKey = $options['masterkey'] ?? '';
@@ -89,6 +88,11 @@ class API
         $this->fbBaseUrl = rtrim($baseUrl, '/');
     }
 
+    public function setCommonBaseUrl(string $baseUrl): void
+    {
+        $this->commonBaseUrl = rtrim($baseUrl, '/');
+    }
+
     public function Adv(): Adv
     {
         return new Adv($this->advBaseUrl, $this->getKey('adv'), $this->proxy);
@@ -132,6 +136,11 @@ class API
     public function Statistics(): Statistics
     {
         return new Statistics($this->statBaseUrl, $this->getKey('statistics'), $this->proxy);
+    }
+
+    public function Tariffs(): Tariffs
+    {
+        return new Tariffs($this->commonBaseUrl, $this->getKey('statistics'), $this->proxy);
     }
 
 }

@@ -1,3 +1,7 @@
+### 4.1.0
+* Новое API Тарифы: `Tariffs()`
+* Удалена константа API::WB_API_VERSION
+
 ### 4.0.1
 * Новые методы API Отзывов: `ratesList()`, `rate()`, `rateFeedback()`, `rateProduct()`
 
