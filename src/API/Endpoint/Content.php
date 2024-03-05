@@ -5,12 +5,23 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\News;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Tags;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Trash;
 use InvalidArgumentException;
 
 class Content extends AbstractEndpoint
 {
+
+    /**
+     * Сервис для получения новостей с портала продавцов.
+     * 
+     * @return News
+     */
+    public function News(): News
+    {
+        return new News($this);
+    }
 
     /**
      * Сервис для работы с тегами КТ.
@@ -556,7 +567,8 @@ class Content extends AbstractEndpoint
     }
 
     /**
-     * Изменение медиа контента КТ
+     * Изменить медиафайлы
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Mediafajly/paths/~1content~1v3~1media~1save/post
      * 
      * Метод позволяет изменить порядок изображений или удалить медиафайлы с НМ в КТ,
      * а также загрузить изображения в НМ со сторонних ресурсов по URL.
@@ -567,39 +579,39 @@ class Content extends AbstractEndpoint
      * Если Вы добавляете фото к уже имеющимся в КТ, то вместе с новыми передайте в запросе все ссылки на фото и видео,
      * которые уже содержатся в КТ. В противном случае в карточке окажутся только передаваемые фото.
      * 
-     * @param string $vendorCode Артикул номенклатуры
-     * @param array  $mediaList  Ссылки на изображения в том порядке, в котором мы хотим их увидеть в карточке товара
+     * @param string $nmID      Артикул Wildberries
+     * @param array  $mediaList Ссылки на изображения в том порядке, в котором мы хотим их увидеть в карточке товара
      * 
      * @return object {data: any, error: bool, errorText: string, additionalErrors: string}
      */
-    public function updateMedia(string $vendorCode, array $mediaList): object
+    public function updateMedia(string $nmID, array $mediaList): object
     {
-        return $this->postRequest('/content/v2/media/save', [
-            'vendorCode' => $vendorCode,
+        return $this->postRequest('/content/v3/media/save', [
+            'nmID' => $nmID,
             'data' => $mediaList,
         ]);
     }
 
     /**
-     * Добавление медиа контента в КТ
-     * @see https://openapi.wb.ru/content/api/ru/#tag/Mediafajly/paths/~1content~1v2~1media~1file/post
+     * Добавить медиафайлы
+     * @see https://openapi.wb.ru/content/api/ru/#tag/Mediafajly/paths/~1content~1v3~1media~1file/post
      * 
      * Метод позволяет загрузить и добавить медиафайл к НМ в КТ.
      * 
-     * @param string $vendorCode  Артикул номенклатуры
+     * @param string $nmID        Артикул Wildberries
      * @param int    $photoNumber Номер медиафайла на загрузку
      * @param string $file        Загружаемый файл
      * 
      * @return object {data: any, error: bool, errorText: string, additionalErrors: string}
      */
-    public function uploadMedia(string $vendorCode, int $photoNumber, string $file): object
+    public function uploadMedia(string $nmID, int $photoNumber, string $file): object
     {
-        return $this->multipartRequest('/content/v2/media/file', [[
+        return $this->multipartRequest('/content/v3/media/file', [[
                 'name' => 'uploadfile',
                 'contents' => $file,
                 'filename' => 'image.jpg',
             ]], [
-            'X-Vendor-Code' => $vendorCode,
+            'X-Nm-Id' => $nmID,
             'X-Photo-Number' => $photoNumber,
         ]);
     }

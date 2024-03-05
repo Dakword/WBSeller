@@ -2,13 +2,14 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-💡 Новое API - Тарифы
+💡 Новое API - Аналитика
 
 ### Работа с API
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API([
     'keys' => [
         'adv' => '',
+        'analytics' => '',
         'content' => 'Content_key',
         'feedbacks' => 'FB_key',
         'marketplace' => 'Marketplace_key',
@@ -18,7 +19,7 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
         'recommendations' => '',
         'statistics' => '',
     ],
-    'masterkey' => 'combo_key'
+    'masterkey' => 'multi_key'
 ]);
 
 // Proxy

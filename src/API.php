@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
-    Adv, Content, Feedbacks, Marketplace, Prices, Promo,
+    Adv, Analytics, Content, Feedbacks, Marketplace, Prices, Promo,
     Questions, Recommendations, Statistics, Tariffs
 };
 
@@ -17,6 +17,7 @@ class API
     private string $recomBaseUrl = 'https://recommend-api.wildberries.ru';
     private string $fbBaseUrl = 'https://feedbacks-api.wildberries.ru';
     private string $commonBaseUrl = 'https://common-api.wildberries.ru';
+    private string $analyticsBaseUrl = 'https://seller-analytics-api.wildberries.ru';
     private array $apiKeys;
     private string $masterKey;
     private ?string $proxy = null;
@@ -25,6 +26,7 @@ class API
      * @param array $options [
      *  'keys' => [
      *     'adv' => '',
+     *     'analytics' => '',
      *     'content' => 'Content_key',
      *     'feedbacks' => 'FB_key',
      *     'marketplace' => 'Marketplace_key',
@@ -96,6 +98,11 @@ class API
     public function Adv(): Adv
     {
         return new Adv($this->advBaseUrl, $this->getKey('adv'), $this->proxy);
+    }
+
+    public function Analytics(): Analytics
+    {
+        return new Analytics($this->apiBaseUrl, $this->getKey('analytics'), $this->proxy);
     }
 
     public function Content(): Content

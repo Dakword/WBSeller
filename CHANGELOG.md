@@ -1,3 +1,10 @@
+### 4.2.0
+* Новое API Аналитика: `Analytics()`
+* Новые методы API Контента: Новости `Content()->News()`
+* Изменения в параметрах метода `Content::updateMedia()`
+* Изменения в параметрах метода `Content::uploadMedia()`
+* Удален метод `Statistics::exciseGoods()`
+
 ### 4.1.0
 * Новое API Тарифы: `Tariffs()`
 * Удалена константа API::WB_API_VERSION
