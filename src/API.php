@@ -18,6 +18,7 @@ class API
     private string $fbBaseUrl = 'https://feedbacks-api.wildberries.ru';
     private string $commonBaseUrl = 'https://common-api.wildberries.ru';
     private string $analyticsBaseUrl = 'https://seller-analytics-api.wildberries.ru';
+    private string $pricesBaseUrl = 'https://discounts-prices-api.wb.ru';
     private array $apiKeys;
     private string $masterKey;
     private ?string $proxy = null;
@@ -31,7 +32,6 @@ class API
      *     'feedbacks' => 'FB_key',
      *     'marketplace' => 'Marketplace_key',
      *     'prices' => '',
-     *     'promo' => '',
      *     'questions' => 'FB_key',
      *     'recommendations' => '',
      *     'statistics' => '',
@@ -95,6 +95,11 @@ class API
         $this->commonBaseUrl = rtrim($baseUrl, '/');
     }
 
+    public function setPricesBaseUrl(string $baseUrl): void
+    {
+        $this->pricesBaseUrl = rtrim($baseUrl, '/');
+    }
+
     public function Adv(): Adv
     {
         return new Adv($this->advBaseUrl, $this->getKey('adv'), $this->proxy);
@@ -102,7 +107,7 @@ class API
 
     public function Analytics(): Analytics
     {
-        return new Analytics($this->apiBaseUrl, $this->getKey('analytics'), $this->proxy);
+        return new Analytics($this->analyticsBaseUrl, $this->getKey('analytics'), $this->proxy);
     }
 
     public function Content(): Content
@@ -122,12 +127,7 @@ class API
 
     public function Prices(): Prices
     {
-        return new Prices($this->apiBaseUrl, $this->getKey('prices'), $this->proxy);
-    }
-
-    public function Promo(): Promo
-    {
-        return new Promo($this->apiBaseUrl, $this->getKey('promo'), $this->proxy);
+        return new Prices($this->pricesBaseUrl, $this->getKey('prices'), $this->proxy);
     }
 
     public function Questions(): Questions

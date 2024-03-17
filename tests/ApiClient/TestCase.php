@@ -5,7 +5,7 @@ namespace Dakword\WBSeller\Tests\ApiClient;
 use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
 use Dakword\WBSeller\API\Endpoint\{
     Adv, Analytics, Content, Feedbacks, Marketplace, Prices,
-    Promo, Questions, Recommendations, Statistics
+    Questions, Recommendations, Statistics
 };
 use Dakword\WBSeller\API\Endpoint\Subpoint\{Passes, News, Tags, Templates, Warehouses};
 use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
@@ -77,12 +77,6 @@ abstract class TestCase extends BaseTestCase
     {
         $this->skipIfNoKeyAPI();
         return $this->API()->Prices();
-    }
-
-    protected function Promo(): Promo
-    {
-        $this->skipIfNoKeyAPI();
-        return $this->API()->Promo();
     }
 
     protected function Questions(): Questions

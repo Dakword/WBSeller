@@ -18,41 +18,87 @@ class PricesTest extends TestCase
 
     /**
      * @covers ::getPrices()
-     * @covers ::getPricesOnStock()
      */
-    public function test_getInfo()
+    public function test_getPrices()
     {
-        $result1 = $this->Prices()->getPrices();
-        $this->assertTrue(is_array($result1));
-
-        $result2 = $this->Prices()->getPricesOnStock();
-        $this->assertTrue(is_array($result2));
-
+        $result = $this->Prices()->getPrices();
+        $this->assertTrue(is_array($result->data->listGoods));
     }
 
     /**
-     * @covers ::updatePrices()
+     * @covers ::getNmIdPrice()
      */
-    public function test_updatePrices()
+    public function test_getNmIdPrice()
     {
         $result1 = $this->Prices()->getPrices();
-        $item = array_shift($result1);
-        if ($item) {
-            $result2 = $this->Prices()->updatePrices([
-                [
-                    'nmId' => $item->nmId,
-                    'price' => $item->price,
-                ]
-            ]);
-            if (property_exists($result2, 'errors')) {
-                // errors: "все номенклатуры с ценами из списка уже загружены, новая загрузка не создана"
-                $this->assertObjectHasAttribute('errors', $result2);
-            } else {
-                $this->assertObjectHasAttribute('uploadId', $result2);
-            }
+        $item1 = array_shift($result1->data->listGoods);
+        if ($item1) {
+            $result2 = $this->Prices()->getNmIdPrice($item1->nmID);
+            $this->assertTrue(is_array($result2->data->listGoods));
+            $item2 = array_shift($result2->data->listGoods);
+            $this->assertEquals($item1->nmID, $item2->nmID);
         } else {
             $this->markTestSkipped();
         }
+    }
+
+    /**
+     * @covers ::getNmIdSizesPrices()
+     */
+    public function test_getNmIdSizesPrices()
+    {
+        $result = $this->Prices()->getNmIdSizesPrices(1234567);
+        $this->assertObjectHasAttribute('listGoods', $result->data);
+    }
+
+    /**
+     * @covers ::upload()
+     */
+    public function test_upload()
+    {
+        $result = $this->Prices()->upload([
+            [
+                'nmID' => 1234567,
+                'price' => 1000,
+                'discount' => 0,
+            ]
+        ]);
+
+        $this->assertObjectHasAttribute('data', $result);
+        $this->assertTrue($result->error);
+    }
+
+    /**
+     * @covers ::getUploadStatus()
+     */
+    public function test_getUploadStatus()
+    {
+        $result = $this->Prices()->getUploadStatus(1234567);
+
+        $this->assertObjectHasAttribute('data', $result);
+        $this->assertNull($result->data);
+    }
+
+    /**
+     * @covers ::getBufferUploadStatus()
+     */
+    public function test_getBufferUploadStatus()
+    {
+        $result = $this->Prices()->getBufferUploadStatus(1234567);
+
+        $this->assertObjectHasAttribute('data', $result);
+        $this->assertNull($result->data);
+    }
+
+    /**
+     * @covers ::getUpload()
+     */
+    public function test_getUpload()
+    {
+        $result = $this->Prices()->getUpload(1234567);
+
+        $this->assertObjectHasAttribute('data', $result);
+        $this->assertNull($result->data->uploadID);
     }
 
 }

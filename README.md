@@ -2,7 +2,7 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-💡 Новое API - Аналитика
+💡 Новая версия API "Цены"
 
 ### Работа с API
 ```php
@@ -14,7 +14,6 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
         'feedbacks' => 'FB_key',
         'marketplace' => 'Marketplace_key',
         'prices' => '',
-        'promo' => '',
         'questions' => 'FB_key',
         'recommendations' => '',
         'statistics' => '',
@@ -31,8 +30,6 @@ $contentApi = $wbSellerAPI->Content();
 $pricesApi = $wbSellerAPI->Prices();
 // API marketplace
 $marketApi = $wbSellerAPI->Marketplace();
-// API скидок и промокодов
-$promoApi = $wbSellerAPI->Promo();
 // API статистики
 $statApi = $wbSellerAPI->Statistics();
 // API рекламы

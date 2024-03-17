@@ -1,3 +1,8 @@
+### 4.3.0
+* Удалено API Промо: `Promo()`
+* Новая версия API Цены: `Prices()`
+* Новые методы API Аналитика: `exciseReport()`, `nmReportDetailHistory()`, `nmReportGroupedHistory()`
+
 ### 4.2.0
 * Новое API Аналитика: `Analytics()`
 * Новые методы API Контента: Новости `Content()->News()`
