@@ -41,7 +41,7 @@ class ContentTagsTest extends TestCase
 
             $result2 = $Tags->create('ХИТ', 'FEE0E0');
             $this->assertTrue($result2->error);
-            $this->assertEquals('Тег с таким именем уже существует', $result2->errorText);
+            $this->assertEquals('tag already exists', $result2->errorText);
 
             $result3 = $Tags->update($id, 'МЕГАХИТ', 'FFECC7');
             $this->assertFalse($result3->error);

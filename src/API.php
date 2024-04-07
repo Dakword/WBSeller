@@ -5,20 +5,24 @@ declare(strict_types=1);
 namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
-    Adv, Analytics, Content, Feedbacks, Marketplace, Prices, Promo,
+    Adv, Analytics, Content, Feedbacks, Marketplace, Prices,
     Questions, Recommendations, Statistics, Tariffs
 };
 
 class API
 {
-    private string $apiBaseUrl = 'https://suppliers-api.wildberries.ru';
-    private string $statBaseUrl = 'https://statistics-api.wildberries.ru';
-    private string $advBaseUrl = 'https://advert-api.wildberries.ru';
-    private string $recomBaseUrl = 'https://recommend-api.wildberries.ru';
-    private string $fbBaseUrl = 'https://feedbacks-api.wildberries.ru';
-    private string $commonBaseUrl = 'https://common-api.wildberries.ru';
-    private string $analyticsBaseUrl = 'https://seller-analytics-api.wildberries.ru';
-    private string $pricesBaseUrl = 'https://discounts-prices-api.wb.ru';
+    private array $apiUrls = [
+        'adv'             => 'https://advert-api.wildberries.ru',
+        'analytics'       => 'https://seller-analytics-api.wildberries.ru',
+        'content'         => 'https://suppliers-api.wildberries.ru',
+        'feedbacks'       => 'https://feedbacks-api.wildberries.ru',
+        'marketplace'     => 'https://suppliers-api.wildberries.ru',
+        'prices'          => 'https://discounts-prices-api.wb.ru',
+        'questions'       => 'https://feedbacks-api.wildberries.ru',
+        'recommendations' => 'https://recommend-api.wildberries.ru',
+        'statistics'      => 'https://statistics-api.wildberries.ru',
+        'tariffs'         => 'https://common-api.wildberries.ru',
+    ];
     private array $apiKeys;
     private string $masterKey;
     private ?string $proxy = null;
@@ -36,13 +40,33 @@ class API
      *     'recommendations' => '',
      *     'statistics' => '',
      *   ],
-     *   'masterkey' => 'alternative_universal_key'
+     *   'masterkey' => 'alternative_universal_key',
+     *   'apiurls' => [
+     *     'adv' => 'url',
+     *     'analytics' => '',
+     *     'content' => 'url',
+     *     'feedbacks' => 'url',
+     *     'marketplace' => '',
+     *     'prices' => '',
+     *     'questions' => '',
+     *     'recommendations' => '',
+     *     'statistics' => '',
+     *     'tariffs' => '',
+     *   ]
      * ]
      */
     function __construct(array $options = [])
     {
         $this->apiKeys = $options['keys'] ?? [];
         $this->masterKey = $options['masterkey'] ?? '';
+        if(isset($options['apiurls']) && is_array($options['apiurls'])) {
+            foreach($options['apiurls'] as $apiName => $apiUrl) {
+                $arrayKey = strtolower($apiName);
+                if(array_key_exists($arrayKey, $this->apiUrls)) {
+                    $this->apiUrls[$arrayKey] = rtrim($apiUrl, '/');
+                }
+            }
+        }
     }
 
     private function getKey($keyName): string
@@ -51,7 +75,7 @@ class API
     }
     
     /**
-     * Использовать для запросов HTTP-прокси
+     * Использовать для запросов прокси
      * 
      * @param string $proxyUrl http://username:password@192.168.16.1:10
      */
@@ -65,89 +89,62 @@ class API
         return $this->proxy;
     }
     
-    public function setApiBaseUrl(string $baseUrl): void
+    public function setApiUrl(string $apiName, string $apiUrl): void
     {
-        $this->apiBaseUrl = rtrim($baseUrl, '/');
-    }
-
-    public function setStatBaseUrl(string $baseUrl): void
-    {
-        $this->statBaseUrl = rtrim($baseUrl, '/');
-    }
-
-    public function setAdvBaseUrl(string $baseUrl): void
-    {
-        $this->advBaseUrl = rtrim($baseUrl, '/');
-    }
-
-    public function setRecomBaseUrl(string $baseUrl): void
-    {
-        $this->recomBaseUrl = rtrim($baseUrl, '/');
-    }
-
-    public function setFeedBacksBaseUrl(string $baseUrl): void
-    {
-        $this->fbBaseUrl = rtrim($baseUrl, '/');
-    }
-
-    public function setCommonBaseUrl(string $baseUrl): void
-    {
-        $this->commonBaseUrl = rtrim($baseUrl, '/');
-    }
-
-    public function setPricesBaseUrl(string $baseUrl): void
-    {
-        $this->pricesBaseUrl = rtrim($baseUrl, '/');
+        $arrayKey = strtolower($apiName);
+        if(array_key_exists($arrayKey, $this->apiUrls)) {
+            $this->apiUrls[$arrayKey] = rtrim($apiUrl, '/');
+        }
     }
 
     public function Adv(): Adv
     {
-        return new Adv($this->advBaseUrl, $this->getKey('adv'), $this->proxy);
+        return new Adv($this->apiUrls['adv'], $this->getKey('adv'), $this->proxy);
     }
 
     public function Analytics(): Analytics
     {
-        return new Analytics($this->analyticsBaseUrl, $this->getKey('analytics'), $this->proxy);
+        return new Analytics($this->apiUrls['analytics'], $this->getKey('analytics'), $this->proxy);
     }
 
     public function Content(): Content
     {
-        return new Content($this->apiBaseUrl, $this->getKey('content'), $this->proxy);
+        return new Content($this->apiUrls['content'], $this->getKey('content'), $this->proxy);
     }
 
     public function Feedbacks(): Feedbacks
     {
-        return new Feedbacks($this->fbBaseUrl, $this->getKey('feedbacks'), $this->proxy);
+        return new Feedbacks($this->apiUrls['feedbacks'], $this->getKey('feedbacks'), $this->proxy);
     }
 
     public function Marketplace(): Marketplace
     {
-        return new Marketplace($this->apiBaseUrl, $this->getKey('marketplace'), $this->proxy);
+        return new Marketplace($this->apiUrls['marketplace'], $this->getKey('marketplace'), $this->proxy);
     }
 
     public function Prices(): Prices
     {
-        return new Prices($this->pricesBaseUrl, $this->getKey('prices'), $this->proxy);
+        return new Prices($this->apiUrls['prices'], $this->getKey('prices'), $this->proxy);
     }
 
     public function Questions(): Questions
     {
-        return new Questions($this->fbBaseUrl, $this->getKey('questions'), $this->proxy);
+        return new Questions($this->apiUrls['questions'], $this->getKey('questions'), $this->proxy);
     }
 
     public function Recommendations(): Recommendations
     {
-        return new Recommendations($this->recomBaseUrl, $this->getKey('recommendations'), $this->proxy);
+        return new Recommendations($this->apiUrls['recommendations'], $this->getKey('recommendations'), $this->proxy);
     }
 
     public function Statistics(): Statistics
     {
-        return new Statistics($this->statBaseUrl, $this->getKey('statistics'), $this->proxy);
+        return new Statistics($this->apiUrls['statistics'], $this->getKey('statistics'), $this->proxy);
     }
 
     public function Tariffs(): Tariffs
     {
-        return new Tariffs($this->commonBaseUrl, $this->getKey('statistics'), $this->proxy);
+        return new Tariffs($this->apiUrls['tariffs'], $this->getKey('statistics'), $this->proxy);
     }
 
 }

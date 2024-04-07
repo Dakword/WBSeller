@@ -74,7 +74,7 @@ class MarketplaceTest extends TestCase
     public function test_closeSupply()
     {
         $result = $this->Marketplace()->closeSupply('WB-GI-123456');
-        $this->assertEquals($result->code, 'InternalServerError');
+        $this->assertEquals($result->code, 'NotFound');
     }
 
     public function test_getReShipmentOrdersSupplies()
@@ -140,7 +140,7 @@ class MarketplaceTest extends TestCase
     {
         $result = $this->Marketplace()->setOrderKiz(123456, []);
         $this->assertObjectHasAttribute('code', $result);
-        $this->assertEquals($result->code, 'IncorrectRequest');
+        $this->assertEquals($result->code, 'IncorrectRequestBody');
     }
 
     public function test_setOrderUin()

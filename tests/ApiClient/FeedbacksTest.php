@@ -221,15 +221,12 @@ class FeedbacksTest extends TestCase
     public function test_rateFeedback()
     {
         $result = $this->Feedbacks->rateFeedback('a2X3e4wB-uQDHp63D36M', 1);
-
-        $this->assertTrue($result->error);
-        $this->assertEquals('Не удалось оценить отзыв', $result->errorText);
+        $this->assertFalse($result);
     }
 
     public function test_rateProduct()
     {
         $result = $this->Feedbacks->rateProduct('a2X3e4wB-uQDHp63D36M', 1);
-
         $this->assertFalse($result);
     }
 

@@ -109,7 +109,7 @@ class ContentTest extends TestCase
     public function test_addCardNomenclature_ERROR()
     {
         $result = $this->Content()->addCardNomenclature('TEST', []);
-        $this->assertEquals('See https://openapi.wb.ru', $result);
+        $this->assertEquals('Invalid request format', $result->errorText);
     }
 
     public function test_createCard_ERROR()

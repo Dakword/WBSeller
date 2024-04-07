@@ -18,7 +18,19 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
         'recommendations' => '',
         'statistics' => '',
     ],
-    'masterkey' => 'multi_key'
+    'masterkey' => 'multi_key',
+    'apiurls' => [
+        'adv'             => 'https://advert-api-sandbox.wildberries.ru',
+        'analytics'       => 'https://abc.site.ru',
+        'content'         => 'https://suppliers-api.wb.ru',
+        'feedbacks'       => 'https://feedbacks-api.wildberries.ru',
+        'marketplace'     => '', // если не нужно заменить, то можно не передавать
+        'prices'          => '',
+        'questions'       => '',
+        'recommendations' => '',
+        'statistics'      => '',
+        'tariffs'         => '',
+    ],
 ]);
 
 // Proxy
