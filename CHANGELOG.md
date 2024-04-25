@@ -1,3 +1,7 @@
+### 4.4.1
+* Новый метод `Content::updateCards()`
+* Изменение лимитов в методах `Content::getCardsList()` и `Content()->Trash::list()`
+
 ### 4.4.0
 * Новый параметр в опциях -`apiurls` (для переназначения стандартных адресов API)
 * Новый метод `API::setApiUrl()`

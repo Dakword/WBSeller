@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint\Subpoint;
 
 use Dakword\WBSeller\API\Endpoint\Content;
+use InvalidArgumentException;
 
 class Trash
 {
@@ -38,9 +39,9 @@ class Trash
      * 
      * @throws InvalidArgumentException Превышение максимального количества запрошенных карточек
      */
-    public function list(string $textSearch = '', int $limit = 1_000, string $trashedAt = '', int $nmId = 0, bool $ascending = false)
+    public function list(string $textSearch = '', int $limit = 100, string $trashedAt = '', int $nmId = 0, bool $ascending = false)
     {
-        $maxLimit = 1_000;
+        $maxLimit = 100;
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрошенных карточек: {$maxLimit}");
         }

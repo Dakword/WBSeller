@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint\Subpoint;
 
 use Dakword\WBSeller\API\Endpoint\Content;
+use InvalidArgumentException;
 
 class Tags
 {

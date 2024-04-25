@@ -2,8 +2,6 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-💡 Новая версия API "Цены"
-
 ### Работа с API
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API([

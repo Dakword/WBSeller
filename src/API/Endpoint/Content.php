@@ -122,7 +122,48 @@ class Content extends AbstractEndpoint
     /**
      * Редактирование КТ
      * 
-     * Метод позволяет отредактировать 1 КТ за раз.
+     * Редактирование КТ происходит асинхронно, после отправки запрос становится в очередь на обработку.
+     * Важно: Баркоды редактированию/удалению не подлежат. Добавить баркод к уже существующему можно.
+     * photos, video и tags в запросе передавать не обязательно, редактирование и удаление этих структур
+     * данным методом не предусмотрено.
+     * Если запрос прошел успешно, но какие-то карточки не изменились, значит были допущены ошибки -
+     * запросите Список несозданных НМ с ошибками (метод cards/error/list) с описанием ошибок.
+     * В одном запросе можно отредактировать максимум 3000 номенклатур (nmID). Максимальный размер запроса 10 Мб.
+     * Габариты товаров можно указать только в сантиметрах.
+     * 
+     * Для успешного обновления карточки рекомендуем Вам придерживаться следующего порядка действий:
+     * 1. Сначала существующую карточку необходимо запросить методом get/card/full.
+     * 2. Забираем из ответа данные карточки, до поля createdAt.
+     * 3. Данные помещаем в массив.
+     * 4. В этом массиве вносим необходимые изменения и отправляем его в cards/update.
+     * 
+     * @param array $cards [
+     *      [ 
+     *          imtID: integer, nmID: integer, vendorCode: string, ...
+     *          characteristics: [ object, object, ...],
+     *          sizes: [ object, object, ...]
+     *      ], ...
+     *  ]
+     * 
+     * @return object {
+     *      data: null,
+     *      error: bool, errorText: string, additionalErrors: string
+     * }
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества номенклатур
+     */
+    public function updateCards(array $cards): object
+    {
+        $maxCount = 3000;
+        if (count($cards) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества номенклатур: {$maxCount}");
+        }
+        return $this->postRequest('/content/v2/cards/update', $cards);
+    }
+
+    /**
+     * Редактирование 1 КТ
+     * 
      * Редактирование КТ происходит асинхронно, после отправки запрос становится в очередь на обработку.
      * Важно: Баркоды редактированию/удалению не подлежат. Добавить баркод к уже существующему можно.
      * photos, video и tags в запросе передавать не обязательно, редактирование и удаление этих структур
@@ -281,11 +322,11 @@ class Content extends AbstractEndpoint
      * @throws InvalidArgumentException
      */
     public function getCardsList(
-        string $textSearch = '', int $limit = 1_000, string $updatedAt = '', int $nmId = 0,
+        string $textSearch = '', int $limit = 100, string $updatedAt = '', int $nmId = 0,
         bool $ascending = false, int $withPhoto = -1, array $objectIDs = [], array $brands = [], array $tagIDs = [], int $imtID = 0,
         bool $allowedCategoriesOnly = false): object
     {
-        $maxCount = 1_000;
+        $maxCount = 100;
         if ($limit > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества запрошенных карточек: {$maxCount}");
         }
@@ -402,7 +443,7 @@ class Content extends AbstractEndpoint
      * @param int    $limit    Ограничение по количеству выдваемых предметов
      * 
      * @return object {
-     *      data: [ {objectName: string, parentName: striing, isVisible: bool, ...}, ... ],
+     *      data: [ {subjectID: int, subjectName: string, parentID: int,  parentName: striing}, ... ],
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
