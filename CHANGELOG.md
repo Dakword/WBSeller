@@ -1,3 +1,6 @@
+### 4.4.2
+* Отчет о продажах по реализации V5
+
 ### 4.4.1
 * Новый метод `Content::updateCards()`
 * Изменение лимитов в методах `Content::getCardsList()` и `Content()->Trash::list()`

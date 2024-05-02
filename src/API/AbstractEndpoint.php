@@ -158,6 +158,17 @@ abstract class AbstractEndpoint
             $attempt++;
 
             goto beginRequest;
+        } elseif ($this->responseCode() == 504) {
+            /* 
+             * "504 Gateway Time-out"
+             */
+            if ($attempt >= $this->attempts) {
+                throw new ApiClientException($message, 504);
+            }
+            usleep($this->retryDelay * 1_000);
+            $attempt++;
+
+            goto beginRequest;
         }
         return $result;
     }

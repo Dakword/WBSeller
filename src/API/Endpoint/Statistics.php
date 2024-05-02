@@ -150,7 +150,7 @@ class Statistics extends AbstractEndpoint
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых строк отчета: {$maxLimit}");
         }
-        return ($this->getRequest('/api/v1/supplier/reportDetailByPeriod', [
+        return ($this->getRequest('/api/v5/supplier/reportDetailByPeriod', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
             'dateTo' => $dateTo->format(DATE_RFC3339),
             'limit' => $limit,
