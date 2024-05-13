@@ -163,7 +163,7 @@ abstract class AbstractEndpoint
              * "504 Gateway Time-out"
              */
             if ($attempt >= $this->attempts) {
-                throw new ApiClientException($message, 504);
+                throw new ApiClientException('Gateway Time-out', 504);
             }
             usleep($this->retryDelay * 1_000);
             $attempt++;
