@@ -388,7 +388,7 @@ class Content extends AbstractEndpoint
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
-    public function getCardByVendorCode($vendorCode): object
+    public function getCardByVendorCode(string $vendorCode): object
     {
         return $this->getCardsList($vendorCode);
     }
@@ -410,7 +410,7 @@ class Content extends AbstractEndpoint
      *      error: bool, errorText: string, additionalErrors: string
      * }
      */
-    public function getCardByNmID($nmId): object
+    public function getCardByNmID(string $nmId): object
     {
         return $this->getCardsList($nmId);
     }
@@ -620,15 +620,15 @@ class Content extends AbstractEndpoint
      * Если Вы добавляете фото к уже имеющимся в КТ, то вместе с новыми передайте в запросе все ссылки на фото и видео,
      * которые уже содержатся в КТ. В противном случае в карточке окажутся только передаваемые фото.
      * 
-     * @param string $nmID      Артикул Wildberries
-     * @param array  $mediaList Ссылки на изображения в том порядке, в котором мы хотим их увидеть в карточке товара
+     * @param int   $nmId      Артикул Wildberries
+     * @param array $mediaList Ссылки на изображения в том порядке, в котором мы хотим их увидеть в карточке товара
      * 
      * @return object {data: any, error: bool, errorText: string, additionalErrors: string}
      */
-    public function updateMedia(string $nmID, array $mediaList): object
+    public function updateMedia(int $nmId, array $mediaList): object
     {
         return $this->postRequest('/content/v3/media/save', [
-            'nmID' => $nmID,
+            'nmId' => $nmId,
             'data' => $mediaList,
         ]);
     }
