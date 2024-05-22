@@ -337,7 +337,8 @@ class Content extends AbstractEndpoint
             'settings' => [
                 'cursor' => array_merge(
                     ['limit' => $limit],
-                    ($updatedAt && $nmId) ? ['updatedAt' => $updatedAt, 'nmID' => $nmId] : []
+                    $updatedAt ? ['updatedAt' => $updatedAt] : [],
+                    $nmId ? ['nmID' => $nmId] : [],
                 ),
                 'filter' => array_merge(
                     ['withPhoto' => $withPhoto],
