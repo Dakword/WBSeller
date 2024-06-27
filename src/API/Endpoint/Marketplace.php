@@ -273,7 +273,7 @@ class Marketplace extends AbstractEndpoint
         if (count($sgtin) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества строк переданного массива: {$maxCount}");
         }
-        return $this->putRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtin' => $sgtin]);
+        return $this->putRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtins' => $sgtin]);
     }
 
     /**
