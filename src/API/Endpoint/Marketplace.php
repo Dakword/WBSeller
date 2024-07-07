@@ -225,10 +225,12 @@ class Marketplace extends AbstractEndpoint
      * Возвращает информацию по сборочным заданиям без их актуального статуса.
      * Данные по сборочному заданию, возвращающиеся в данном методе, не меняются.
      * Рекомендуется использовать для получения исторических данных.
+     * Можно выгрузить данные за конкретный период, максимум 30 календарных дней
      * 
      * @param int      $limit     Параметр пагинации. Устанавливает предельное количество возвращаемых данных. (не более 1000)
      * @param int      $next      Параметр пагинации. Устанавливает значение, с которого надо получить следующий пакет данных. Для получения полного списка данных должен быть равен 0 в первом запросе.
      * @param DateTime $dateStart С какой даты вернуть сборочные задания (заказы)
+     *                            по умолчанию — дата за 30 дней до запроса
      * @param DateTime $dateEnd   По какую дату вернуть сборочные задания (заказы)
      * 
      * @return object {next: int, orders: [object, ...]}
@@ -273,7 +275,7 @@ class Marketplace extends AbstractEndpoint
         if (count($sgtin) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества строк переданного массива: {$maxCount}");
         }
-        return $this->putRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtin' => $sgtin]);
+        return $this->putRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtins' => $sgtin]);
     }
 
     /**
