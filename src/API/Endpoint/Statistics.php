@@ -144,7 +144,7 @@ class Statistics extends AbstractEndpoint
      * 
      * @throws InvalidArgumentException
      */
-    public function detailReport(DateTime $dateFrom, DateTime $dateTo, int $limit, int $rrdId = 0): array
+    public function detailReport(DateTime $dateFrom, DateTime $dateTo, int $limit, int $rrdId = 0)
     {
         $maxLimit = 100_000;
         if ($limit > $maxLimit) {

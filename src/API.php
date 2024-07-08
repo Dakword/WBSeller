@@ -6,7 +6,7 @@ namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
     Adv, Analytics, Content, Feedbacks, Marketplace, Prices,
-    Questions, Recommendations, Statistics, Tariffs
+    Questions, Recommendations, Returns, Statistics, Tariffs
 };
 
 class API
@@ -20,6 +20,7 @@ class API
         'prices'          => 'https://discounts-prices-api.wb.ru',
         'questions'       => 'https://feedbacks-api.wildberries.ru',
         'recommendations' => 'https://recommend-api.wildberries.ru',
+        'returns'         => 'https://returns-api.wildberries.ru',
         'statistics'      => 'https://statistics-api.wildberries.ru',
         'tariffs'         => 'https://common-api.wildberries.ru',
     ];
@@ -135,6 +136,11 @@ class API
     public function Recommendations(): Recommendations
     {
         return new Recommendations($this->apiUrls['recommendations'], $this->getKey('recommendations'), $this->proxy);
+    }
+
+    public function Returns(): Returns
+    {
+        return new Returns($this->apiUrls['returns'], $this->getKey('returns'), $this->proxy);
     }
 
     public function Statistics(): Statistics

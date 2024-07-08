@@ -29,6 +29,16 @@ class AdvertType
      */
     const ON_HOME_RECOM = 7;
 
+    /**
+     * @var int Автоматическая
+     */
+    const AUTO = 8;
+
+    /**
+     * @var int Реклама в поиске и каталоге
+     */
+    const ON_SEARCH_CATALOG = 9;
+
     public static function all(): array
     {
         return [
@@ -36,6 +46,8 @@ class AdvertType
             self::ON_CARD,
             self::ON_SEARCH,
             self::ON_HOME_RECOM,
+            self::AUTO,
+            self::ON_SEARCH_CATALOG,
         ];
     }
 

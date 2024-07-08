@@ -5,45 +5,20 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
-use Dakword\WBSeller\Enum\AdvertStatus;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Promotion;
 use Dakword\WBSeller\Enum\AdvertType;
 use InvalidArgumentException;
 
 class Adv extends AbstractEndpoint
 {
-
     /**
-     * Получение списка РК поставщика
+     * Сервис для продвижения
      * 
-     * @param int    $status    Статус РК
-     * @param int    $type      Тип РК
-     * @param int    $limit     Количество кампаний в ответе
-     * @param int    $offset    Смещение относительно первой РК
-     * @param string $order     Порядок: "create", "change", "id"
-     * @param string $direction Направление: "desc", "asc"
-     * 
-     * @return array
-     * 
-     * @throws InvalidArgumentException Неизвестный статус РК
-     * @throws InvalidArgumentException Неизвестный тип РК
+     * @return Promotion
      */
-    public function advertsList(int $status, int $type, int $limit, int $offset = 0, string $order = 'change', string $direction = 'desc'): array
+    public function Promotion(): Promotion
     {
-        if (!in_array($status, AdvertStatus::all())) {
-            throw new InvalidArgumentException('Неизвестный статус РК: ' . $status);
-        }
-        $this->checkType($type);
-        if (!in_array($order, ["create", "change", "id"])) {
-            throw new InvalidArgumentException('Неизвестный порядок сортировки: ' . $order);
-        }
-        return $this->getRequest('/adv/v0/adverts', [
-            'status' => $status,
-            'type' => $type,
-            'limit' => $limit,
-            'offset' => $offset,
-            'order' => $order,
-            'direction' => $direction,
-        ]) ?? [];
+        return new Promotion($this);
     }
 
     /**

@@ -10,9 +10,24 @@ namespace Dakword\WBSeller\Enum;
 class AdvertStatus
 {
     /**
-     * @var int Рекламная кампаниязавершена
+     * @var int Рекламная кампания в процессе удаления
+     */
+    const DELETED = -1;
+
+    /**
+     * @var int Рекламная кампания готова к запуску
+     */
+    const READY = 4;
+
+    /**
+     * @var int Рекламная кампания завершена
      */
     const DONE = 7;
+
+    /**
+     * @var int отказался
+     */
+    const CANCELLED = 8;
 
     /**
      * @var int Идут показы
@@ -27,6 +42,10 @@ class AdvertStatus
     public static function all(): array
     {
         return [
+            self::DELETED,
+            self::READY,
+            self::DONE,
+            self::CANCELLED,
             self::PLAY,
             self::PAUSE,
         ];
