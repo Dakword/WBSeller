@@ -5,11 +5,29 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\PaidStorage;
 use DateTime;
 use InvalidArgumentException;
 
 class Analytics extends AbstractEndpoint
 {
+    /**
+     * Платное хранение
+     * 
+     * @return PaidStorage
+     */
+    public function PaidStorage(): PaidStorage
+    {
+        return new PaidStorage($this);
+    }
+
+    public function __call($method, $parameters)
+    {
+        if(method_exists($this, $method)) {
+            return call_user_func_array([$this, $method], $parameters);
+        }
+        throw new InvalidArgumentException('Magic request method ' . $method . ' not exists');
+    }
 
     /**
      * Получение статистики КТ за выбранный период,
@@ -236,6 +254,23 @@ class Analytics extends AbstractEndpoint
         return $this->postRequest('/api/v1/analytics/excise-report?dateFrom=' . $dateFrom->format('Y-m-d') . '&dateTo=' . $dateTo->format('Y-m-d'), [
             'countries' => $countries,
         ]);
+    }
+
+    /**
+     * Отчет о платной приемке
+     * 
+     * Возвращает даты и стоимость приёмки. Можно получить отчёт максимум за 31 день.
+     * Максимум 1 запрос в минуту
+     * 
+     * @param DateTime $dateFrom Начало отчётного периода
+     * @param DateTime $dateTo   Конец отчётного периода
+     * 
+     * @return array Отчет [object, object, ...]
+     */
+    public function acceptanceReport(DateTime $dateFrom, DateTime $dateTo):array
+    {
+        $result = $this->getRequest('/api/v1/analytics/acceptance-report?dateFrom=' . $dateFrom->format('Y-m-d') . '&dateTo=' . $dateTo->format('Y-m-d'));
+        return $result->report;
     }
     
     private function getFromFilter(string $param, array $filter)
