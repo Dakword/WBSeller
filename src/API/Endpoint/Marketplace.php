@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\CrossBorder;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Warehouses;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Passes;
 use DateTime;
@@ -12,6 +13,16 @@ use InvalidArgumentException;
 
 class Marketplace extends AbstractEndpoint
 {
+
+    /**
+     * Методы используемые при кроссбордере
+     * 
+     * @return CrossBorder
+     */
+    public function CrossBorder(): CrossBorder
+    {
+        return new CrossBorder($this);
+    }
 
     /**
      * Сервис для работы с пропусками.
@@ -209,6 +220,8 @@ class Marketplace extends AbstractEndpoint
      * 
      * @return object (orders: [{id: int, supplierStatus: string, wbStatus: string}, ...])
      * @return object В случае ошибки {code: string, message: string}
+     * 
+     * @throws InvalidArgumentException Превышение максимального количества запрашиваемых статусов сборочных заданий
      */
     public function getOrdersStatuses(array $orders): object
     {

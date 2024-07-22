@@ -11,6 +11,24 @@ class Tariffs extends AbstractEndpoint
 {
 
     /**
+     * Комиссия по категориям товаров
+     * 
+     * Комиссия WB по родительским категориям товаров согласно модели продаж.
+     * 
+     * Максимум - 1 запрос в минуту.
+     * @see https://openapi.wb.ru/tariffs/api/ru/#tag/Komissii/paths/~1api~1v1~1tariffs~1commission/get
+     * 
+     * @return object Список комиссий
+     */
+    public function commission(): object
+    {
+        return $this->getRequest('/api/v1/tariffs/commissioin', [
+            'locale' => getenv('WBSELLER_LOCALE')?:'ru'
+        ])
+        ->report;
+    }
+    
+    /**
      * Тарифы для коробов
      * 
      * Для товаров, которые поставляются на склад в коробах (коробках), возвращает стоимость:
@@ -19,6 +37,7 @@ class Tariffs extends AbstractEndpoint
      *  - хранения на складе Wildberries.
      * 
      * Максимум — 60 запросов в минуту.
+     * @see https://openapi.wb.ru/tariffs/api/ru/#tag/Koefficienty-skladov/paths/~1api~1v1~1tariffs~1box/get
      * 
      * @param DateTime $date Дата
      * 
@@ -41,6 +60,7 @@ class Tariffs extends AbstractEndpoint
      *  - хранения на складе Wildberries.
      * 
      * Максимум — 60 запросов в минуту.
+     * @see https://openapi.wb.ru/tariffs/api/ru/#tag/Koefficienty-skladov/paths/~1api~1v1~1tariffs~1pallet/get
      * 
      * @param DateTime $date Дата
      * 
@@ -62,6 +82,7 @@ class Tariffs extends AbstractEndpoint
      *  - на обратную перевозку возвратов, которые не забрал продавец.
      * 
      * Максимум — 60 запросов в минуту.
+     * @see https://openapi.wb.ru/tariffs/api/ru/#tag/Stoimost-vozvrata-prodavcu/paths/~1api~1v1~1tariffs~1return/get
      * 
      * @param DateTime $date Дата
      * 

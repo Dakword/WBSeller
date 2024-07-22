@@ -154,7 +154,7 @@ class Content extends AbstractEndpoint
      */
     public function updateCards(array $cards): object
     {
-        $maxCount = 3000;
+        $maxCount = 3_000;
         if (count($cards) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества номенклатур: {$maxCount}");
         }
@@ -471,7 +471,7 @@ class Content extends AbstractEndpoint
      */
     public function getParentCategories(): object
     {
-        return $this->getRequest('/content/v2/object/parent/all?locale=' . (getenv('WBSELLER_LOCALE')?:'ru'));
+        return $this->getRequest('/content/v2/object/parent/all', ['locale' => getenv('WBSELLER_LOCALE')?:'ru']);
     }
 
     /**
@@ -488,7 +488,7 @@ class Content extends AbstractEndpoint
      */
     public function getCategoryCharacteristics(int $objectId): object
     {
-        return $this->getRequest('/content/v2/object/charcs/' . $objectId . '?locale=' . (getenv('WBSELLER_LOCALE')?:'ru'));
+        return $this->getRequest('/content/v2/object/charcs/' . $objectId, ['locale' => getenv('WBSELLER_LOCALE')?:'ru']);
     }
 
     /**
