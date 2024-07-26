@@ -212,4 +212,35 @@ class Prices extends AbstractEndpoint
             'limit' => $onPage,
         ]);
     }
+    
+    /**
+     * Получить товары в карантине
+     * 
+     * Если новая цена товара со скидкой будет минимум в 3 раза меньше старой,
+     * товар попадёт в карантин и будет продаваться по старой цене. 
+     * @link https://openapi.wb.ru/prices/api/ru/#tag/Karantin/paths/~1api~1v2~1quarantine~1goods/get
+     * 
+     * @param int $page     Номер страницы
+     * @param int $onPage   Количество результатов на странице
+     * 
+     * @return object {
+     *      data: {
+     *          quarantineGoods: [ object, ... ]
+     *      }
+     *      error: bool, errorText: string
+     * }
+     * 
+     * @throws InvalidArgumentException Превышение максимального размера страницы
+     */
+    public function quarantine(int $page = 1, int $onPage = 1_000): object
+    {
+        $maxLimit = 1_000;
+        if ($onPage > $maxLimit) {
+            throw new InvalidArgumentException("Превышение максимального размера страницы: {$maxLimit}");
+        }
+        return $this->getRequest('/api/v2/quarantine/goods', [
+            'offset' => --$page * $onPage,
+            'limit' => $onPage,
+        ]);
+    }
 }

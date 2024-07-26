@@ -18,7 +18,7 @@ class API
         'content'         => 'https://suppliers-api.wildberries.ru',
         'feedbacks'       => 'https://feedbacks-api.wildberries.ru',
         'marketplace'     => 'https://suppliers-api.wildberries.ru',
-        'prices'          => 'https://discounts-prices-api.wb.ru',
+        'prices'          => 'https://discounts-prices-api.wildberries.ru',
         'questions'       => 'https://feedbacks-api.wildberries.ru',
         'recommendations' => 'https://recommend-api.wildberries.ru',
         'returns'         => 'https://returns-api.wildberries.ru',
