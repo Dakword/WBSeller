@@ -2,12 +2,12 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-💡 Новое API "Чат с покупателями"
+💡 Новое API "Документы"
 
 ### Работа с API
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API([
-    // 'adv', 'analytics', 'chat', 'content', 'feedbacks', 'marketplace',
+    // 'adv', 'analytics', 'chat', 'content', 'documents', 'feedbacks', 'marketplace',
     // 'prices', 'questions', 'recommendations', 'statistics'
     'keys' => [
         'content' => 'Content_key',
@@ -16,7 +16,7 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
         'questions' => 'FB_key',
     ],
     'masterkey' => 'multi_key', // 'content' + 'prices'
-    // 'adv', 'analytics', 'chat', 'content', 'feedbacks', 'marketplace', 'prices', 'questions',
+    // 'adv', 'analytics', 'chat', 'content', 'documents', 'feedbacks', 'marketplace', 'prices', 'questions',
     // 'recommendations', 'returns', 'statistics', 'tariffs'
     'apiurls' => [
         'adv'             => 'https://advert-api-sandbox.wildberries.ru',

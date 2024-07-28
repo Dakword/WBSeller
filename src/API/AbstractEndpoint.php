@@ -10,19 +10,29 @@ use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 
 abstract class AbstractEndpoint
 {
+    private $locale = 'ru';
     private int $attempts = 1;
     private int $retryDelay = 0;
     private Client $Client;
 
-    public function __construct(string $baseUrl, string $key, ?string $proxy = null)
+    public function __construct(string $baseUrl, string $key, ?string $proxy = null, ?string $locale = null)
     {
         $this->Client = new Client(rtrim($baseUrl, '/'), $key, $proxy);
-
+        if(!is_null($locale)) {
+            $this->locale = $locale;
+        } else {
+            $this->locale = getenv('WBSELLER_LOCALE') ?: 'ru';
+        }
         if (method_exists($this, 'middleware')) {
             $this->Client->addMiddleware($this->middleware());
         }
     }
 
+    public function locale(): string
+    {
+        return $this->locale;
+    }
+    
     /**
      * Автоматически повторять запросы в случае ответа сервера "429 Too Many Requests"
      * 
