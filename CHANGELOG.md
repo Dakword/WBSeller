@@ -1,3 +1,11 @@
+### 4.7.2
+* Отчет по удержаниям за самовыкупы Analytics::antifraudDetails()
+* Отчет по удержаниям за подмены товара Analytics::incorrectAttachments()
+* Коэффициент логистики и хранения Analytics::storageCoefficient()
+* Отчет о штрафах за отсутствие маркировки Analytics::goodsLabeling()
+* Отчет об удержаниях за смену характеристик товара Analytics::characteristicsChange()
+* Отчет о продажах по регионам Analytics::regionSale()
+
 ### 4.7.1
 * Доставка силами продавца (DBS) `Marketplace()->DBS()`
 
