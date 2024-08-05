@@ -18,7 +18,7 @@ class API
         'content'         => 'https://suppliers-api.wildberries.ru',
         'documents'       => 'https://documents-api.wildberries.ru',
         'feedbacks'       => 'https://feedbacks-api.wildberries.ru',
-        'marketplace'     => 'https://suppliers-api.wildberries.ru',
+        'marketplace'     => 'https://marketplace-api.wildberries.ru',
         'prices'          => 'https://discounts-prices-api.wildberries.ru',
         'questions'       => 'https://feedbacks-api.wildberries.ru',
         'recommendations' => 'https://recommend-api.wildberries.ru',
@@ -76,22 +76,22 @@ class API
     {
         return isset($this->apiKeys[$keyName]) && $this->apiKeys[$keyName] ? $this->apiKeys[$keyName] : $this->masterKey;
     }
-    
+
     /**
      * Использовать для запросов прокси
-     * 
+     *
      * @param string $proxyUrl http://username:password@192.168.16.1:10
      */
     public function useProxy(string $proxyUrl)
     {
         $this->proxy = $proxyUrl;
     }
-    
+
     public function getProxy()
     {
         return $this->proxy;
     }
-    
+
     public function setApiUrl(string $apiName, string $apiUrl): void
     {
         $arrayKey = strtolower($apiName);
