@@ -1,3 +1,19 @@
+### 4.9.0
+* Новые методы API Продвижение: Медиакампании `Adv::Media()`
+* Новые методы в `Adv::Auto()`: `advertStatistic()`, `advertStatisticByWords()`
+* Новые методы в `Adv::SearchCatalog()`: `searchAdvertStatisticByWords()`, `searchAndCatalogAdvertStatistic()`
+* Новый метод `Adv::statistic()` - Статистика кампаний
+* Новый метод `Adv::subjects()` - Предметы для кампаний
+* Новый метод `Adv::nms()` - Номенклатуры для кампаний
+* Перенос метода `Adv::count()` в `Adv::Media()->count()`
+* Перенос метода `Adv::advert()` в `Adv::Media()->getAdvert()`
+* Удален метод `Adv::allCpm()`
+* Удален метод `Adv::nmActive()`
+* Удален метод `Adv::paramMenu()`
+* Удален метод `Adv::paramSet()`
+* Удален метод `Adv::paramSubject()`
+* Удален метод `Adv::setIntervals()`
+
 ### 4.8.0
 * Новые методы API Продвижение: Автоматические кампании `Adv::Auto()`
 * Новые методы API Продвижение: Кампании в поиске и поиск + каталог `Adv::SearchCatalog()`

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint\Subpoint;
 
 use Dakword\WBSeller\API\Endpoint\Adv;
-use Dakword\WBSeller\Enum\AdvertType;
 use InvalidArgumentException;
 
 class AdvSearchCatalog
@@ -244,5 +243,43 @@ class AdvSearchCatalog
     public function deleteAdvertMinuses(int $id): bool
     {
         return $this->setAdvertMinuses($id, []);
+    }
+
+    /*
+     * СТАТИСТИКА
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika
+     */
+
+    /**
+     * Статистика поисковой кампании по ключевым фразам
+     *
+     * Метод позволяет получать статистику поисковой кампании по ключевым фразам.
+     * Допускается максимум 4 запроса в секунду.
+     * Информация обновляется примерно каждые полчаса.
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v1~1stat~1words/get
+     *
+     * @param int $id Идентификатор кампании
+     *
+     * @return object
+     */
+    public function searchAdvertStatisticByWords(int $id): object
+    {
+        return $this->Adv->getRequest('/adv/v1/stat/words', ['id' => $id]);
+    }
+
+    /**
+     * Статистика кампаний Поиск + Каталог
+     *
+     * Допускается 2 запроса в секунду.
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v1~1seacat~1stat/get
+     *
+     * @param int $id Идентификатор кампании
+     *
+     * @return object
+     */
+    public function searchAndCatalogAdvertStatistic(int $id): object
+    {
+        return $this->Adv->getRequest('/adv/v1/seacat/stat', ['id' => $id]);
     }
 }

@@ -167,4 +167,44 @@ class AdvAuto
         return $this->setAdvertMinuses($id, []);
     }
 
+    /*
+     * СТАТИСТИКА
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika
+     */
+
+    /**
+     * Статистика автоматической кампании
+     *
+     * Метод позволяет получать краткую статистику по автоматической кампании.
+     * Допускается 1 запрос в 6 секунд.
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v1~1auto~1stat/get
+     *
+     * @param int $id Идентификатор кампании
+     *
+     * @return object
+     */
+    public function advertStatistic(int $id): object
+    {
+        return $this->Adv->getRequest('/adv/v1/auto/stat', ['id' => $id]);
+    }
+
+    /**
+     * Статистика автоматической кампании по кластерам фраз
+     *
+     * Возвращает кластеры ключевых фраз (наборы похожих), по которым показывались товары в кампании,
+     * и количество показов по ним. В ответ метода попадают только те фразы,
+     * по которым товары показывались хотя бы один раз.
+     * Информация обновляется раз в 15 минут.
+     * Максимум — 4 запроса секунду.
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v2~1auto~1stat-words/get
+     *
+     * @param int $id Идентификатор кампании
+     *
+     * @return object
+     */
+    public function advertStatisticByWords(int $id): object
+    {
+        return $this->Adv->getRequest('/adv/v1/auto/stat-words', ['id' => $id]);
+    }
 }

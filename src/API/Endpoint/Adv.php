@@ -44,28 +44,6 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Получение информации об одной РК
-     *
-     * @param int $id Идентификатор РК
-     *
-     * @return object
-     */
-    public function advert(int $id): object
-    {
-        return $this->getRequest('/adv/v0/advert', ['id' => $id]);
-    }
-
-    /**
-     * Получение количества РК поставщика
-     *
-     * @return object
-     */
-    public function count(): object
-    {
-        return $this->getRequest('/adv/v0/count');
-    }
-
-    /**
      * Списки кампаний
      *
      * Метод позволяет получать списки кампаний, сгруппированных по типу и статусу,
@@ -197,136 +175,6 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Получение списка ставок по типу размещения РК
-     *
-     * @param int   $type  Тип РК
-     * @param array $param Параметр запроса, по которому будет получен список ставок активных РК.
-     *                     Должен быть значением menuId (для РК в каталоге), subjectId (для РК в поиске и рекомендациях)
-     *                     или setId (для РК в карточке товара).
-     *
-     * @return array
-     */
-    public function allCpm(int $type, array $param): array
-    {
-        $this->checkType($type);
-        return $this->postRequest('/adv/v0/allcpm?type=' . $type, [
-            'param' => $param,
-        ]);
-    }
-
-    /**
-     *  Изменение временных интервалов показа рекламной кампании
-     *
-     * @param int   $advertId  Идентификатор РК, у которой меняется интервал
-     * @param int   $param     Параметр, для которого будет внесено изменение,
-     *                         должен быть значением menuId (для РК в каталоге), subjectId (для РК в поиске и рекомендациях)
-     *                         или setId (для РК в карточке товара)
-     * @param array $intervals Массив новых значений для интервалов
-     *                         Максимальное количество интервалов 24.
-     *                         [{"begin": 15, "end": 21}, ...]
-     *                         begin, end - Время начала и окончания показов, по 24 часовой схеме
-     *
-     * @return bool
-     *
-     * @throws InvalidArgumentException Превышение максимального количества переданных интервалов
-     */
-    public function setIntervals(int $advertId, int $param, array $intervals): bool
-    {
-        $maxCount = 24;
-        if (count($intervals) > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества переданных интервалов: {$maxCount}");
-        }
-        $this->postRequest('/adv/v0/intervals', [
-            'advertId' => $advertId,
-            'param' => $param,
-            'intervals' => $intervals,
-        ]);
-        return $this->responseCode() == 200;
-    }
-
-    /**
-     * Изменение активности номенклатур в РК.
-     *
-     * В запросе необходимо передавать все номенклатуры РК с их активностью,
-     * даже если изменение планируется только по одной номенклатуре.
-     * При наличии в РК нескольких subjectId номенклатуры по каждому subjectId необходимо передать отдельным запросом.
-     * То же касается setId, menuId.
-     *
-     * @param int   $advertId Идентификатор РК, у которой меняется бюджет
-     * @param int   $param    Параметр, для которого будет внесено изменение,
-     *                        должен быть значением menuId (для РК в каталоге), subjectId (для РК в поиске и рекомендациях)
-     *                        или setId (для РК в карточке товара)
-     * @param array $active   Массив значений активности для номенклатур.
-     *                        Максимальноe количество номенклатур в запросе 50.
-     *                        [{"nm": 2116745, "active": true}, ...]
-     *
-     * @return bool
-     *
-     * @throws InvalidArgumentException Превышение максимального количества номенклатур в запросе
-     */
-    public function nmActive(int $advertId, int $param, array $active): bool
-    {
-        $maxCount = 50;
-        if (count($active) > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества номенклатур в запросе: {$maxCount}");
-        }
-        $this->postRequest('/adv/v0/nmactive', [
-            'advertId' => $advertId,
-            'param' => $param,
-            'active' => $active,
-        ]);
-        return $this->responseCode() == 200;
-    }
-
-    /**
-     * Словарь значений параметра subjectId
-     *
-     * Метод позволяет получить список значений параметра subjectId.
-     *
-     * @param int $id Идентификатор предметной группы, для которой создана РК (для РК в поиске и рекомендациях).
-     *                Принимает значение параметра subjectId из РК.
-     *                При пустом параметре вернётся весь список существующих значений.
-     *
-     * @return array
-     */
-    public function paramSubject(int $id = 0): array
-    {
-        return $this->getRequest('/adv/v0/params/subject', $id ? ['id' => $id] : []);
-    }
-
-    /**
-     * Словарь значений параметра menuId
-     *
-     * Метод позволяет получить список значений параметра menuId.
-     *
-     * @param int $id Идентификатор меню, где размещается РК (для РК в каталоге).
-     *                Принимает значение параметра menuId из РК.
-     *                При пустом параметре вернётся весь список существующих значений.
-     *
-     * @return array
-     */
-    public function paramMenu(int $id = 0): array
-    {
-        return $this->getRequest('/adv/v0/params/menu', $id ? ['id' => $id] : []);
-    }
-
-    /**
-     * Словарь значений параметра setId
-     *
-     * Метод позволяет получить список значений параметра setId
-     *
-     * @param int $id Идентификатор сочетания предмета и пола (для РК в карточке товара).
-     *                Принимает значение параметра setId из РК.
-     *                При пустом параметре вернётся весь список существующих значений.
-     *
-     * @return array
-     */
-    public function paramSet(int $id = 0): array
-    {
-        return $this->getRequest('/adv/v0/params/set', $id ? ['id' => $id] : []);
-    }
-
-    /**
      * Запуск РК
      *
      * @param int $id
@@ -363,6 +211,57 @@ class Adv extends AbstractEndpoint
     {
         $this->getRequest('/adv/v0/stop', ['id' => $id]);
         return $this->responseCode() == 200;
+    }
+
+    /**
+     * Статистика кампаний
+     *
+     * Максимум 1 запрос в минуту.
+     * Данные вернутся для кампаний в статусе 7, 9 и 11.
+     * Важно. В запросе можно передавать либо параметр dates либо параметр interval, но не оба.
+     * Можно отправить запрос только с ID кампании.
+     * При этом вернутся данные за последние сутки, но не за весь период существования кампании.
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v2~1fullstats/post
+     *
+     * @param array $params Запрос с датами
+     *                      Запрос с интервалами
+     *                      Запрос только с id кампаний
+     *
+     * @return array
+     */
+    public function statistic(array $params): array
+    {
+        return $this->postRequest('/adv/v2/fullstats', $params);
+    }
+
+    /**
+     * Предметы для кампаний
+     *
+     * Возвращает предметы, номенклатуры из которых можно добавить в кампании.
+     * Максимум 1 запрос в 12 секунд.
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Slovari/paths/~1adv~1v1~1supplier~1subjects/get
+     *
+     * @return array
+     */
+    public function subjects(): array
+    {
+        return $this->getRequest('/adv/v1/supplier/subjects');
+    }
+
+    /**
+     * Номенклатуры для кампаний
+     *
+     * Возвращает номенклатуры, которые можно добавить в кампании.
+     * Максимум 5 запросов в минуту
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Slovari/paths/~1adv~1v2~1supplier~1nms/post
+     *
+     * @param array $subjects ID предметов, для которых нужно получить номенклатуры
+     *
+     * @return array
+     */
+    public function mns(array $subjects = []): array
+    {
+        return $this->postRequest('/adv/v2/supplier/nms', $subjects);
     }
 
     private function checkType(int $type, array $types = [])

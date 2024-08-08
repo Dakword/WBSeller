@@ -2,7 +2,9 @@
 
 Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-💡 Доставка силами продавца
+💡 Медиакампании `Adv::Auto()`
+💡 Медиакампании `Adv::SearchCatalog()`
+💡 Медиакампании `Adv::Media()`
 
 ### Работа с API
 ```php
