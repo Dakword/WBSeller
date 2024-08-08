@@ -1,10 +1,23 @@
+### 4.8.0
+* Новые методы API Продвижение: Автоматические кампании `Adv::Auto()`
+* Новые методы API Продвижение: Кампании в поиске и поиск + каталог `Adv::SearchCatalog()`
+* Новые методы API Продвижение: Финансы `Adv::Finances()`
+* Новый метод `Adv::advertsList()` - Списки кампаний
+* Новый метод `Adv::delete()` - Удаление кампании
+* Удаление `Adv::Promotion()` и перенос методов `advertsInfo()` и `advertsInfoByIds()` обратно в Adv()
+* Перенос метода `Adv::setActive()` в `Adv::Auto()->setAdvertSubjectActive()`
+* Перенос метода `Adv::balance()` в `Adv::Finances()->balance()`
+* Новый параметр `$instrument` в методу `Adv::updateCpm()`
+* Удален метод `Adv::cpm()`
+* Удален метод `Adv::dailyBudget()`
+
 ### 4.7.2
-* Отчет по удержаниям за самовыкупы Analytics::antifraudDetails()
-* Отчет по удержаниям за подмены товара Analytics::incorrectAttachments()
-* Коэффициент логистики и хранения Analytics::storageCoefficient()
-* Отчет о штрафах за отсутствие маркировки Analytics::goodsLabeling()
-* Отчет об удержаниях за смену характеристик товара Analytics::characteristicsChange()
-* Отчет о продажах по регионам Analytics::regionSale()
+* Отчет по удержаниям за самовыкупы `Analytics::antifraudDetails()`
+* Отчет по удержаниям за подмены товара `Analytics::incorrectAttachments()`
+* Коэффициент логистики и хранения `Analytics::storageCoefficient()`
+* Отчет о штрафах за отсутствие маркировки `Analytics::goodsLabeling()`
+* Отчет об удержаниях за смену характеристик товара `Analytics::characteristicsChange()`
+* Отчет о продажах по регионам `Analytics::regionSale()`
 
 ### 4.7.1
 * Доставка силами продавца (DBS) `Marketplace()->DBS()`
@@ -17,7 +30,7 @@
 
 ### 4.6.0
 * Новое API "Чат с покупателями": `Chat()`
-* Новый метод `Tariffs::commission()()` - Комиссия по категориям товаров
+* Новый метод `Tariffs::commission()` - Комиссия по категориям товаров
 * Выделение методов используемых при кроссбордере `Marketplace()->CrossBoard()`
 
 ### 4.5.1
