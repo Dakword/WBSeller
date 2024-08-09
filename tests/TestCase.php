@@ -22,6 +22,7 @@ class TestCase extends PHPUnitTestCase
     {
         return new API([
             'masterkey' => $this->apiKey,
+            'locale' => 'ru',
         ]);
     }
 

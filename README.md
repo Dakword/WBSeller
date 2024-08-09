@@ -24,10 +24,13 @@ $wbSellerAPI = new \Dakword\WBSeller\API([
         'content'         => 'https://suppliers-api.wb.ru',
         'feedbacks'       => 'https://feedbacks-api.wildberries.ru',
     ],
+    'locale' => 'ru'
 ]);
 
 // Proxy
 $wbSellerAPI->useProxy('http://122.123.123.123:8088');
+// Locale
+$wbSellerAPI->setLocale('en');
 
 // API контента
 $contentApi = $wbSellerAPI->Content();

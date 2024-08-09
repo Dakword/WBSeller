@@ -22,11 +22,33 @@ class ApiTest extends TestCase
         $this->expectExceptionCode(401);
 
         $API = new API([
-            'apikey' => 'XXX',
-            'statkey' => 'YYY',
-            'advkey' => 'ZZZ',
+            'keys' => [
+                'apikey' => 'XXX',
+                'statkey' => 'YYY',
+                'advkey' => 'ZZZ',
+            ]
         ]);
         $API->Prices()->getPrices();
+    }
+
+    public function test_API_Locale()
+    {
+        $API1 = new API([
+            'keys' => [
+                'apikey' => 'XXX',
+                'statkey' => 'YYY',
+                'advkey' => 'ZZZ',
+            ],
+            'locale' => 'en'
+        ]);
+        $this->assertEquals('en', $API1->getLocale());
+
+        $API2 = new API();
+        $this->assertEquals('ru', $API2->getLocale());
+
+        $API3 = new API();
+        $API3->setLocale('en');
+        $this->assertEquals('en', $API3->getLocale());
     }
 
     public function test_Retry()

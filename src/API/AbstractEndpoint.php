@@ -10,19 +10,15 @@ use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
 
 abstract class AbstractEndpoint
 {
-    private $locale = 'ru';
+    private string $locale = 'ru';
     private int $attempts = 1;
     private int $retryDelay = 0;
     private Client $Client;
 
     public function __construct(string $baseUrl, string $key, ?string $proxy = null, ?string $locale = null)
     {
+        $this->locale = $locale;
         $this->Client = new Client(rtrim($baseUrl, '/'), $key, $proxy);
-        if(!is_null($locale)) {
-            $this->locale = $locale;
-        } else {
-            $this->locale = getenv('WBSELLER_LOCALE') ?: 'ru';
-        }
         if (method_exists($this, 'middleware')) {
             $this->Client->addMiddleware($this->middleware());
         }
@@ -32,10 +28,10 @@ abstract class AbstractEndpoint
     {
         return $this->locale;
     }
-    
+
     /**
      * Автоматически повторять запросы в случае ответа сервера "429 Too Many Requests"
-     * 
+     *
      * @param int $attempts Количество попыток выполнения запроса
      * @param int $delay    Задержка в миллисекундах между попытками
      * @return self
@@ -120,15 +116,15 @@ abstract class AbstractEndpoint
         $result = $this->Client->request($method, $path, $data, $addonHeaders);
 
         if (
-            $this->responseCode() == 400 && property_exists($result, 'error') && $result->error 
+            $this->responseCode() == 400 && property_exists($result, 'error') && $result->error
             && mb_strpos(mb_strtolower($result->errorText), 'временные ограничения') !== false
         ) {
             throw new ApiTimeRestrictionsException($result->errorText);
-            
+
         } elseif ($this->responseCode() == 401) {
             /*
              * "401 Unauthorized"
-             * 
+             *
              * (api-new) can\'t decode supplier key
              * (api-new) some chars in key are wrong
              * (api-new) supplier key not found
@@ -144,9 +140,9 @@ abstract class AbstractEndpoint
                 throw new ApiClientException('Unauthorized', 401);
             }
         } elseif ($this->responseCode() == 429) {
-            /* 
+            /*
              * "429 Too Many Requests"
-             * 
+             *
              * { errors: ["Технический перерыв до 16:00"] }
              * { errors: ["(api-new) too many requests"] }
              * { code: 429, message: "" }
@@ -169,7 +165,7 @@ abstract class AbstractEndpoint
 
             goto beginRequest;
         } elseif ($this->responseCode() == 504) {
-            /* 
+            /*
              * "504 Gateway Time-out"
              */
             if ($attempt >= $this->attempts) {
