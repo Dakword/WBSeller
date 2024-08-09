@@ -5,12 +5,23 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Brands;
 use Dakword\WBSeller\API\Endpoint\Subpoint\PaidStorage;
 use DateTime;
 use InvalidArgumentException;
 
 class Analytics extends AbstractEndpoint
 {
+    /**
+     * Доля бренда в продажах
+     *
+     * @return Brands
+     */
+    public function Brands(): Brands
+    {
+        return new Brands($this);
+    }
+
     /**
      * Платное хранение
      *
@@ -29,12 +40,21 @@ class Analytics extends AbstractEndpoint
         throw new InvalidArgumentException('Magic request method ' . $method . ' not exists');
     }
 
+    /*
+     * ВОРОНКА ПРОДАЖ
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Voronka-prodazh
+     */
+
     /**
      * Получение статистики КТ за выбранный период,
      * по nmID/предметам/брендам/тегам
      *
      * Поля brandNames,objectIDs, tagIDs, nmIDs могут быть пустыми, тогда в ответе идут все карточки продавца.
      * При выборе нескольких полей в ответ приходят данные по карточкам, у которых есть все выбранные поля.
+     * Можно получить отчёт максимум за последний год (365 дней).
+     * Максимум 3 запроса в минуту.
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Voronka-prodazh/paths/~1api~1v2~1nm-report~1detail/post
      *
      * @param DateTime $dateFrom  Начало периода
      * @param DateTime $dateTo    Конец периода
@@ -98,6 +118,9 @@ class Analytics extends AbstractEndpoint
      *
      * Поля brandNames, objectIDs, tagIDs могут быть пустыми,
      * тогда группировка происходит по всем карточкам продавца.
+     * Можно получить отчёт максимум за последний год (365 дней).
+     * Максимум 3 запроса в минуту.
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Voronka-prodazh/paths/~1api~1v2~1nm-report~1grouped/post
      *
      * @param DateTime $dateFrom  Начало периода
      * @param DateTime $dateTo    Конец периода
@@ -156,6 +179,10 @@ class Analytics extends AbstractEndpoint
     /**
      * Получение статистики КТ по дням/неделям/месяцам по выбранным nmID
      *
+     * Можно получить отчёт максимум за последнюю неделю.
+     * Максимум 3 запроса в минуту.
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Voronka-prodazh/paths/~1api~1v2~1nm-report~1detail~1history/post
+     *
      * @param array    $nmIDs      Артикулы Wildberries (максимум 20)
      * @param DateTime $dateFrom   Начало периода
      * @param DateTime $dateTo     Конец периода
@@ -191,6 +218,15 @@ class Analytics extends AbstractEndpoint
     }
 
     /**
+     * Получение статистики КТ по дням за период,
+     * сгруппированный по предметам, брендам и тегам
+     *
+     * Параметры фильтра brandNames, objectIDs, tagIDs могут быть пустыми,
+     * тогда группировка происходит по всем карточкам продавца.
+     * В запросе произведение количества предметов, брендов, тегов не должно быть больше 16.
+     * Можно получить отчёт максимум за последнюю неделю.
+     * Максимум 3 запроса в минуту.
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Voronka-prodazh/paths/~1api~1v2~1nm-report~1grouped~1history/post
      *
      * @param DateTime $dateFrom   Начало периода
      * @param DateTime $dateTo     Конец периода
@@ -199,7 +235,7 @@ class Analytics extends AbstractEndpoint
      *                                 'objectIDs' => [int, int, ...],
      *                                 'tagIDs' => [int, int, ...],
      *                             ]
-     * @param string   $agregation Тип аггрегации: day, week, month
+     * @param string   $agregation Тип аггрегации: day, week
      * @param string   $timezone   Временная зона
      *
      * @return object {
@@ -220,7 +256,7 @@ class Analytics extends AbstractEndpoint
         ) {
             throw new InvalidArgumentException("Превышение максимального произведения количества предметов, брендов, тегов: {$max}");
         }
-        if (!in_array($agregation, ["day", "week", "month"])) {
+        if (!in_array($agregation, ["day", "week"])) {
             throw new InvalidArgumentException('Неизвестный тип агрегации: ' . $agregation);
         }
         return $this->postRequest('/api/v2/nm-report/grouped/history', [
@@ -236,10 +272,18 @@ class Analytics extends AbstractEndpoint
         ]);
     }
 
+    /*
+     * ТОВАРЫ С ОБЯЗАТЕЛЬНОЙ МАРКИРОВКОЙ
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Tovary-s-obyazatelnoj-markirovkoj
+     */
+
     /**
      * Отчёт по товарам с обязательной маркировкой
      *
      * Возвращает операции по маркируемым товарам.
+     * Максимум 10 запросов за 5 часов.
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Tovary-s-obyazatelnoj-markirovkoj/paths/~1api~1v1~1analytics~1excise-report/post
      *
      * @param DateTime $dateFrom  Дата начала отчётного периода
      * @param DateTime $dateTo    Дата окончания отчётного периода
@@ -256,11 +300,18 @@ class Analytics extends AbstractEndpoint
         ]);
     }
 
+    /*
+     * ПЛАТНАЯ ПРИЕМКА
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Platnaya-priyomka
+     */
+
     /**
      * Отчет о платной приемке
      *
      * Возвращает даты и стоимость приёмки. Можно получить отчёт максимум за 31 день.
      * Максимум 1 запрос в минуту
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Platnaya-priyomka/paths/~1api~1v1~1analytics~1acceptance-report/get
      *
      * @param DateTime $dateFrom Начало отчётного периода
      * @param DateTime $dateTo   Конец отчётного периода
@@ -275,6 +326,12 @@ class Analytics extends AbstractEndpoint
         ]);
         return $result->report;
     }
+
+     /*
+     * ОТЧЕТЫ ПО УДЕРЖАНИЯМ
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Otchyoty-po-uderzhaniyam
+     */
 
     /**
      * Отчет по удержаниям за самовыкупы
@@ -382,6 +439,12 @@ class Analytics extends AbstractEndpoint
         ]);
         return $result->report;
     }
+
+    /*
+     * ПРОДАЖИ ПО РЕГИОНАМ
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Prodazhi-po-regionam
+     */
 
     /**
      * Отчет о продажах сгруппированный по регионам стран

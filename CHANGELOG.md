@@ -1,3 +1,6 @@
+### 4.10.0
+* Новые методы API Аналитики: Доля бренда в продажах `Analytics::Brands()`
+
 ### 4.9.0
 * Новые методы API Продвижение: Медиакампании `Adv::Media()`
 * Новые методы в `Adv::Auto()`: `advertStatistic()`, `advertStatisticByWords()`
