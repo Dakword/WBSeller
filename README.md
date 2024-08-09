@@ -9,7 +9,7 @@ $API = new \Dakword\WBSeller\API($options = [
 $contentApi = $API->Content();
 ```
 | API                   | Endpoint                      | $options<br>['keys' / 'apiurls']<br>['?'] | 'apiurls' defaults |
-| --------------------- -| ----------------------------- | --------------------- | ------------------------------ |
+| --------------------- | ----------------------------- | --------------------- | ------------------------------ |
 | Контент               | $API->**Content()**           | content           | https://suppliers-api.wildberries.ru
 | Цены и скидки         | $API->**Prices()**            | prices            | https://discounts-prices-api.wildberries.ru
 | Маркетплейс           | $API->**Marketplace()**       | marketplace       | https://marketplace-api.wildberries.ru
