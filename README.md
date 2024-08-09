@@ -1,28 +1,44 @@
 # WBSeller
+Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
 
-Библиотека для работы с [Wildberries API](https://openapi.wb.ru)<br>
+```php
+$API = new \Dakword\WBSeller\API($options = [
+    'masterkey' => 'token'
+]);
+// API Контента
+$contentApi = $API->Content();
+```
+| API                   | Endpoint                      | $options<br>['keys' / 'apiurls']<br>['?'] | 'apiurls' defaults |
+| --------------------- -| ----------------------------- | --------------------- | ------------------------------ |
+| Контент               | $API->**Content()**           | content           | https://suppliers-api.wildberries.ru
+| Цены и скидки         | $API->**Prices()**            | prices            | https://discounts-prices-api.wildberries.ru
+| Маркетплейс           | $API->**Marketplace()**       | marketplace       | https://marketplace-api.wildberries.ru
+| Статистика            | $API->**Statistic()**         | statistics        | https://statistics-api.wildberries.ru
+| Аналитика             | $API->**Analitics()**         | analytics         | https://seller-analytics-api.wildberries.ru
+| Продвижение           | $API->**Adv()**               | adv               | https://advert-api.wildberries.ru
+| Рекомендации          | $API->**Recommendations()**   | recommendations   | https://recommend-api.wildberries.ru
+| Вопросы               | $API->**Questions()**         | feedbacks         | https://feedbacks-api.wildberries.ru
+| Отзывы                | $API->**Feedbacks()**         | feedbacks         | https://feedbacks-api.wildberries.ru
+| Тарифы                | $API->**Tariffs()**           | tariffs           | https://common-api.wildberries.ru
+| Чат с покупателями    | $API->**Chat()**              | chat              | https://buyer-chat-api.wildberries.ru
+| Возвраты покупателями | $API->**Returns()**           | returns           | https://returns-api.wildberries.ru
+| Документы             | $API->**Documents()**         | documents         | https://documents-api.wildberries.ru
 
-⚡️ Доля бренда в продажах `Analytics::Brands()`<br>
-
-### Работа с API
+### Примеры работы с API
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API([
-    // 'adv', 'analytics', 'chat', 'content', 'documents', 'feedbacks', 'marketplace',
-    // 'prices', 'questions', 'recommendations', 'statistics'
     'keys' => [
         'content' => 'Content_key',
         'feedbacks' => 'FB_key',
         'marketplace' => 'Marketplace_key',
         'questions' => 'FB_key',
     ],
-    'masterkey' => 'multi_key', // 'content' + 'prices'
-    // 'adv', 'analytics', 'chat', 'content', 'documents', 'feedbacks', 'marketplace', 'prices', 'questions',
-    // 'recommendations', 'returns', 'statistics', 'tariffs'
+    'masterkey' => 'multi_key', // 'content' + 'prices' + ...
     'apiurls' => [
-        'adv'             => 'https://advert-api-sandbox.wildberries.ru',
-        'analytics'       => 'https://abc.site.ru',
         'content'         => 'https://suppliers-api.wb.ru',
         'feedbacks'       => 'https://feedbacks-api.wildberries.ru',
+        'adv'             => 'https://advert-api-sandbox.wildberries.ru',
+        'analytics'       => 'https://abc.site.ru',
     ],
     'locale' => 'ru'
 ]);
@@ -32,20 +48,10 @@ $wbSellerAPI->useProxy('http://122.123.123.123:8088');
 // Locale
 $wbSellerAPI->setLocale('en');
 
-// API контента
 $contentApi = $wbSellerAPI->Content();
-// API цен
 $pricesApi = $wbSellerAPI->Prices();
-// API marketplace
 $marketApi = $wbSellerAPI->Marketplace();
-// API статистики
-$statApi = $wbSellerAPI->Statistics();
-// API рекламы
-$advApi = $wbSellerAPI->Adv();
-// API вопросов
-$questionsApi = $wbSellerAPI->Questions();
-// API отзывов
-$fbApi = $wbSellerAPI->Feedbacks();
+
 // subAPI контента - теги
 $tagsApi = $wbSellerAPI->Content()->Tags();
 
@@ -55,8 +61,8 @@ if (!$result->error) {
     var_dump($result->cards, $result->cursor);
 }
 
-// Цены товаров с ненулевым остатком
-$info = $pricesApi->getPricesOnStock();
+// Получение информации по ценам и скидкам
+$info = $pricesApi->getPrices();
 var_dump($info);
 
 // Cписок складов поставщика

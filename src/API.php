@@ -43,6 +43,7 @@ class API
      *     'questions' => 'FB_key',
      *     'recommendations' => '',
      *     'statistics' => '',
+     *     'tariffs' => '',
      *   ],
      *   'masterkey' => 'alternative_universal_key',
      *   'apiurls' => [
@@ -178,7 +179,7 @@ class API
 
     public function Tariffs(): Tariffs
     {
-        return new Tariffs($this->apiUrls['tariffs'], $this->getKey('statistics'), $this->proxy, $this->locale);
+        return new Tariffs($this->apiUrls['tariffs'], $this->getKey('tariffs'), $this->proxy, $this->locale);
     }
 
 }
