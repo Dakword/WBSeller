@@ -14,7 +14,7 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Сервис для работы с шаблонами ответов.
-     * 
+     *
      * @return Templates
      */
     public function Templates(): Templates
@@ -32,9 +32,9 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Наличие непросмотренных отзывов
-     * 
+     *
      * Метод отображает информацию о наличии у продавца непросмотренных отзывов и вопросов
-     * 
+     *
      * @return object {
      * 	    data: {hasNewQuestions: bool, hasNewFeedbacks: bool},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -47,12 +47,12 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Количество отзывов
-     * 
+     *
      * @param bool          $isAnswered Обработанные отзывы (true) или необработанные отзывы (false)
      *                                  Если не указать, вернутся необработанные отзывы
      * @param DateTime|null $dateStart  Дата начала периода
      * @param DateTime|null $dateEnd    Дата конца периода
-     * 
+     *
      * @return object {
      * 	    data: {hasNewQuestions: bool, hasNewFeedbacks: bool},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -67,13 +67,13 @@ class Feedbacks extends AbstractEndpoint
             + ($dateEnd == '' ? [] : ['dateTo' => $dateEnd->getTimestamp()])
         );
     }
-    
+
     /**
      * Необработанные отзывы
-     * 
+     *
      * Метод позволяет получить количество необработанных отзывов за сегодня,
      * за всё время, и среднюю оценку всех отзывов
-     * 
+     *
      * @return object {
      * 	    data: {countUnanswered: int, countUnansweredToday: int, valuation: string},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -86,9 +86,9 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Родительские категории товаров
-     * 
+     *
      * Метод позволяет получить список родительских категорий товаров, которые есть у продавца
-     * 
+     *
      * @return object {
      * 	    data: [{subjectId: int, subjectName: string}, ...],
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -100,9 +100,9 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Средняя оценка товаров по родительской категории
-     * 
+     *
      * @param int $subjectId id категории товара
-     * 
+     *
      * @return object {
      * 	    data: [{feedbacksCount: int, valuation: string}, ...],
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -111,15 +111,15 @@ class Feedbacks extends AbstractEndpoint
     {
         return $this->getRequest('/api/v1/feedbacks/products/rating', ['subjectId' => $subjectId]);
     }
-    
+
     /**
      * Товары с наибольшей и наименьшей средней оценкой по родительской категории
-     * 
+     *
      * Метод позволяет получить список из двух товаров,
      * с наибольшей и наименьшей средней оценкой, по родительской категории
-     * 
+     *
      * @param int $subjectId id категории товара
-     * 
+     *
      * @return object {
      * 	    data: {productMinRating: object, productMaxRating: object},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -131,21 +131,21 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Список отзывов
-     * 
+     *
      * Метод позволяет получить список отзывов по заданным параметрам с пагинацией и сортировкой
-     * 
+     *
      * @param int         $page                 Номер страницы
      * @param int         $onPage               Количество отзывов на странице
      * @param bool        $isAnswered           Обработанные отзывы (true) или необработанные отзывы (false)
-     * @param int         $nmId                 Идентификатор номенклатуры 
+     * @param int         $nmId                 Идентификатор номенклатуры
      * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
      * @param DateTime    $dateFrom             Дата начала периода
      * @param DateTime    $dateTo               Дата окончания периода
-     * 
+     *
      * @return object {
      * 	    data: {countUnanswered: int, countArchive: int, feedbacks: [object, ...]},
      * 	    error: bool, errorText: string, additionalErrors: ?string
-     * 
+     *
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
@@ -169,22 +169,22 @@ class Feedbacks extends AbstractEndpoint
             + (!is_null($dateTo) ? ['dateTo' => $dateTo->getTimestamp()] : [])
         );
     }
-    
+
     /**
      * Список архивных отзывов
-     * 
+     *
      * Отзыв становится архивным если на него предоставлен ответ
      * или ответ не предоставлен в течение 30 дней со дня его публикации
-     * 
+     *
      * @param int         $page                 Номер страницы
      * @param int         $onPage               Количество отзывов на странице
-     * @param int         $nmId                 Идентификатор номенклатуры 
+     * @param int         $nmId                 Идентификатор номенклатуры
      * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
-     * 
+     *
      * @return object {
      * 	    data: {feedbacks: [object, ...]},
      * 	    error: bool, errorText: string, additionalErrors: ?string
-     * 
+     *
      * @throws InvalidArgumentException Превышение максимального количества запрошенных отзывов
      * @throws InvalidArgumentException Недопустимое значение для сортировки результатов
      */
@@ -203,12 +203,12 @@ class Feedbacks extends AbstractEndpoint
             + (!is_null($order) ? ['order' => $order] : [])
         );
     }
-    
+
     /**
      * Средняя оценка товара
-     * 
+     *
      * @param int $nmId Идентификатор номенклатуры
-     * 
+     *
      * @return object {
      * 	    data: {feedbacksCount: int, valuation: string},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -219,17 +219,17 @@ class Feedbacks extends AbstractEndpoint
             'nmId' => $nmId,
         ]);
     }
-    
+
     /**
      * Получение отзывов в формате XLSX
-     * 
+     *
      * Метод позволяет получить XLSX файл с отзывами в кодировке BASE64
      * За один запрос можно получить 5000 отзывов.
      * На данный момент всего можно получить 200 000 последних отзывов.
-     * 
+     *
      * @param bool        $isAnswered           Обработанные отзывы (true) или необработанные отзывы (false)
      * @param int         $page                 Номер страницы
-     * 
+     *
      * @return object {
      * 	    data: {filename: string, contentType: string, file: base64},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -241,13 +241,13 @@ class Feedbacks extends AbstractEndpoint
                 'skip' => --$page * 5_000,
             ]);
     }
-    
+
     /**
      * Изменение статуса "просмотра" отзыва
-     * 
+     *
      * @param string $id        Идентификатор отзыва
      * @param bool   $wasViewed Просмотрен (true) или не просмотрен (false)
-     * 
+     *
      * @return bool true - успешно, false - неудача
      */
     public function changeViewed(string $id, bool $wasViewed): bool
@@ -258,13 +258,13 @@ class Feedbacks extends AbstractEndpoint
         ]);
         return $this->responseCode() == 200;
     }
-    
+
     /**
      * Ответить на отзыв
-     * 
+     *
      * @param string $id         Идентификатор отзыва
      * @param string $answerText Текст ответа
-     * 
+     *
      * @return bool true - успешно, false - неудача
      */
     public function sendAnswer(string $id, string $answerText): bool
@@ -278,9 +278,9 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Получить отзыв
-     * 
+     *
      * @param string $id Идентификатор отзыва
-     * 
+     *
      * @return object {
      * 	    data: object,
      * 	    error: bool, errorText: string, additionalErrors: any
@@ -295,7 +295,7 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Получить список оценок
-     * 
+     *
      * @return object {
      * 	    data: {feedbackValuations: object, productValuations: object},
      * 	    error: bool, errorText: string, additionalErrors: any
@@ -307,13 +307,13 @@ class Feedbacks extends AbstractEndpoint
             'X-Locale' => getenv('WBSELLER_LOCALE')?:'ru'
         ]);
     }
-    
+
     /**
      * Оценить отзыв
-     * 
+     *
      * @param string $id             Идентификатор отзыва
      * @param int    $feedbackRateId Оценка отзыва
-     * 
+     *
      * @return bool
      */
     public function rateFeedback(string $id, int $feedbackRateId): bool
@@ -327,10 +327,10 @@ class Feedbacks extends AbstractEndpoint
 
     /**
      * Оценить товар
-     * 
+     *
      * @param string $id            Идентификатор отзыва
      * @param int    $productRateId Оценка товара
-     * 
+     *
      * @return bool
      */
     public function rateProduct(string $id, int $productRateId): bool
@@ -341,14 +341,14 @@ class Feedbacks extends AbstractEndpoint
         ]);
         return $this->responseCode() == 200;
     }
-    
+
     /**
      * Оценить отзыв и товар
-     * 
+     *
      * @param string $id             Идентификатор отзыва
      * @param int    $feedbackRateId Оценка отзыва
      * @param int    $productRateId  Оценка товара
-     * 
+     *
      * @return bool
      */
     public function rate(string $id, int $feedbackRateId, int $productRateId): bool
@@ -360,12 +360,30 @@ class Feedbacks extends AbstractEndpoint
         ]);
         return $this->responseCode() == 200;
     }
-    
+
+    /**
+     * Возврат товара по ID отзыва
+     *
+     * Метод позволяет запросить на возврат товар, по которому оставлен отзыв.
+     * Возврат доступен для отзывов с "isAbleReturnProductOrders": true
+     * @link https://openapi.wb.ru/feedbacks-questions/api/ru/#tag/Otzyvy/paths/~1api~1v1~1feedbacks~1order~1return/post
+     *
+     * @param string $id Идентификатор отзыва
+     *
+     * @return bool
+     */
+    public function orderReturn(string $id): bool
+    {
+        $this->postRequest('/api/v1/feedbacks/order/return', [
+            'feedbackId' => $id,
+        ]);
+        return $this->responseCode() == 200;
+    }
+
     private function checkOrder($order)
     {
         if (!is_null($order) && !in_array($order, ['dateAsc', 'dateDesc'])) {
             throw new InvalidArgumentException("Недопустимое значение для сортировки результатов: {$order}");
         }
     }
-
 }

@@ -1,30 +1,40 @@
-# WBSeller
-Библиотека для работы с [Wildberries API](https://openapi.wb.ru)
+# WBSeller API
+Библиотека для работы с **Wildberries API** [https://openapi.wb.ru](https://openapi.wb.ru)
 
 ```php
-$API = new \Dakword\WBSeller\API($options = [
-    'masterkey' => 'token'
+$wbSellerAPI = new \Dakword\WBSeller\API($options = [
+    'masterkey' => 'token',
+    //'keys' => [...],
+    //'apiurls' => [...],
+    //'locale' => 'ru'
 ]);
 // API Контента
-$contentApi = $API->Content();
+$contentAPI = $wbSellerAPI->Content();
+$contentAPI->getCardsList(); // Получить список карточек
 ```
-| API                   | Endpoint                      | $options<br>['keys' / 'apiurls']<br>['?'] | 'apiurls' defaults |
-| --------------------- | ----------------------------- | --------------------- | ------------------------------ |
-| Контент               | $API->**Content()**           | content           | https://suppliers-api.wildberries.ru
-| Цены и скидки         | $API->**Prices()**            | prices            | https://discounts-prices-api.wildberries.ru
-| Маркетплейс           | $API->**Marketplace()**       | marketplace       | https://marketplace-api.wildberries.ru
-| Статистика            | $API->**Statistic()**         | statistics        | https://statistics-api.wildberries.ru
-| Аналитика             | $API->**Analitics()**         | analytics         | https://seller-analytics-api.wildberries.ru
-| Продвижение           | $API->**Adv()**               | adv               | https://advert-api.wildberries.ru
-| Рекомендации          | $API->**Recommendations()**   | recommendations   | https://recommend-api.wildberries.ru
-| Вопросы               | $API->**Questions()**         | feedbacks         | https://feedbacks-api.wildberries.ru
-| Отзывы                | $API->**Feedbacks()**         | feedbacks         | https://feedbacks-api.wildberries.ru
-| Тарифы                | $API->**Tariffs()**           | tariffs           | https://common-api.wildberries.ru
-| Чат с покупателями    | $API->**Chat()**              | chat              | https://buyer-chat-api.wildberries.ru
-| Возвраты покупателями | $API->**Returns()**           | returns           | https://returns-api.wildberries.ru
-| Документы             | $API->**Documents()**         | documents         | https://documents-api.wildberries.ru
 
-### Примеры работы с API
+### Поддерживаемые API
+
+:book: [Документация](docs/API.md)
+
+| API                   | Endpoint                                           |
+| --------------------- | -------------------------------------------------- |
+| Контент               | $wbSellerAPI->**Content()**           |
+| Цены и скидки         | $wbSellerAPI->**Prices()**            |
+| Маркетплейс           | $wbSellerAPI->**Marketplace()**       |
+| Статистика            | $wbSellerAPI->**Statistic()**         |
+| Аналитика             | $wbSellerAPI->**Analitics()**         |
+| Продвижение           | $wbSellerAPI->**Adv()**               |
+| Рекомендации          | $wbSellerAPI->**Recommendations()**   |
+| Вопросы               | $wbSellerAPI->[**Questions()**](docs/Questions.md) |
+| Отзывы                | $wbSellerAPI->[**Feedbacks()**](docs/Feedbacks/md) |
+| Тарифы                | $wbSellerAPI->[**Tariffs()**](docs/Tariffs.md)     |
+| Чат с покупателями    | $wbSellerAPI->[**Chat()**](docs/Chat.md)           |
+| Возвраты покупателями | $wbSellerAPI->[**Returns()**](docs/Returns.md)     |
+| Документы             | $wbSellerAPI->[**Documents()**](docs/Documents.md) |
+
+### Примеры использования WBSeller API
+
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API([
     'keys' => [
