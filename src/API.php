@@ -12,19 +12,19 @@ use Dakword\WBSeller\API\Endpoint\{
 class API
 {
     private array $apiUrls = [
-        'adv'             => 'https://advert-api.wildberries.ru',
-        'analytics'       => 'https://seller-analytics-api.wildberries.ru',
-        'chat'            => 'https://buyer-chat-api.wildberries.ru',
-        'content'         => 'https://suppliers-api.wildberries.ru',
-        'documents'       => 'https://documents-api.wildberries.ru',
-        'feedbacks'       => 'https://feedbacks-api.wildberries.ru',
-        'marketplace'     => 'https://marketplace-api.wildberries.ru',
-        'prices'          => 'https://discounts-prices-api.wildberries.ru',
-        'questions'       => 'https://feedbacks-api.wildberries.ru',
-        'recommendations' => 'https://recommend-api.wildberries.ru',
-        'returns'         => 'https://returns-api.wildberries.ru',
-        'statistics'      => 'https://statistics-api.wildberries.ru',
-        'tariffs'         => 'https://common-api.wildberries.ru',
+        'adv'         => 'https://advert-api.wildberries.ru',
+        'analytics'   => 'https://seller-analytics-api.wildberries.ru',
+        'chat'        => 'https://buyer-chat-api.wildberries.ru',
+        'content'     => 'https://suppliers-api.wildberries.ru',
+        'documents'   => 'https://documents-api.wildberries.ru',
+        'feedbacks'   => 'https://feedbacks-api.wildberries.ru',
+        'marketplace' => 'https://marketplace-api.wildberries.ru',
+        'prices'      => 'https://discounts-prices-api.wildberries.ru',
+        'questions'   => 'https://feedbacks-api.wildberries.ru',
+        'recommends'  => 'https://recommend-api.wildberries.ru',
+        'returns'     => 'https://returns-api.wildberries.ru',
+        'statistics'  => 'https://statistics-api.wildberries.ru',
+        'tariffs'     => 'https://common-api.wildberries.ru',
     ];
     private array $apiKeys;
     private string $masterKey;
@@ -41,7 +41,7 @@ class API
      *     'marketplace' => 'Marketplace_key',
      *     'prices' => '',
      *     'questions' => 'FB_key',
-     *     'recommendations' => '',
+     *     'recommends' => '',
      *     'statistics' => '',
      *     'tariffs' => '',
      *   ],
@@ -54,7 +54,7 @@ class API
      *     'marketplace' => '',
      *     'prices' => '',
      *     'questions' => '',
-     *     'recommendations' => '',
+     *     'recommends' => '',
      *     'statistics' => '',
      *     'tariffs' => '',
      *   ],
@@ -72,6 +72,10 @@ class API
         if(isset($options['apiurls']) && is_array($options['apiurls'])) {
             foreach($options['apiurls'] as $apiName => $apiUrl) {
                 $arrayKey = strtolower($apiName);
+                // "recommendations" => "recommends"
+                if($arrayKey == 'recommendations') {
+                    $arrayKey = 'recommends';
+                }
                 if(array_key_exists($arrayKey, $this->apiUrls)) {
                     $this->apiUrls[$arrayKey] = rtrim($apiUrl, '/');
                 }
@@ -81,7 +85,13 @@ class API
 
     private function getKey($keyName): string
     {
-        return isset($this->apiKeys[$keyName]) && $this->apiKeys[$keyName] ? $this->apiKeys[$keyName] : $this->masterKey;
+        // ! "recommends" <= "recommendations"
+        if($keyName == 'recommends' && !isset($this->apiKeys['recommends']) && isset($this->apiKeys['recommendations'])) {
+            $keyName = 'recommendations';
+        }
+        return isset($this->apiKeys[$keyName]) && is_string($this->apiKeys[$keyName]) && $this->apiKeys[$keyName] !== ''
+            ? $this->apiKeys[$keyName]
+            : $this->masterKey;
     }
 
     /**
@@ -162,9 +172,14 @@ class API
         return new Questions($this->apiUrls['questions'], $this->getKey('questions'), $this->proxy, $this->locale);
     }
 
+    public function Recommends(): Recommendations
+    {
+        return new Recommends($this->apiUrls['recommends'], $this->getKey('recommends'), $this->proxy, $this->locale);
+    }
+
     public function Recommendations(): Recommendations
     {
-        return new Recommendations($this->apiUrls['recommendations'], $this->getKey('recommendations'), $this->proxy, $this->locale);
+        return $this->Recommends();
     }
 
     public function Returns(): Returns

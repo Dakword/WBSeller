@@ -14,24 +14,24 @@ $contentAPI->getCardsList(); // Получить список карточек
 ```
 
 ### Поддерживаемые API
+:book: [Документация](/docs/API.md)
 
-:book: [Документация](docs/API.md)
-
-| API                   | Endpoint                                           |
-| --------------------- | -------------------------------------------------- |
+| API                   | Endpoint                                              |
+| --------------------- | ----------------------------------------------------- |
 | Контент               | $wbSellerAPI->**Content()**           |
 | Цены и скидки         | $wbSellerAPI->**Prices()**            |
 | Маркетплейс           | $wbSellerAPI->**Marketplace()**       |
 | Статистика            | $wbSellerAPI->**Statistic()**         |
 | Аналитика             | $wbSellerAPI->**Analitics()**         |
 | Продвижение           | $wbSellerAPI->**Adv()**               |
-| Рекомендации          | $wbSellerAPI->**Recommendations()**   |
-| Вопросы               | $wbSellerAPI->[**Questions()**](docs/Questions.md) |
-| Отзывы                | $wbSellerAPI->[**Feedbacks()**](docs/Feedbacks/md) |
-| Тарифы                | $wbSellerAPI->[**Tariffs()**](docs/Tariffs.md)     |
-| Чат с покупателями    | $wbSellerAPI->[**Chat()**](docs/Chat.md)           |
-| Возвраты покупателями | $wbSellerAPI->[**Returns()**](docs/Returns.md)     |
-| Документы             | $wbSellerAPI->[**Documents()**](docs/Documents.md) |
+| Рекомендации          | $wbSellerAPI->[**Recommends()**](/docs/Recommends.md) |
+| Вопросы               | $wbSellerAPI->[**Questions()**](/docs/Questions.md)   |
+| Отзывы                | $wbSellerAPI->[**Feedbacks()**](/docs/Feedbacks.md)   |
+| Тарифы                | $wbSellerAPI->[**Tariffs()**](/docs/Tariffs.md)       |
+| Чат с покупателями    | $wbSellerAPI->[**Chat()**](/docs/Chat.md)             |
+| Возвраты покупателями | $wbSellerAPI->[**Returns()**](/docs/Returns.md)       |
+| Документы             | $wbSellerAPI->[**Documents()**](/docs/Documents.md)   |
+
 
 ### Примеры использования WBSeller API
 
