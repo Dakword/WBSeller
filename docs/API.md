@@ -23,9 +23,9 @@ $wbSellerAPI = new \Dakword\WBSeller\API($options = [
 | Аналитика                | $wbSellerAPI->**Analitics()**         | analytics         | https://seller-analytics-api.wildberries.ru
 | Продвижение              | $wbSellerAPI->**Adv()**               | adv               | https://advert-api.wildberries.ru
 | Рекомендации             | $wbSellerAPI->**Recommendations()**   | recommendations   | https://recommend-api.wildberries.ru
-| Вопросы                  | $wbSellerAPI->[**Questions()**](docs/Questions.md) | feedbacks         | https://feedbacks-api.wildberries.ru
-| Отзывы                   | $wbSellerAPI->[**Feedbacks()**](docs/Feedbacks.md) | feedbacks         | https://feedbacks-api.wildberries.ru
-| Тарифы                   | $wbSellerAPI->[**Tariffs()**](docs/Tariffs.md)     | tariffs           | https://common-api.wildberries.ru
-| Чат<br>с покупателями    | $wbSellerAPI->[**Chat()**](docs/Chat.md)           | chat              | https://buyer-chat-api.wildberries.ru
-| Возвраты<br>покупателями | $wbSellerAPI->[**Returns()**](docs/Returns.md)     | returns           | https://returns-api.wildberries.ru
-| Документы                | $wbSellerAPI->[**Documents()**](docs/Documents.md) | documents         | https://documents-api.wildberries.ru
+| Вопросы                  | $wbSellerAPI->[**Questions()**](Questions.md) | feedbacks         | https://feedbacks-api.wildberries.ru
+| Отзывы                   | $wbSellerAPI->[**Feedbacks()**](Feedbacks.md) | feedbacks         | https://feedbacks-api.wildberries.ru
+| Тарифы                   | $wbSellerAPI->[**Tariffs()**](Tariffs.md)     | tariffs           | https://common-api.wildberries.ru
+| Чат<br>с покупателями    | $wbSellerAPI->[**Chat()**](Chat.md)           | chat              | https://buyer-chat-api.wildberries.ru
+| Возвраты<br>покупателями | $wbSellerAPI->[**Returns()**](Returns.md)     | returns           | https://returns-api.wildberries.ru
+| Документы                | $wbSellerAPI->[**Documents()**](Documents.md) | documents         | https://documents-api.wildberries.ru

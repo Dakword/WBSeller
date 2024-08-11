@@ -1,4 +1,4 @@
-## [WBSeller API](docs/API.md) / Feedbacks()
+## [WBSeller API](/docs/API.md) / Feedbacks()
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
@@ -7,7 +7,7 @@ $Feedbacks = $wbSellerAPI->Feedbacks();
 
 Wildberries API / [**Отзывы**](https://openapi.wb.ru/feedbacks-questions/api/ru/)
 
-| :speech_balloon: | :cloud: | [Feedbacks()](src/API/Endpoint/Feedbacks.php) |
+| :speech_balloon: | :cloud: | [Feedbacks()](/src/API/Endpoint/Feedbacks.php) |
 | ---------------- | ------- | --------------------------------------------- |
 | Наличие непросмотренных отзывов  | /api/v1/new-feedbacks-questions    | Feedbacks()->**hasNew()**          |
 | Количество отзывов               | /api/v1/feedbacks/count            | Feedbacks()->**count()**           |
@@ -29,7 +29,7 @@ Wildberries API / [**Отзывы**](https://openapi.wb.ru/feedbacks-questions/a
 | Возврат товара по ID отзыва      | /api/v1/feedbacks/order/return     | Feedbacks()->**orderReturn()**     |
 <br>
 
-## [WBSeller API](docs/API.md) / Feedbacks()->Templates()
+## [WBSeller API](/docs/API.md) / Feedbacks()->Templates()
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
 $Feedbacks = $wbSellerAPI->Feedbacks();
@@ -37,7 +37,7 @@ $Templates = $Feedbacks()->Templates();
 ```
 **Шаблоны** для отзывов
 
-| :speech_balloon: | :cloud: | [Templates()](src/API/Endpoint/Subpoint/Templates.php) |
+| :speech_balloon: | :cloud: | [Templates()](/src/API/Endpoint/Subpoint/Templates.php) |
 | ---------------- | ------- | ------------------------------------------------------ |
 | Cписок шаблонов  | /api/v1/templates | Templates()->**list()**   |
 | Создать шаблон   | /api/v1/templates | Templates()->**create()** |

@@ -1,4 +1,4 @@
-## [WBSeller API](docs/API.md) / Tariffs()
+## [WBSeller API](/docs/API.md) / Tariffs()
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
@@ -7,7 +7,7 @@ $Tariffs = $wbSellerAPI->Tariffs();
 
 Wildberries API / [**Тарифы**](https://openapi.wb.ru/tariffs/api/ru/)
 
-| :speech_balloon: | :cloud: | [Tariffs()](src/API/Endpoint/Tariffs.php) |
+| :speech_balloon: | :cloud: | [Tariffs()](/src/API/Endpoint/Tariffs.php) |
 | ---------------- | ------- | ----------------------------------------- |
 | **Комиссии** |||
 | Комиссия по категориям товаров | /api/v1/tariffs/commissioin | Tariffs()->**commission()** |

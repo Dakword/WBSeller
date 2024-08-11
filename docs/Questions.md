@@ -1,4 +1,4 @@
-## [WBSeller API](docs/API.md) / Questions()
+## [WBSeller API](/docs/API.md) / Questions()
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
@@ -7,7 +7,7 @@ $Questions = $wbSellerAPI->Questions();
 
 Wildberries API / [**Вопросы**](https://openapi.wb.ru/feedbacks-questions/api/ru/)
 
-| :speech_balloon: | :cloud: | [Questions()](src/API/Endpoint/Questions.php) |
+| :speech_balloon: | :cloud: | [Questions()](/src/API/Endpoint/Questions.php) |
 | ---------------- | ------- | --------------------------------------------- |
 | Наличие непросмотренных вопросов  | /api/v1/new-feedbacks-questions       | Feedbacks()->**hasNew()**                  |
 | Количество необработанных вопросов<br>за период | /api/v1/questions/count | Feedbacks()->**unansweredCountByPeriod()** |
@@ -30,7 +30,7 @@ $Templates = $Questions()->Templates();
 ```
 **Шаблоны** для вопросов
 
-| :speech_balloon: | :cloud: | [Templates()](src/API/Endpoint/Subpoint/Templates.php) |
+| :speech_balloon: | :cloud: | [Templates()](/src/API/Endpoint/Subpoint/Templates.php) |
 | ---------------- | ------- | ------------------------------------------------------ |
 | Cписок шаблонов  | /api/v1/templates | Templates()->**list()**   |
 | Создать шаблон   | /api/v1/templates | Templates()->**create()** |
