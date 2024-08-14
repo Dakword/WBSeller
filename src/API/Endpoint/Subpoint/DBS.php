@@ -78,4 +78,12 @@ class DBS
         $this->Marketplace->patchRequest("/api/v3/orders/{$order_id}/reject");
         return $this->Marketplace->responseCode() == 204;
     }
+
+    /**
+     * Информация по клиенту
+     */
+    public function getOrdersClient(array $orders)
+    {
+        return $this->Marketplace->getOrdersClient($orders);
+    }
 }

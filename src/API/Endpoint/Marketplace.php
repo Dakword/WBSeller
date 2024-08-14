@@ -427,29 +427,6 @@ class Marketplace extends AbstractEndpoint
     }
 
     /**
-     * Получить список ссылок на этикетки для сборочных заданий,
-     * которые требуются при кроссбордере
-     *
-     * Возвращает список ссылок на этикетки для сборочных заданий, которые требуются при кроссбордере.
-     *
-     * Метод возвращает этикетки только для сборочных заданий, находящихся на сборке (в статусе confirm).
-     *
-     * @param array  $orderIds Идентификаторы сборочных заданий (не более 100)
-     *
-     * @return object {stickers: [object, ...]}
-     *
-     * @throws InvalidArgumentException Превышение максимального количества запрашиваемых этикеток
-     */
-    public function getOrdersExternalStickers(array $orderIds): object
-    {
-        $maxCount = 100;
-        if (count($orderIds) > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых этикеток: {$maxCount}");
-        }
-        return $this->postRequest('/api/v3/files/orders/external-stickers', ['orders' => $orderIds]);
-    }
-
-    /**
      * Обновление остатков товаров по складу
      *
      * @param int   $warehouseId Идентификатор склада продавца
@@ -612,5 +589,24 @@ class Marketplace extends AbstractEndpoint
             throw new InvalidArgumentException('Неизвестный формат штрихкода: ' . $type);
         }
         return $this->postRequest('/api/v3/supplies/' . $supplyId . '/trbx/stickers?type=' . $type, ['trbxIds' => $boxIds]);
+    }
+
+    /**
+     * Информация по клиенту
+     *
+     * Метод позволяет получать информацию о клиенте по ID заказа.
+     * Только для dbs (доставка силами продавца) и кроссбордера из Турции
+     * @see https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya/paths/~1api~1v3~1orders~1client/post
+     *
+     * @param array $orders Список заказов
+     *
+     * @return array Информация по клиенту
+     */
+    public function getOrdersClient(array $orders): array
+    {
+        return $this->postRequest('/api/v3/orders/client', [
+            'orders' => $orders,
+        ])
+        ->orders;
     }
 }

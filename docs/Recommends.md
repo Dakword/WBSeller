@@ -2,7 +2,7 @@
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
-$Recommens = $wbSellerAPI->Recommends();
+$Recommends = $wbSellerAPI->Recommends();
 ```
 
 Wildberries API / [**Рекомендации**](https://openapi.wb.ru/recommendations/api/ru/)

@@ -35,7 +35,8 @@ $wbSellerAPI = new \Dakword\WBSeller\API($options);
 $Feedbacks = $wbSellerAPI->Feedbacks();
 $Templates = $Feedbacks()->Templates();
 ```
-**Шаблоны** для отзывов
+
+Wildberries API Отзывы / [**Шаблоны для отзывов**](https://openapi.wb.ru/feedbacks-questions/api/ru/#tag/Shablony-dlya-voprosov-i-otzyvov)
 
 | :speech_balloon: | :cloud: | [Templates()](/src/API/Endpoint/Subpoint/Templates.php) |
 | ---------------- | ------- | ------------------------------------------------------ |

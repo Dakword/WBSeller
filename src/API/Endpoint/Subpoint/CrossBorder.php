@@ -19,14 +19,14 @@ class CrossBorder
     /**
      * Получить список ссылок на этикетки для сборочных заданий,
      * которые требуются при кроссбордере
-     * 
+     *
      * Нельзя запросить больше 100 этикеток за раз
      * Метод возвращает этикетки только для сборочных заданий,
      * находящихся в доставке (в статусе complete).
      * @see https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya/paths/~1api~1v3~1files~1orders~1external-stickers/post
-     * 
+     *
      * @param array $orders Массив идентификаторов сборочных заданий
-     * 
+     *
      * @return array [
      *     {
      *         orderID: int,
@@ -34,7 +34,7 @@ class CrossBorder
      *         parcelID: string,
      *     }, ...
      * ]
-     * 
+     *
      * @throws InvalidArgumentException Превышение максимального количества переданных сборочных заданий
      */
     public function getOrdersStickers(array $orders): array
@@ -50,14 +50,14 @@ class CrossBorder
     }
     /**
      * История статусов для сборочных заданий кроссбордера
-     * 
+     *
      * Возвращает историю статусов для сборочных заданий кроссбордера
      * @see https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya/paths/~1api~1v3~1orders~1status~1history/post
-     * 
+     *
      * @param array $orders Массив идентификаторов сборочных заданий
-     * 
+     *
      * @return array Сборочные задания
-     * 
+     *
      * @throws InvalidArgumentException
      */
     public function getOrdersStatusHistory(array $orders): array
@@ -73,22 +73,11 @@ class CrossBorder
     }
 
     /**
-     * Заказы с информацией по клиенту
-     * 
-     * Метод позволяет получать информацию о клиенте по ID заказа.
-     * Только для кроссбордера из Турции
-     * @see https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya/paths/~1api~1v3~1orders~1client/post
-     * 
-     * @param array $orders Список заказов
-     * 
-     * @return array Информация по клиенту
+     * Информация по клиенту
      */
-    public function getOrdersClient(array $orders): array
+    public function getOrdersClient(array $orders)
     {
-        return $this->Marketplace->postRequest('/api/v3/orders/client', [
-            'orders' => $orders,
-        ])
-        ->orders;
+        return $this->Marketplace->getOrdersClient($orders);
     }
 
 }

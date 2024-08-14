@@ -28,7 +28,8 @@ $wbSellerAPI = new \Dakword\WBSeller\API($options);
 $Questions = $wbSellerAPI->Questions();
 $Templates = $Questions()->Templates();
 ```
-**Шаблоны** для вопросов
+
+Wildberries API Вопросы / [**Шаблоны для вопросов**](https://openapi.wb.ru/feedbacks-questions/api/ru/#tag/Shablony-dlya-voprosov-i-otzyvov)
 
 | :speech_balloon: | :cloud: | [Templates()](/src/API/Endpoint/Subpoint/Templates.php) |
 | ---------------- | ------- | ------------------------------------------------------ |

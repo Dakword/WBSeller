@@ -1,3 +1,6 @@
+### 4.10.5
+* Документирование
+
 ### 4.10.4
 * Новый метод WBSeller для API Рекомендаций `API::Recommends()` дублирующий `API::Recommendations()`
 * Замена параметра опций `recommendations` на `recommends` с поддержкой совместимости
