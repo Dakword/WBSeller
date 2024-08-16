@@ -22,8 +22,8 @@ $wbSellerAPI = new \Dakword\WBSeller\API($options = [
 | Цены и скидки            | $wbSellerAPI->[**Prices()**](/docs/Prices.md)           | prices      | https://discounts-prices-api.wildberries.ru
 | Маркетплейс              | $wbSellerAPI->[**Marketplace()**](/docs/Marketplace.md) | marketplace | https://marketplace-api.wildberries.ru
 | Статистика               | $wbSellerAPI->[**Statistics()**](/docs/Statistics.md)   | statistics  | https://statistics-api.wildberries.ru
-| Аналитика                | $wbSellerAPI->**Analytics()**                           | analytics   | https://seller-analytics-api.wildberries.ru
-| Продвижение              | $wbSellerAPI->**Adv()**                                 | adv         | https://advert-api.wildberries.ru
+| Аналитика                | $wbSellerAPI->[**Analytics()**](/docs/Analytics.md)     | analytics   | https://seller-analytics-api.wildberries.ru
+| Продвижение              | $wbSellerAPI->[**Adv()**](/docs/Adv.md)                 | adv         | https://advert-api.wildberries.ru
 | Рекомендации             | $wbSellerAPI->[**Recommends()**](Recommends.md)         | recommends  | https://recommend-api.wildberries.ru
 | Вопросы                  | $wbSellerAPI->[**Questions()**](Questions.md)           | feedbacks   | https://feedbacks-api.wildberries.ru
 | Отзывы                   | $wbSellerAPI->[**Feedbacks()**](Feedbacks.md)           | feedbacks   | https://feedbacks-api.wildberries.ru

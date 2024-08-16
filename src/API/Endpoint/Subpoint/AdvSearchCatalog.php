@@ -17,7 +17,7 @@ class AdvSearchCatalog
     }
 
     /**
-     * Создать кампанию Поиск + Каталог
+     * Создать кампанию Аукцион
      *
      * Максимум 5 запросов в минуту
      * @link https://openapi.wb.ru/promotion/api/ru/#tag/Prodvizhenie/paths/~1adv~1v2~1seacat~1save-ad/post
@@ -263,13 +263,13 @@ class AdvSearchCatalog
      *
      * @return object
      */
-    public function searchAdvertStatisticByWords(int $id): object
+    public function advertStatisticByWords(int $id): object
     {
         return $this->Adv->getRequest('/adv/v1/stat/words', ['id' => $id]);
     }
 
     /**
-     * Статистика кампаний Поиск + Каталог
+     * Статистика кампаний Аукцион
      *
      * Допускается 2 запроса в секунду.
      * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v1~1seacat~1stat/get
@@ -278,7 +278,7 @@ class AdvSearchCatalog
      *
      * @return object
      */
-    public function searchAndCatalogAdvertStatistic(int $id): object
+    public function advertStatistic(int $id): object
     {
         return $this->Adv->getRequest('/adv/v1/seacat/stat', ['id' => $id]);
     }

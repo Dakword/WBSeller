@@ -177,7 +177,7 @@ class Analytics extends AbstractEndpoint
     }
 
     /**
-     * Получение статистики КТ по дням/неделям/месяцам по выбранным nmID
+     * Получение статистики КТ по дням/неделям по выбранным nmID
      *
      * Можно получить отчёт максимум за последнюю неделю.
      * Максимум 3 запроса в минуту.
@@ -186,7 +186,7 @@ class Analytics extends AbstractEndpoint
      * @param array    $nmIDs      Артикулы Wildberries (максимум 20)
      * @param DateTime $dateFrom   Начало периода
      * @param DateTime $dateTo     Конец периода
-     * @param string   $agregation Тип аггрегации: day, week, month
+     * @param string   $agregation Тип аггрегации: day, week
      * @param string   $timezone   Временная зона
      *
      * @return object {
@@ -203,7 +203,7 @@ class Analytics extends AbstractEndpoint
         if (count($nmIDs) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества переданных артикулов: {$maxCount}");
         }
-        if (!in_array($agregation, ["day", "week", "month"])) {
+        if (!in_array($agregation, ["day", "week"])) {
             throw new InvalidArgumentException('Неизвестный тип агрегации: ' . $agregation);
         }
         return $this->postRequest('/api/v2/nm-report/detail/history', [

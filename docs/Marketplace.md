@@ -48,8 +48,8 @@ Wildberries API / [**Маркетплейс**](https://openapi.wb.ru/marketplace
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
-$Content = $wbSellerAPI->Marketplace();
-$Warehouses = Marketplace()->Warehouses();
+$Marketplace = $wbSellerAPI->Marketplace();
+$Warehouses = $Marketplace->Warehouses();
 ```
 Wildberries API Маркетплейс / [**Склады**](https://openapi.wb.ru/marketplace/api/ru/#tag/Sklady)
 
@@ -66,8 +66,8 @@ Wildberries API Маркетплейс / [**Склады**](https://openapi.wb.r
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
-$Content = $wbSellerAPI->Marketplace();
-$Passes = Marketplace()->Passes();
+$Marketplace = $wbSellerAPI->Marketplace();
+$Passes = $Marketplace->Passes();
 ```
 Wildberries API Маркетплейс / [**Пропуска**](https://openapi.wb.ru/marketplace/api/ru/#tag/Propuska)
 
@@ -84,8 +84,8 @@ Wildberries API Маркетплейс / [**Пропуска**](https://openapi.
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
-$Content = $wbSellerAPI->Marketplace();
-$CrossBorder = Marketplace()->CrossBorder();
+$Marketplace = $wbSellerAPI->Marketplace();
+$CrossBorder = $Marketplace->CrossBorder();
 ```
 
 | :speech_balloon: | :cloud: | [CrossBorder()](/src/API/Endpoint/Subpoint/CrossBorder.php) |
@@ -99,8 +99,8 @@ $CrossBorder = Marketplace()->CrossBorder();
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
-$Content = $wbSellerAPI->Marketplace();
-$DBS = Marketplace()->DBS();
+$Marketplace = $wbSellerAPI->Marketplace();
+$DBS = $Marketplace->DBS();
 ```
 Wildberries API Маркетплейс / [**Доставка силами продавца**](https://openapi.wb.ru/marketplace/api/ru/#tag/Dostavka-silami-prodavca-(DBS))
 

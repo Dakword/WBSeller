@@ -11,21 +11,25 @@ class AdvertType
 {
     /**
      * @var int Реклама в каталоге
+     * @deprecated устаревший тип
      */
     const ON_CATALOG = 4;
 
     /**
      * @var int Реклама в карточке товара
+     * @deprecated устаревший тип
      */
     const ON_CARD = 5;
 
     /**
      * @var int Реклама в поиске
+     * @deprecated устаревший тип
      */
     const ON_SEARCH = 6;
 
     /**
      * @var int Реклама в рекомендациях на главной странице
+     * @deprecated устаревший тип
      */
     const ON_HOME_RECOM = 7;
 

@@ -80,7 +80,7 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Переименование РК
+     * Переименование кампании
      *
      * @param type $advertId Идентификатор РК, у которой меняется название
      * @param type $name     Новое название (максимум 100 символов)
@@ -128,7 +128,7 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Информация о кампаниях по списку их id.
+     * Информация о кампаниях по списку их id
      *
      * @param array $ids Список ID кампаний. Максимум 50
      *
@@ -146,7 +146,7 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Изменение ставки у РК.
+     * Изменение ставки у кампании
      *
      * Доступно для РК в карточке товара, поиске или рекомендациях.
      *
@@ -175,7 +175,7 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Запуск РК
+     * Запуск кампании
      *
      * @param int $id
      *
@@ -188,7 +188,7 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Пауза РК
+     * Пауза кампании
      *
      * @param int $id
      *
@@ -201,7 +201,7 @@ class Adv extends AbstractEndpoint
     }
 
     /**
-     * Пауза РК
+     * Завершение кампании
      *
      * @param int $id
      *
@@ -259,7 +259,7 @@ class Adv extends AbstractEndpoint
      *
      * @return array
      */
-    public function mns(array $subjects = []): array
+    public function nms(array $subjects = []): array
     {
         return $this->postRequest('/adv/v2/supplier/nms', $subjects);
     }

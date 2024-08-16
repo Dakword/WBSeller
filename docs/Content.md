@@ -29,7 +29,7 @@ Wildberries API / [**Контент**](https://openapi.wb.ru/content/api/ru/)
 | Родительские категории товаров         | /content/v2/object/parent/all         | Content()->**getParentCategories()**        |
 | Характеристики предмета (подкатегории) | /content/v2/object/charcs/{subjectId} | Content()->**getCategoryCharacteristics()** |
 | Значения характеристики                | /content/v2/directory/{directory}     | Content()->**getDirectory()**               |
-| Цает                                   | /content/v2/directory/colors          | Content()->**getDirectoryColors()**         |
+| Цвет                                   | /content/v2/directory/colors          | Content()->**getDirectoryColors()**         |
 | Пол                                    | /content/v2/directory/kinds           | Content()->**getDirectoryKinds()**          |
 | Страна производства                    | /content/v2/directory/countries       | Content()->**getDirectoryCountries()**      |
 | Сезон                                  | /content/v2/directory/seasons         | Content()->**getDirectorySeasons()**        |

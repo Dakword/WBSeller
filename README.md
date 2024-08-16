@@ -22,8 +22,8 @@ $contentAPI->getCardsList(); // Получить список карточек
 | Цены и скидки         | $wbSellerAPI->[**Prices()**](/docs/Prices.md)            |
 | Маркетплейс           | $wbSellerAPI->[**Marketplace()**](/docs/Marketplaces.md) |
 | Статистика            | $wbSellerAPI->[**Statistics()**](/docs/Statistics.md)    |
-| Аналитика             | $wbSellerAPI->**Analytics()**                            |
-| Продвижение           | $wbSellerAPI->**Adv()**                                  |
+| Аналитика             | $wbSellerAPI->[**Analytics()**](/docs/Analytics.md)      |
+| Продвижение           | $wbSellerAPI->[**Adv()**](/docs/Adv.md)                  |
 | Рекомендации          | $wbSellerAPI->[**Recommends()**](/docs/Recommends.md)    |
 | Вопросы               | $wbSellerAPI->[**Questions()**](/docs/Questions.md)      |
 | Отзывы                | $wbSellerAPI->[**Feedbacks()**](/docs/Feedbacks.md)      |

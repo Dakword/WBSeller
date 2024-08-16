@@ -1,4 +1,7 @@
-### 4.10.5
+### 4.11.0
+* Переименование метода `Adv::mns()` в `Adv::nms()`
+* Переименование метода `SearchCatalog::searchAndCatalogAdvertStatistic()` в `SearchCatalog::advertStatistic()`
+* Переименование метода `SearchCatalog::searchAdvertStatisticByWords()` в `SearchCatalog::advertStatisticByWords()`
 * Документирование
 
 ### 4.10.4
