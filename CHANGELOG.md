@@ -1,3 +1,6 @@
+### 4.11.1
+* Изменение максимального значения параметра `onPage` в методах `Feedbacks::list()` и  `Feedbacks::archive()`
+
 ### 4.11.0
 * Переименование метода `Adv::mns()` в `Adv::nms()`
 * Переименование метода `SearchCatalog::searchAndCatalogAdvertStatistic()` в `SearchCatalog::advertStatistic()`
