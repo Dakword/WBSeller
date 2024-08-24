@@ -20,7 +20,7 @@ $contentAPI->getCardsList(); // Получить список карточек
 | --------------------- | -------------------------------------------------------- |
 | Контент               | $wbSellerAPI->[**Content()**](/docs/Content.md)          |
 | Цены и скидки         | $wbSellerAPI->[**Prices()**](/docs/Prices.md)            |
-| Маркетплейс           | $wbSellerAPI->[**Marketplace()**](/docs/Marketplaces.md) |
+| Маркетплейс           | $wbSellerAPI->[**Marketplace()**](/docs/Marketplace.md)  |
 | Статистика            | $wbSellerAPI->[**Statistics()**](/docs/Statistics.md)    |
 | Аналитика             | $wbSellerAPI->[**Analytics()**](/docs/Analytics.md)      |
 | Продвижение           | $wbSellerAPI->[**Adv()**](/docs/Adv.md)                  |
