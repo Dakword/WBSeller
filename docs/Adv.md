@@ -10,21 +10,22 @@ Wildberries API / [**Продвиженение**](https://openapi.wb.ru/promoti
 | :speech_balloon: | :cloud: | [Adv()](/src/API/Endpoint/Adv.php) |
 | ---------------- | ------- | ---------------------------------- |
 | [**Продвижение**](https://openapi.wb.ru/promotion/api/ru/#tag/Prodvizhenie) |||
-| Списки кампаний             | /adv/v1/promotion/count               | Adv()->**advertsList()**      |
-| Переименование кампании     | /adv/v0/rename                        | Adv()->**renameAdvert()**     |
-| Удаление кампании           | /adv/v0/delete                        | Adv()->**delete()**           |
-| Информация о кампаниях      | /adv/v1/promotion/adverts             | Adv()->**advertsInfo()**      |
-| Информация о кампаниях по списку id | /adv/v1/promotion/adverts     | Adv()->**advertsInfoByIds()** |
-| Изменение ставки у кампании | /adv/v0/cpm                           | Adv()->**updateCpm()**        |
+| Списки кампаний               | /adv/v1/promotion/count               | Adv()->**advertsList()**               |
+| Переименование кампании       | /adv/v0/rename                        | Adv()->**renameAdvert()**              |
+| Удаление кампании             | /adv/v0/delete                        | Adv()->**delete()**                    |
+| Информация о кампаниях        | /adv/v1/promotion/adverts             | Adv()->**advertsInfo()**               |
+| Информация о кампаниях по списку id | /adv/v1/promotion/adverts       | Adv()->**advertsInfoByIds()**          |
+| Изменение ставки у кампании   | /adv/v0/cpm                           | Adv()->**updateCpm()**                 |
 | [**Активность кампании**](https://openapi.wb.ru/promotion/api/ru/#tag/Aktivnost-kampanii) |||
-| Запуск кампании             | /adv/v0/start                         | Adv()->**start()**            |
-| Пауза кампании              | /adv/v0/pause                         | Adv()->**pause()**            |
-| Завершение кампании         | /adv/v0/stop                          | Adv()->**stop()**             |
+| Запуск кампании               | /adv/v0/start                         | Adv()->**start()**                     |
+| Пауза кампании                | /adv/v0/pause                         | Adv()->**pause()**                     |
+| Завершение кампании           | /adv/v0/stop                          | Adv()->**stop()**                      |
 | [**Словари**](https://openapi.wb.ru/promotion/api/ru/#tag/Slovari) |||
-| Номенклатуры для кампаний   | /adv/v2/supplier/nms                  | Adv()->**nms()**         |
-| Предметы для кампаний       | /adv/v1/supplier/subjects             | Adv()->**subjects()**         |
+| Номенклатуры для кампаний     | /adv/v2/supplier/nms                  | Adv()->**nms()**                       |
+| Предметы для кампаний         | /adv/v1/supplier/subjects             | Adv()->**subjects()**                  |
 | [**Статистика**](https://openapi.wb.ru/promotion/api/ru/#tag/Statistika) |||
-| Статистика кампаний         | /adv/v2/fullstats                     | Adv()->**statistic()**        |
+| Статистика кампаний           | /adv/v2/fullstats                     | Adv()->**statistic()**                 |
+| Статистика по ключевым фразам | /adv/v0/stats/keywords                | Adv()->**advertStatisticByKeywords()** |
 <br>
 
 ## [WBSeller API](/docs/API.md) / Adv()->Auto()
@@ -37,43 +38,45 @@ Wildberries API Продвижение / **Автоматическая камп
 
 | :speech_balloon: | :cloud: | [Auto()](/src/API/Endpoint/Subpoint/AdvAuto.php) |
 | ---------------- | ------- | ------------------------------------------------ |
-| Создать автоматическую кампанию | /adv/v1/save-ad           | Auto()->**createAdvert()**           |
+| Создать автоматическую кампанию | /adv/v1/save-ad           | Auto()->**createAdvert()**              |
 | [**Управление параметрами**](https://openapi.wb.ru/promotion/api/ru/#tag/Upravlenie-parametrami-avtomaticheskih-kampanij) |||
-| Список номенклатур              | /adv/v1/auto/getnmtoadd   | Auto()->**getAdvertNmsToAdd()**      |
-| Изменение списка номенклатур    | /adv/v1/auto/updatenm     | Auto()->**updateAdvertNms()**        |
-| Управление зонами показов       | /adv/v1/auto/active       | Auto()->**setAdvertActives()**       |
-| Установка минус-фраз            | /adv/v1/auto/set-excluded | Auto()->**setAdvertMinuses()**       |
-| Удаление минус-фраз             | /adv/v1/auto/set-excluded | Auto()->**deleteAdvertMinuses()**    |
+| Список номенклатур              | /adv/v1/auto/getnmtoadd   | Auto()->**getAdvertNmsToAdd()**         |
+| Изменение списка номенклатур    | /adv/v1/auto/updatenm     | Auto()->**updateAdvertNms()**           |
+| Управление зонами показов       | /adv/v1/auto/active       | Auto()->**setAdvertActives()**          |
+| Установка минус-фраз            | /adv/v1/auto/set-excluded | Auto()->**setAdvertMinuses()**          |
+| Удаление минус-фраз             | /adv/v1/auto/set-excluded | Auto()->**deleteAdvertMinuses()**       |
 | [**Статистика**](https://openapi.wb.ru/promotion/api/ru/#tag/Statistika) |||
-| Статистика                      | /adv/v1/auto/stat         | Auto()->**advertStatistic()**        |
-| Статистика по кластерам фраз    | /adv/v1/auto/stat-words   | Auto()->**advertStatisticByWords()** |
+| Статистика                      | /adv/v1/auto/stat         | Auto()->**advertStatistic()**           |
+| Статистика по кластерам фраз    | /adv/v1/auto/stat-words   | Auto()->**advertStatisticByWords()**    |
+| Статистика по ключевым фразам   | /adv/v0/stats/keywords    | Auto()->**advertStatisticByKeywords()** |
 <br>
 
-## [WBSeller API](/docs/API.md) / Adv()->SearchCatalog()
+## [WBSeller API](/docs/API.md) / Adv()->Auction()
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
-$SearchCatalog = $wbSellerAPI->Adv()->SearchCatalog();
+$AuctionCatalog = $wbSellerAPI->Adv()->Auction();
 ```
-Wildberries API Продвижение / **Кампания Аукцион**
+Wildberries API Продвижение / **Кампания Аукцион** (Поиск + Каталог)
 
 | :speech_balloon: | :cloud: | [SearchCatalog()](/src/API/Endpoint/Subpoint/AdvSearchCatalog.php) |
 | ---------------- | ------- | ------------------------------------------------ |
-| Создать кампанию Аукцион                    | /adv/v2/seacat/save-ad      | SearchCatalog()->**createAdvert()**             |
+| Создать кампанию Аукцион                    | /adv/v2/seacat/save-ad      | Auction()->**createAdvert()**             |
 | [**Управление параметрами**](https://openapi.wb.ru/promotion/api/ru/#tag/Upravlenie-parametrami-kampanij-Aukcion) |||
-| Изменение активности предметной группы      | /adv/v0/active              | SearchCatalog()->**setAdvertSubjectActive()**   |
-| Управление активностью фиксированных фраз   | /adv/v1/search/set-plus     | SearchCatalog()->**setAdvertPlusesActive()**    |
-| Установка фиксированных фраз                | /adv/v1/search/set-plus     | SearchCatalog()->**setAdvertPluses()**          |
-| Удаление фиксированных фраз                 | /adv/v1/search/set-plus     | SearchCatalog()->**deleteAdvertPluses()**       |
-| Установка минус-фраз фразового соответствия | /adv/v1/search/set-phrase   | SearchCatalog()->**setAdvertMinusPhrases()**    |
-| Удаление минус-фраз фразового соответствия  | /adv/v1/search/set-phrase   | SearchCatalog()->**deleteAdvertMinusPhrases()** |
-| Установка минус-фраз точного соответствия   | /adv/v1/search/set-strong   | SearchCatalog()->**setAdvertMinusStrong()**     |
-| Удаление минус-фраз точного соответствия    | /adv/v1/search/set-strong   | SearchCatalog()->**deleteAdvertMinusStrong()**  |
-| Установка минус-фраз из поиска              | /adv/v1/search/set-excluded | SearchCatalog()->**setAdvertMinuses()**         |
-| Удаление минус-фраз из поиска               | /adv/v1/search/set-excluded | SearchCatalog()->**deleteAdvertMinuses()**      |
+| Изменение активности предметной группы      | /adv/v0/active              | Auction()->**setAdvertSubjectActive()**   |
+| Управление активностью фиксированных фраз   | /adv/v1/search/set-plus     | Auction()->**setAdvertPlusesActive()**    |
+| Установка фиксированных фраз                | /adv/v1/search/set-plus     | Auction()->**setAdvertPluses()**          |
+| Удаление фиксированных фраз                 | /adv/v1/search/set-plus     | Auction()->**deleteAdvertPluses()**       |
+| Установка минус-фраз фразового соответствия | /adv/v1/search/set-phrase   | Auction()->**setAdvertMinusPhrases()**    |
+| Удаление минус-фраз фразового соответствия  | /adv/v1/search/set-phrase   | Auction()->**deleteAdvertMinusPhrases()** |
+| Установка минус-фраз точного соответствия   | /adv/v1/search/set-strong   | Auction()->**setAdvertMinusStrong()**     |
+| Удаление минус-фраз точного соответствия    | /adv/v1/search/set-strong   | Auction()->**deleteAdvertMinusStrong()**  |
+| Установка минус-фраз из поиска              | /adv/v1/search/set-excluded | Auction()->**setAdvertMinuses()**         |
+| Удаление минус-фраз из поиска               | /adv/v1/search/set-excluded | Auction()->**deleteAdvertMinuses()**      |
 | [**Статистика**](https://openapi.wb.ru/promotion/api/ru/#tag/Statistika) |||
-| Статистика кампаний                         | /adv/v1/seacat/stat         | SearchCatalog()->**advertStatistic()**          |
-| Статистика поисковой кампании<br>по ключевым фразам | /adv/v1/stat/words  | SearchCatalog()->**advertStatisticByWords()**   |
+| Статистика кампаний                                   | /adv/v1/seacat/stat    | Auction()->**advertStatistic()**           |
+| Статистика поисковой кампании<br>по ключевым фразам   | /adv/v1/stat/words     | Auction()->**advertStatisticByWords()**    |
+| Статистика по ключевым фразам<br>для компаний Аукцион | /adv/v0/stats/keywords | Auction()->**advertStatisticByKeywords()** |
 <br>
 
 ## [WBSeller API](/docs/API.md) / Adv()->Finances()

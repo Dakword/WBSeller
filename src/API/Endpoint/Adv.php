@@ -44,6 +44,16 @@ class Adv extends AbstractEndpoint
     }
 
     /**
+     * Сервисы для кампаний Аукцион
+     *
+     * @return AdvSearchCatalog
+     */
+    public function Auction(): AdvSearchCatalog
+    {
+        return new AdvSearchCatalog($this);
+    }
+
+    /**
      * Списки кампаний
      *
      * Метод позволяет получать списки кампаний, сгруппированных по типу и статусу,
@@ -232,6 +242,30 @@ class Adv extends AbstractEndpoint
     public function statistic(array $params): array
     {
         return $this->postRequest('/adv/v2/fullstats', $params);
+    }
+
+    /**
+     * Статистика по ключевым фразам
+     *
+     * Возвращает статистику по ключевым фразам за каждый день, когда кампания была активна.
+     * За один запрос можно получить данные максимум за 7 дней.
+     * Информация обновляется раз в час.
+     * Максимум 4 запроса секунду
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v0~1stats~1keywords/get
+     *
+     * @param int      $id       Идентификатор кампании
+     * @param DateTime $dateFrom Начало периода
+     * @param DateTime $dateTo   Конец периода
+     *
+     * @return array
+     */
+    public function advertStatisticByKeywords(int $id, DateTime $dateFrom, DateTime $dateTo): array
+    {
+        return $this->Adv->getRequest('/adv/v0/stats/keywords', [
+            'advert_id' => $id,
+            'from' => $dateFrom->format('Y-m-d'),
+            'to' => $dateTo->format('Y-m-d'),
+        ])->keywords;
     }
 
     /**

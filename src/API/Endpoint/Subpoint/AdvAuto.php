@@ -6,6 +6,7 @@ namespace Dakword\WBSeller\API\Endpoint\Subpoint;
 
 use Dakword\WBSeller\API\Endpoint\Adv;
 use Dakword\WBSeller\Enum\AdvertType;
+use DateTime;
 use InvalidArgumentException;
 
 class AdvAuto
@@ -206,5 +207,25 @@ class AdvAuto
     public function advertStatisticByWords(int $id): object
     {
         return $this->Adv->getRequest('/adv/v1/auto/stat-words', ['id' => $id]);
+    }
+
+    /**
+     * Статистика по ключевым фразам
+     *
+     * Возвращает статистику по ключевым фразам за каждый день, когда кампания была активна.
+     * За один запрос можно получить данные максимум за 7 дней.
+     * Информация обновляется раз в час.
+     * Максимум 4 запроса секунду
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v0~1stats~1keywords/get
+     *
+     * @param int      $id       Идентификатор кампании
+     * @param DateTime $dateFrom Начало периода
+     * @param DateTime $dateTo   Конец периода
+     *
+     * @return array
+     */
+    public function advertStatisticByKeywords(int $id, DateTime $dateFrom, DateTime $dateTo): array
+    {
+        return $this->Adv->advertStatisticByKeywords($id, $dateFrom, $dateTo);
     }
 }

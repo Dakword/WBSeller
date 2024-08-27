@@ -1,3 +1,9 @@
+### 4.12.0
+* Новое имя для методов кампании Аукцион `Adv::Auction()` (Пока как копия `Adv::SearchCatalog()`)
+* Новый метод `Adv::advertStatisticByKeywords()` - Статистика по ключевым фразам
+* Новый метод `Adv::Auto()->advertStatisticByKeywords()` - Статистика по ключевым фразам для Автоматических кампаний
+* Новый метод `Adv::Auction()->advertStatisticByKeywords()` - Статистика по ключевым фразам для кампаний Аукцион
+
 ### 4.11.2
 * Изменение README.md
 
