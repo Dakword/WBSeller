@@ -1,3 +1,8 @@
+### 4.13.0
+* Новый url для API Контента - https://content-api.wildberries.ru
+* Удаление устаревшего имени метода `API::Recommendations()`
+* Удаление автозамены имени опции "recommendations" на "recommends"
+
 ### 4.12.0
 * Новое имя для методов кампании Аукцион `Adv::Auction()` (Пока как копия `Adv::SearchCatalog()`)
 * Новый метод `Adv::advertStatisticByKeywords()` - Статистика по ключевым фразам

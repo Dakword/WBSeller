@@ -7,23 +7,23 @@ namespace Dakword\WBSeller\API\Endpoint;
 use Dakword\WBSeller\API\AbstractEndpoint;
 use InvalidArgumentException;
 
-class Recommendations extends AbstractEndpoint
+class Recommends extends AbstractEndpoint
 {
 
     /**
      * Получение списка рекомендаций
-     * 
+     *
      * Метод позволяет получить список рекомендаций ("Магазин рекомендует") по нескольким товарам.
-     * 
+     *
      * @param array $nmIds Идентификаторы товаров, для которых необходимо получить список рекомендаций (max. 200)
      * @param int   $limit Ограничение количества рекомендованных nm в ответе (max. 999)
-     * 
+     *
      * @return array !!! РЕСТРУКТУРИРОВАННЫЙ ОТВЕТ
      *               [
      *                  nmId => [recomNm1, recomNm2, ...],
      *                  ...
      *               ]
-     * 
+     *
      * @throws InvalidArgumentException Превышение максимального количества переданных идентификаторов
      * @throws InvalidArgumentException Превышение максимального значения параметра limit
      */
@@ -46,14 +46,14 @@ class Recommendations extends AbstractEndpoint
 
     /**
      * Добавление рекомендаций
-     * 
+     *
      * Метод позволяет добавить рекомендации к товарам.
-     * 
+     *
      * @param array $recom [nmId => [nmId1, nmId2, ...], ...]
      *                     nmId - Идентификатор товара, к которому добавляется рекомендация
      *                     [nmId1, nmId2, ...] - Список идентификаторов товаров,
      *                                           которые необходимо добавить в рекомендуемые
-     * 
+     *
      * @return object|string
      */
     public function add(array $recom)
@@ -68,14 +68,14 @@ class Recommendations extends AbstractEndpoint
 
     /**
      * Удаление рекомендаций
-     * 
+     *
      * Метод позволяет удалить рекомендации.
-     * 
+     *
      * @param array $recom [nmId => [nmId1, nmId2, ...], ...]
      *                     nmId - Идентификатор товара, у которого необходимо удалить рекомендацию
      *                     [nmId1, nmId2, ...] - Список идентификаторов товаров,
      *                                           которые необходимо удалить из рекомендуемых
-     * 
+     *
      * @return string|object
      */
     public function delete(array $recom)
@@ -90,16 +90,16 @@ class Recommendations extends AbstractEndpoint
 
     /**
      * Управление рекомендациями
-     * 
+     *
      * Метод позволяет добавлять, удалять рекомендации.
      * Работает по принципу перезаписи, все что указано в recom, ставится взамен того, что было ранее.
      * Чтобы удалить рекомендации необходимо передать пустой массив recom.
-     * 
+     *
      * @param array $recom [nmId => [nmId1, nmId2, ...], ...]
      *                     nmId - Идентификатор товара
      *                     [nmId1, nmId2, ...] - Список идентификаторов товаров,
      *                                           которые необходимо передать в рекомендуемые
-     * 
+     *
      * @return string|object
      */
     public function update(array $recom)
@@ -111,5 +111,5 @@ class Recommendations extends AbstractEndpoint
             array_keys($recom), array_values($recom)
         ));
     }
-    
+
 }

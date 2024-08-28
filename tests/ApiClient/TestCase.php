@@ -5,7 +5,7 @@ namespace Dakword\WBSeller\Tests\ApiClient;
 use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
 use Dakword\WBSeller\API\Endpoint\{
     Adv, Analytics, Content, Feedbacks, Marketplace, Prices,
-    Questions, Recommendations, Statistics
+    Questions, Recommends, Statistics
 };
 use Dakword\WBSeller\API\Endpoint\Subpoint\{Passes, News, Tags, Templates, Warehouses};
 use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
@@ -91,10 +91,10 @@ abstract class TestCase extends BaseTestCase
         return $this->API()->Questions()->Templates();
     }
 
-    protected function Recommendations(): Recommendations
+    protected function Recommends(): Recommends
     {
         $this->skipIfNoKeyAPI();
-        return $this->API()->Recommendations();
+        return $this->API()->Recommends();
     }
 
     protected function Statistics(): Statistics
@@ -115,8 +115,8 @@ abstract class TestCase extends BaseTestCase
         if (count($result->cards) == 0) {
             $this->markTestSkipped('No cards in account');
         }
-        
+
         return $list = array_column($result->cards, 'nmID');
-    }    
+    }
 
 }

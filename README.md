@@ -87,7 +87,7 @@ var_dump($orders);
 try {
     $createCardResult = $contentApi->createCard([
         'subjectID' => 105,
-		'variants' => [
+        'variants' => [
             [
                 'vendorCode' => 'A0001',
                 'title' => 'Наименование',
