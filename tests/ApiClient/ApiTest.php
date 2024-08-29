@@ -57,4 +57,14 @@ class ApiTest extends TestCase
         $this->assertInstanceOf(Statistics::class, $Statistics->retryOnTooManyRequests(3, 500));
     }
 
+    public function test_Ping()
+    {
+        $Content = $this->Content();
+        $result = $Content->ping();
+
+        $this->assertIsObject($result);
+        $this->assertObjectHasAttribute('Status', $result);
+        $this->assertEquals('OK', $result->Status);
+    }
+
 }

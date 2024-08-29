@@ -24,6 +24,18 @@ abstract class AbstractEndpoint
         }
     }
 
+    /**
+     * Проверка подключения к WB API
+     *
+     * @link https://openapi.wildberries.ru/general/ping/ru/#/paths/~1ping/get
+     *
+     * @return object {TS: string, status: "OK"}
+     */
+    public function ping(): object
+    {
+        return $this->getRequest('/ping');
+    }
+
     public function locale(): string
     {
         return $this->locale;

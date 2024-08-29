@@ -1,3 +1,6 @@
+### 4.14.0
+* Проверка подключения к WB API `ping()`
+
 ### 4.13.0
 * Новый url для API Контента - https://content-api.wildberries.ru
 * Удаление устаревшего имени метода `API::Recommendations()`
