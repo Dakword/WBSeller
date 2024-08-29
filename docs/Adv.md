@@ -9,6 +9,7 @@ Wildberries API / [**Продвиженение**](https://openapi.wb.ru/promoti
 
 | :speech_balloon: | :cloud: | [Adv()](/src/API/Endpoint/Adv.php) |
 | ---------------- | ------- | ---------------------------------- |
+| Проверка подключения к API    | /ping                                 | Adv()->**ping()**                      |
 | [**Продвижение**](https://openapi.wb.ru/promotion/api/ru/#tag/Prodvizhenie) |||
 | Списки кампаний               | /adv/v1/promotion/count               | Adv()->**advertsList()**               |
 | Переименование кампании       | /adv/v0/rename                        | Adv()->**renameAdvert()**              |
@@ -46,7 +47,6 @@ Wildberries API Продвижение / **Автоматическая камп
 | Установка минус-фраз            | /adv/v1/auto/set-excluded | Auto()->**setAdvertMinuses()**          |
 | Удаление минус-фраз             | /adv/v1/auto/set-excluded | Auto()->**deleteAdvertMinuses()**       |
 | [**Статистика**](https://openapi.wb.ru/promotion/api/ru/#tag/Statistika) |||
-| Статистика                      | /adv/v1/auto/stat         | Auto()->**advertStatistic()**           |
 | Статистика по кластерам фраз    | /adv/v1/auto/stat-words   | Auto()->**advertStatisticByWords()**    |
 | Статистика по ключевым фразам   | /adv/v0/stats/keywords    | Auto()->**advertStatisticByKeywords()** |
 <br>
@@ -59,8 +59,8 @@ $AuctionCatalog = $wbSellerAPI->Adv()->Auction();
 ```
 Wildberries API Продвижение / **Кампания Аукцион** (Поиск + Каталог)
 
-| :speech_balloon: | :cloud: | [SearchCatalog()](/src/API/Endpoint/Subpoint/AdvSearchCatalog.php) |
-| ---------------- | ------- | ------------------------------------------------ |
+| :speech_balloon: | :cloud: | [Auction()](/src/API/Endpoint/Subpoint/AdvSearchCatalog.php) |
+| ---------------- | ------- | ------------------------------------------------------------ |
 | Создать кампанию Аукцион                    | /adv/v2/seacat/save-ad      | Auction()->**createAdvert()**             |
 | [**Управление параметрами**](https://openapi.wb.ru/promotion/api/ru/#tag/Upravlenie-parametrami-kampanij-Aukcion) |||
 | Изменение активности предметной группы      | /adv/v0/active              | Auction()->**setAdvertSubjectActive()**   |

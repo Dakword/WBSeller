@@ -9,6 +9,7 @@ Wildberries API / [**Чат с покупателями**](https://openapi.wb.ru
 
 | :speech_balloon: | :cloud: | [Returns()](/src/API/Endpoint/Chat.php) |
 | ---------------- | ------- | ----------------------------------------- |
-| Список чатов         | /api/v1/seller/chats    | Chat()->**list()**     |
-| События чатов        | /api/v1/seller/events   | Chat()->**events()**   |
-| Отправить сообщение  | /api/v1/seller/message  | Chat()->**message()**  |
+| Проверка подключения к API | /ping                  | Chat()->**ping()**    |
+| Список чатов               | /api/v1/seller/chats   | Chat()->**list()**    |
+| События чатов              | /api/v1/seller/events  | Chat()->**events()**  |
+| Отправить сообщение        | /api/v1/seller/message | Chat()->**message()** |

@@ -9,17 +9,18 @@ Wildberries API / [**Вопросы**](https://openapi.wb.ru/feedbacks-questions
 
 | :speech_balloon: | :cloud: | [Questions()](/src/API/Endpoint/Questions.php) |
 | ---------------- | ------- | --------------------------------------------- |
-| Наличие непросмотренных вопросов  | /api/v1/new-feedbacks-questions       | Feedbacks()->**hasNew()**                  |
-| Количество необработанных вопросов<br>за период | /api/v1/questions/count | Feedbacks()->**unansweredCountByPeriod()** |
-| Количество обработанных вопросов<br>за период   | /api/v1/questions/count | Feedbacks()->**answeredCountByPeriod()**   |
-| Неотвеченные вопросы              | /api/v1/questions/count-unanswered    | Feedbacks()->**unansweredCount()**         |
-| Список вопросов                   | /api/v1/questions                     | Feedbacks()->**list()**                    |
-| Получить вопрос по id             | /api/v1/questions                     | Feedbacks()->**get()**                     |
-| Просмотреть вопрос                | /api/v1/questions                     | Feedbacks()->**changeViewed()**            |
-| Ответить на вопрос                | /api/v1/questions                     | Feedbacks()->**sendAnswer()**              |
-| Отклонить вопрос                  | /api/v1/questions                     | Feedbacks()->**reject()**                  |
-| Часто спрашиваемые товары         | /api/v1/questions/products/rating     | Feedbacks()->**productRating()**           |
-| Получение вопросов в формате XLSX | /api/v1/questions/report              | Feedbacks()->**xlsReport()**               |
+| Проверка подключения к API        | /ping                                 | Questions()->**ping()**                    |
+| Наличие непросмотренных вопросов  | /api/v1/new-feedbacks-questions       | Questions()->**hasNew()**                  |
+| Количество необработанных вопросов<br>за период | /api/v1/questions/count | Questions()->**unansweredCountByPeriod()** |
+| Количество обработанных вопросов<br>за период   | /api/v1/questions/count | Questions()->**answeredCountByPeriod()**   |
+| Неотвеченные вопросы              | /api/v1/questions/count-unanswered    | Questions()->**unansweredCount()**         |
+| Список вопросов                   | /api/v1/questions                     | Questions()->**list()**                    |
+| Получить вопрос по id             | /api/v1/questions                     | Questions()->**get()**                     |
+| Просмотреть вопрос                | /api/v1/questions                     | Questions()->**changeViewed()**            |
+| Ответить на вопрос                | /api/v1/questions                     | Questions()->**sendAnswer()**              |
+| Отклонить вопрос                  | /api/v1/questions                     | Questions()->**reject()**                  |
+| Часто спрашиваемые товары         | /api/v1/questions/products/rating     | Questions()->**productRating()**           |
+| Получение вопросов в формате XLSX | /api/v1/questions/report              | Questions()->**xlsReport()**               |
 <br>
 
 ## [WBSeller API](docs/API.md) / Questions()->Templates()

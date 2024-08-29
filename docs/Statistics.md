@@ -9,6 +9,7 @@ Wildberries API / [**Статистика**](https://openapi.wb.ru/statistics/ap
 
 | :speech_balloon: | :cloud: | [Statistics()](/src/API/Endpoint/Statistics.php) |
 | ---------------- | ------- | ------------------------------------------------ |
+| Проверка подключения к API     | /ping                                 | Statistics()->**ping()**           |
 | Поставки                       | /api/v1/supplier/incomes              | Statistics()->**incomes()**        |
 | Остатки на складах             | /api/v1/supplier/stocks               | Statistics()->**stocks()**         |
 | Заказы                         | /api/v1/supplier/orders               | Statistics()->**ordersFromDate()** |

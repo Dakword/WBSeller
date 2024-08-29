@@ -9,6 +9,7 @@ Wildberries API / [**Отзывы**](https://openapi.wb.ru/feedbacks-questions/a
 
 | :speech_balloon: | :cloud: | [Feedbacks()](/src/API/Endpoint/Feedbacks.php) |
 | ---------------- | ------- | --------------------------------------------- |
+| Проверка подключения к API       | /ping                              | Feedbacks()->**ping()**            |
 | Наличие непросмотренных отзывов  | /api/v1/new-feedbacks-questions    | Feedbacks()->**hasNew()**          |
 | Количество отзывов               | /api/v1/feedbacks/count            | Feedbacks()->**count()**           |
 | Необработанные отзывы            | /api/v1/feedbacks/count-unanswered | Feedbacks()->**unansweredCount()** |
@@ -17,8 +18,8 @@ Wildberries API / [**Отзывы**](https://openapi.wb.ru/feedbacks-questions/a
 | Просмотреть отзыв                | /api/v1/feedbacks                  | Feedbacks()->**changeViewed()**    |
 | Ответить на отзыв                | /api/v1/feedbacks                  | Feedbacks()->**sendAnswer()**      |
 | Оценить отзыв                    | /api/v1/feedbacks                  | Feedbacks()->**rateFeedback()**    |
-| Оценить товар                    | /api/v1/feedbacks                  | Feedbacks()->**rateProduct()**    |
-| Оценить отзыв и товар            | /api/v1/feedbacks                  | Feedbacks()->**rate()**    |
+| Оценить товар                    | /api/v1/feedbacks                  | Feedbacks()->**rateProduct()**     |
+| Оценить отзыв и товар            | /api/v1/feedbacks                  | Feedbacks()->**rate()**            |
 | Список архивных отзывов          | /api/v1/feedbacks/archive          | Feedbacks()->**archive()**         |
 | Получить список оценок           | /api/v1/supplier-valuations        | Feedbacks()->**ratesList()**       |
 | Средняя оценка товара<br>по артикулу WB | /api/v1/feedbacks/products/rating/nmid | Feedbacks()->**productRating()** |

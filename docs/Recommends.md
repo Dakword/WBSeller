@@ -9,7 +9,8 @@ Wildberries API / [**Рекомендации**](https://openapi.wb.ru/recommend
 
 | :speech_balloon: | :cloud: | [Recommends()](/src/API/Endpoint/Recommends.php) |
 | ---------------- | ------- | ------------------------------------------------ |
-| Список рекомендаций       | /api/v1/list | Recommends()->**list()**   |
-| Добавление рекомендаций   | /api/v1/ins  | Recommends()->**add()**    |
-| Управление рекомендациями | /api/v1/set  | Recommends()->**update()** |
-| Удаление рекомендаций     | /api/v1/del  | Recommends()->**delete()** |
+| Проверка подключения к API | /ping        | Recommends()->**ping()**   |
+| Список рекомендаций        | /api/v1/list | Recommends()->**list()**   |
+| Добавление рекомендаций    | /api/v1/ins  | Recommends()->**add()**    |
+| Управление рекомендациями  | /api/v1/set  | Recommends()->**update()** |
+| Удаление рекомендаций      | /api/v1/del  | Recommends()->**delete()** |

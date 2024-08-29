@@ -9,6 +9,7 @@ Wildberries API / [**Тарифы**](https://openapi.wb.ru/tariffs/api/ru/)
 
 | :speech_balloon: | :cloud: | [Tariffs()](/src/API/Endpoint/Tariffs.php) |
 | ---------------- | ------- | ----------------------------------------- |
+| Проверка подключения к API     | /ping                       | Tariffs()->**ping()**       |
 | [**Комиссии**](https://openapi.wb.ru/tariffs/api/ru/#tag/Komissii) |||
 | Комиссия по категориям товаров | /api/v1/tariffs/commissioin | Tariffs()->**commission()** |
 | [**Коэффициенты складов**](https://openapi.wb.ru/tariffs/api/ru/#tag/Koefficienty-skladov) |||

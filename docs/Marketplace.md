@@ -9,6 +9,7 @@ Wildberries API / [**Маркетплейс**](https://openapi.wb.ru/marketplace
 
 | :speech_balloon: | :cloud: | [Marketplace()](/src/API/Endpoint/Marketplace.php) |
 | ---------------- | ------- | -------------------------------------------------- |
+| Проверка подключения к API                | /ping                                   | Marketplace()->**ping()**              |
 | [**Сборочные задания**](https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya) |||
 | Получить список новых сборочных заданий   | /api/v3/orders/new                      | Marketplace()->**getNewOrders()**      |
 | Получить информацию по сборочным заданиям | /api/v3/orders                          | Marketplace()->**getOrders()**         |

@@ -9,6 +9,7 @@ Wildberries API / [**Аналитика**](https://openapi.wb.ru/analytics/api/r
 
 | :speech_balloon: | :cloud: | [Analytics()](/src/API/Endpoint/Analytics.php) |
 | ---------------- | ------- | ---------------------------------------------- |
+| Проверка подключения к API | /ping | Analytics()->**ping()** |
 | [**Воронка продаж**](https://openapi.wb.ru/analytics/api/ru/#tag/Voronka-prodazh) |||
 | Получение статистики КТ за выбранный период,<br>по nmID/предметам/брендам/тегам             | /api/v2/nm-report/detail          | Analytics()->**nmReportDetail()**         |
 | Получение статистики КТ за период,<br>сгруппированный по предметам, брендам и тегам         | /api/v2/nm-report/grouped         | Analytics()->**nmReportGrouped()**        |

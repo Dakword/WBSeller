@@ -9,6 +9,7 @@ Wildberries API / [**Контент**](https://openapi.wb.ru/content/api/ru/)
 
 | :speech_balloon: | :cloud: | [Content()](/src/API/Endpoint/Content.php) |
 | ---------------- | ------- | ---------------------------------------- |
+| Проверка подключения к API   | /ping                        | Content()->**ping()**                |
 | [**Загрузка**](https://openapi.wb.ru/content/api/ru/#tag/Zagruzka) |||
 | Создание КТ                  | /content/v2/cards/upload     | Content()->**createCard()**          |
 | Создание нескольких КТ       | /content/v2/cards/upload     | Content()->**createCards()**         |
