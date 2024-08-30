@@ -7,6 +7,7 @@ namespace Dakword\WBSeller\API\Endpoint;
 use Dakword\WBSeller\API\AbstractEndpoint;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Brands;
 use Dakword\WBSeller\API\Endpoint\Subpoint\PaidStorage;
+use Dakword\WBSeller\API\Endpoint\Subpoint\WarehouseRemains;
 use DateTime;
 use InvalidArgumentException;
 
@@ -30,6 +31,17 @@ class Analytics extends AbstractEndpoint
     public function PaidStorage(): PaidStorage
     {
         return new PaidStorage($this);
+    }
+
+    /**
+     * Отчёт по остаткам на складах
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Otchyot-po-ostatkam-na-skladah
+     *
+     * @return WarehouseRemains
+     */
+    public function WarehouseRemains(): WarehouseRemains
+    {
+        return new WarehouseRemains($this);
     }
 
     public function __call($method, $parameters)

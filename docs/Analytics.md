@@ -57,3 +57,18 @@ Wildberries API Аналитика / [**Доля бренда в продажа�
 | Бренды продавца                 | /api/v1/analytics/brand-share/brands          | Brands()->**getBrands()**              |
 | Родительские категории бренда   | /api/v1/analytics/brand-share/parent-subjects | Brands()->**getBrandParentSubjects()** |
 | Отчёт по доле бренда в продажах | /api/v1/analytics/brand-share                 | Brands()->**getReport()**              |
+<br>
+
+## [WBSeller API](/docs/API.md) / Analytics()->WarehouseRemains()
+
+```php
+$wbSellerAPI = new \Dakword\WBSeller\API($options);
+$WarehouseRemains = $wbSellerAPI->Analytics()->WarehouseRemains();
+```
+Wildberries API Аналитика / [**Остатки на складах**](https://openapi.wb.ru/analytics/api/ru/#tag/Otchyot-po-ostatkam-na-skladah)
+
+| :speech_balloon: | :cloud: | [WarehouseRemains()](/src/API/Endpoint/Subpoint/WarehouseRemains.php) |
+| ---------------- | ------- | --------------------------------------------------------------------- |
+| Создать отчёт    | /api/v1/warehouse_remains                         | WarehouseRemains()->**makeReport()**        |
+| Проверить статус | /api/v1/warehouse_remains/tasks/{taskId}/status   | WarehouseRemains()->**checkReportStatus()** |
+| Получить отчёт   | /api/v1/warehouse_remains/tasks/{taskId}/download | WarehouseRemains()->**getReport()**         |
