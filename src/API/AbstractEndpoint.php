@@ -128,7 +128,7 @@ abstract class AbstractEndpoint
         $result = $this->Client->request($method, $path, $data, $addonHeaders);
 
         if (
-            $this->responseCode() == 400 && property_exists($result, 'error') && $result->error
+            $this->responseCode() == 400 && property_exists($result, 'errorText')
             && mb_strpos(mb_strtolower($result->errorText), 'временные ограничения') !== false
         ) {
             throw new ApiTimeRestrictionsException($result->errorText);
