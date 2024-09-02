@@ -12,11 +12,11 @@ class AdvTest extends TestCase
 {
 
     private $Adv;
-    
+
     public function setUp(): void
     {
         parent::setUp();
-        
+
         $this->Adv = $this->Adv();
     }
 
@@ -128,11 +128,25 @@ class AdvTest extends TestCase
 
     public function test_balance()
     {
-        $result = $this->Adv->balance();
+        $result = $this->Adv->Finances()->balance();
 
         $this->assertIsObject($result);
         $this->assertObjectHasAttribute('balance', $result);
         $this->assertObjectHasAttribute('net', $result);
         $this->assertObjectHasAttribute('bonus', $result);
+    }
+
+    public function test_payments()
+    {
+        $result = $this->Adv->Finances()->payments(new \DateTime('2024-01-01'), new \DateTime('2024-01-31'));
+
+        $this->assertIsArray($result);
+    }
+
+    public function test_costs()
+    {
+        $result = $this->Adv->Finances()->costs(new \DateTime('2024-01-01'), new \DateTime('2024-01-31'));
+
+        $this->assertIsArray($result);
     }
 }

@@ -2,13 +2,23 @@
 
 namespace Dakword\WBSeller\Tests\ApiClient;
 
-use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
-use Dakword\WBSeller\API\Endpoint\{
-    Adv, Analytics, Content, Feedbacks, Marketplace, Prices,
-    Questions, Recommends, Statistics
-};
-use Dakword\WBSeller\API\Endpoint\Subpoint\{Passes, News, Tags, Templates, Warehouses};
+use Dakword\WBSeller\API\Endpoint\Adv;
+use Dakword\WBSeller\API\Endpoint\Analytics;
+use Dakword\WBSeller\API\Endpoint\Content;
+use Dakword\WBSeller\API\Endpoint\Feedbacks;
+use Dakword\WBSeller\API\Endpoint\Marketplace;
+use Dakword\WBSeller\API\Endpoint\Prices;
+use Dakword\WBSeller\API\Endpoint\Questions;
+use Dakword\WBSeller\API\Endpoint\Recommends;
+use Dakword\WBSeller\API\Endpoint\Statistics;
+use Dakword\WBSeller\API\Endpoint\Subpoint\DBS;
+use Dakword\WBSeller\API\Endpoint\Subpoint\News;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Passes;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Tags;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Templates;
+use Dakword\WBSeller\API\Endpoint\Subpoint\Warehouses;
 use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
+use Dakword\WBSeller\Tests\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -59,6 +69,12 @@ abstract class TestCase extends BaseTestCase
     {
         $this->skipIfNoKeyAPI();
         return $this->API()->Marketplace();
+    }
+
+    protected function MarketplaceDBS(): DBS
+    {
+        $this->skipIfNoKeyAPI();
+        return $this->API()->Marketplace()->DBS();
     }
 
     protected function MarketplacePasses(): Passes

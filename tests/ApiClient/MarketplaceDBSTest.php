@@ -8,7 +8,7 @@ use Dakword\WBSeller\Tests\ApiClient\TestCase;
 class MarketplaceDBSTest extends TestCase
 {
     private $DBS;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -21,8 +21,8 @@ class MarketplaceDBSTest extends TestCase
 
     public function test_list()
     {
-        $result = $this->DBS->confirm();
-        $this->assertIsFalse($result);
+        $result = $this->DBS->confirm(0);
+        $this->assertFalse($result);
     }
 
 }

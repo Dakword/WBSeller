@@ -24,6 +24,16 @@ abstract class AbstractEndpoint
         }
     }
 
+    public function __call($method, $parameters)
+    {
+        if(method_exists($this, $method)
+            && in_array($method, ['getRequest', 'postRequest', 'putRequest', 'patchRequest', 'deleteRequest', 'multipartRequest'])
+        ) {
+            return call_user_func_array([$this, $method], $parameters);
+        }
+        throw new InvalidArgumentException('Magic request methods not exists');
+    }
+
     /**
      * Проверка подключения к WB API
      *

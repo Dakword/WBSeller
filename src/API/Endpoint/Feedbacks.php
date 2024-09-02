@@ -22,14 +22,6 @@ class Feedbacks extends AbstractEndpoint
         return new Templates($this);
     }
 
-    public function __call($method, $parameters)
-    {
-        if(method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], $parameters);
-        }
-        throw new InvalidArgumentException('Magic request methods not exists');
-    }
-
     /**
      * Наличие непросмотренных отзывов
      *

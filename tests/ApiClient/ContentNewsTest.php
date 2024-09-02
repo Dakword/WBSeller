@@ -14,13 +14,14 @@ class ContentNewsTest extends TestCase
 
     public function test_news()
     {
-        $result1 = $this->ContentNews()->fromDate(new \DateTime('2024-01-01'));
+        $result1 = $this->ContentNews()->fromDate(new \DateTime('2024-08-01'));
+        var_dump($result1);
         $this->assertIsArray($result1);
 
         if($result1) {
             $firstNews1 = array_shift($result1);
             $result2 = $this->ContentNews()->fromId($firstNews1->id);
-            
+
             $this->assertIsArray($result2);
             $firstNews2 = array_shift($result2);
             $this->assertEquals($firstNews1->id, $firstNews2->id);

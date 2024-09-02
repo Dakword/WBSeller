@@ -14,7 +14,7 @@ class Questions extends AbstractEndpoint
 
     /**
      * Сервис для работы с шаблонами ответов.
-     * 
+     *
      * @return Templates
      */
     public function Templates(): Templates
@@ -22,20 +22,12 @@ class Questions extends AbstractEndpoint
         return new Templates($this);
     }
 
-    public function __call($method, $parameters)
-    {
-        if(method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], $parameters);
-        }
-        throw new InvalidArgumentException('Magic request methods not exists');
-    }
-
     /**
      * Количество необработанных вопросов за период
-     * 
+     *
      * @param DateTime $dateFrom Дата начала периода
      * @param DateTime $dateTo   Дата окончания периода
-     * 
+     *
      * @return object {
      * 	    data: int,
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -52,10 +44,10 @@ class Questions extends AbstractEndpoint
 
     /**
      * Количество обработанных вопросов за период
-     * 
+     *
      * @param DateTime $dateFrom Дата начала периода
      * @param DateTime $dateTo   Дата окончания периода
-     * 
+     *
      * @return object {
      * 	    data: int,
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -72,7 +64,7 @@ class Questions extends AbstractEndpoint
 
     /**
      * Неотвеченные вопросы за сегодня и за всё время
-     * 
+     *
      * @return object {
      * 	    data: {countUnanswered: int, countUnansweredToday: int, valuation: string},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -85,9 +77,9 @@ class Questions extends AbstractEndpoint
 
     /**
      * Наличие непросмотренных вопросов
-     * 
+     *
      * Метод отображает информацию о наличии у продавца непросмотренных отзывов и вопросов
-     * 
+     *
      * @return object {
      * 	    data: {hasNewQuestions: bool, hasNewFeedbacks: bool},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -100,9 +92,9 @@ class Questions extends AbstractEndpoint
 
     /**
      * Часто спрашиваемые товары
-     * 
+     *
      * @param int $limit Количество запрашиваемых товаров
-     * 
+     *
      * @return object {
      * 	    data: {products: [object, ...]},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -119,20 +111,20 @@ class Questions extends AbstractEndpoint
             'size' => $limit,
         ]);
     }
-    
+
     /**
      * Список вопросов
-     * 
+     *
      * Метод позволяет получить список вопросов по заданным параметрам с пагинацией и сортировкой
-     * 
+     *
      * @param int         $page                 Номер страницы
      * @param int         $onPage               Количество вопросов на странице (max. 10000)
      * @param bool        $isAnswered           Отвеченные вопросы (true) или неотвеченные вопросы (false)
-     * @param int         $nmId                 Идентификатор номенклатуры 
+     * @param int         $nmId                 Идентификатор номенклатуры
      * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
      * @param DateTime    $dateFrom             Дата начала периода
      * @param DateTime    $dateTo               Дата окончания периода
-     * 
+     *
      * @return object {
      * 	    data: {countUnanswered: int, countArchive: int, questions: [object, ...]},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -165,11 +157,11 @@ class Questions extends AbstractEndpoint
 
     /**
      * Получение вопросов в формате XLSX
-     * 
+     *
      * Метод позволяет получить XLSX файл с вопросами в кодировке BASE64
-     * 
+     *
      * @param bool $isAnswered Обработанные вопросы (true) или необработанные вопросы (false)
-     * 
+     *
      * @return object {
      * 	    data: {filename: string, contentType: string, file: base64},
      * 	    error: bool, errorText: string, additionalErrors: ?string
@@ -182,13 +174,13 @@ class Questions extends AbstractEndpoint
             ]
         );
     }
-    
+
     /**
      * Изменение статуса "просмотра" вопроса
-     * 
+     *
      * @param string $id        Идентификатор вопроса
      * @param bool   $wasViewed Просмотрен (true) или не просмотрен (false)
-     * 
+     *
      * @return bool true - успешно, false - неудача
      */
     public function changeViewed(string $id, bool $wasViewed): bool
@@ -199,13 +191,13 @@ class Questions extends AbstractEndpoint
         ]);
         return $this->responseCode() == 200;
     }
-    
+
     /**
      * Ответить на вопрос
-     * 
+     *
      * @param string $id         Идентификатор вопроса
      * @param string $answerText Текст ответа
-     * 
+     *
      * @return bool true - успешно, false - неудача
      */
     public function sendAnswer(string $id, string $answerText): bool
@@ -222,12 +214,12 @@ class Questions extends AbstractEndpoint
 
     /**
      * Отклонить вопрос
-     * 
+     *
      * Отклонить вопрос (такой вопрос не отображается на портале покупателей)
-     * 
+     *
      * @param string $id         Идентификатор вопроса
      * @param string $answerText Текст ответа
-     * 
+     *
      * @return bool true - успешно, false - неудача
      */
     public function reject(string $id, string $answerText): bool
@@ -244,9 +236,9 @@ class Questions extends AbstractEndpoint
 
     /**
      * Получить вопрос
-     * 
+     *
      * @param string $id Идентификатор вопроса
-     * 
+     *
      * @return object {
      * 	    data: object,
      * 	    error: bool, errorText: string, additionalErrors: any

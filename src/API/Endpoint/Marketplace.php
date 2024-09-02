@@ -55,14 +55,6 @@ class Marketplace extends AbstractEndpoint
         return new Warehouses($this);
     }
 
-    public function __call($method, $parameters)
-    {
-        if(method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], $parameters);
-        }
-        throw new InvalidArgumentException('Magic request method ' . $method . ' not exists');
-    }
-
     /**
      * Список поставок
      *

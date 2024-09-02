@@ -28,9 +28,9 @@ class AdvFinance
      *
      * @return int Бюджет кампании, ₽
      */
-    public function balance(): int
+    public function balance(): object
     {
-        return $this->Adv->getRequest('/adv/v1/balance')->total;
+        return $this->Adv->getRequest('/adv/v1/balance');
     }
 
     /**
@@ -42,11 +42,12 @@ class AdvFinance
      *
      * @param int $id Идентификатор кампании
      *
-     * @return object {cash: int, netting: int, total: int}
+     * @return int Бюджет кампании
      */
-    public function getAdvertBudget(int $id): object
+    public function getAdvertBudget(int $id): int
     {
-        return $this->Adv->getRequest('/adv/v1/budget', ['id' => $id]);
+        return $this->Adv->getRequest('/adv/v1/budget', ['id' => $id])
+            ->total;
     }
 
     /**
@@ -90,9 +91,9 @@ class AdvFinance
      * @param DateTime $dateFrom Начало интервала
      * @param DateTime $dateTo   Конец интервала
      *
-     * @return array
+     * @return mixed
      */
-    public function payments(DateTime $dateFrom, DateTime $dateTo): array
+    public function payments(DateTime $dateFrom, DateTime $dateTo)
     {
         return $this->Adv->getRequest('/adv/v1/payments', [
             'from' => $dateFrom->format('Y-m-d'),
