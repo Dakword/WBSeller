@@ -16,8 +16,8 @@ Wildberries API / **Общее**
 
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options);
-$Content = $wbSellerAPI->Common();
-$News = Common()->News();
+$Common = $wbSellerAPI->Common();
+$News = $Common->News();
 ```
 Wildberries API / [**Новости портала поставщиков**](https://openapi.wb.ru/general/sellers_portal_news/ru/)
 
