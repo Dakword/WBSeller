@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller\API\Endpoint;
 
 use Dakword\WBSeller\API\AbstractEndpoint;
+use Dakword\WBSeller\API\Endpoint\Subpoint\BannedProducts;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Brands;
 use Dakword\WBSeller\API\Endpoint\Subpoint\PaidStorage;
 use Dakword\WBSeller\API\Endpoint\Subpoint\WarehouseRemains;
@@ -13,6 +14,15 @@ use InvalidArgumentException;
 
 class Analytics extends AbstractEndpoint
 {
+    /**
+     * Скрытые товары
+     *
+     * @return BannedProducts
+     */
+    public function BannedProducts(): BannedProducts
+    {
+        return new BannedProducts($this);
+    }
     /**
      * Доля бренда в продажах
      *

@@ -72,3 +72,17 @@ Wildberries API Аналитика / [**Остатки на складах**](ht
 | Создать отчёт    | /api/v1/warehouse_remains                         | WarehouseRemains()->**makeReport()**        |
 | Проверить статус | /api/v1/warehouse_remains/tasks/{taskId}/status   | WarehouseRemains()->**checkReportStatus()** |
 | Получить отчёт   | /api/v1/warehouse_remains/tasks/{taskId}/download | WarehouseRemains()->**getReport()**         |
+<br>
+
+## [WBSeller API](/docs/API.md) / Analytics()->BannedProducts()
+
+```php
+$wbSellerAPI = new \Dakword\WBSeller\API($options);
+$BannedProducts = $wbSellerAPI->Analytics()->BannedProducts();
+```
+Wildberries API Аналитика / [**Скрытые товары**](https://openapi.wildberries.ru/analytics/api/ru/#tag/Skrytye-tovary)
+
+| :speech_balloon: | :cloud: | [BannedProducts()](/src/API/Endpoint/Subpoint/BannedProducts.php) |
+| ---------------- | ------- | ----------------------------------------------------------------- |
+| Заблокированные карточки | /api/v1/analytics/banned-products/blocked  | BannedProducts()->**blocked()**  |
+| Скрытые из каталога      | /api/v1/analytics/banned-products/shadowed | BannedProducts()->**shadowed()** |

@@ -18,6 +18,7 @@ $contentAPI->getCardsList(); // Получить список карточек
 
 | API                   | Endpoint                                                 |
 | --------------------- | -------------------------------------------------------- |
+| Общее                 | $wbSellerAPI->[**Common()**](/docs/Common.md)            |
 | Контент               | $wbSellerAPI->[**Content()**](/docs/Content.md)          |
 | Цены и скидки         | $wbSellerAPI->[**Prices()**](/docs/Prices.md)            |
 | Маркетплейс           | $wbSellerAPI->[**Marketplace()**](/docs/Marketplace.md)  |

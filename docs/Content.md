@@ -75,18 +75,3 @@ Wildberries API Контент / [**Корзина**](https://openapi.wb.ru/cont
 | Список НМ, находящихся в корзине | /content/v2/get/cards/trash    | Trash()->**list()**    |
 | Перенос НМ в корзину             | /content/v2/cards/delete/trash | Trash()->**add()**     |
 | Восстановление НМ из корзины     | /content/v2/cards/recover      | Trash()->**recover()** |
-<br>
-
-## [WBSeller API](/docs/API.md) / Content()->News()
-
-```php
-$wbSellerAPI = new \Dakword\WBSeller\API($options);
-$Content = $wbSellerAPI->Content();
-$News = Content()->News();
-```
-Wildberries API / [**Новости портала поставщиков**](https://openapi.wb.ru/general/sellers_portal_news/ru/)
-
-| :speech_balloon: | :cloud: | [News()](/src/API/Endpoint/Subpoint/News.php) |
-| ---------------- | ------- | --------------------------------------------- |
-| Новости с даты | /api/communications/v1/news | News()->**fromDate()** |
-| Новости с ID   | /api/communications/v1/news | News()->**fromId()**   |

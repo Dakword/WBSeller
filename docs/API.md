@@ -18,6 +18,7 @@ $wbSellerAPI = new \Dakword\WBSeller\API($options = [
 
 | API | Endpoint | $options['keys' / 'apiurls']['?'] | 'apiurls' defaults |
 | --- | -------- | --------------------------------- | ------------------ |
+| Общее                    | $wbSellerAPI->[**Common()**](Common.md)                 | сommon      | https://common-api.wildberries.ru
 | Контент                  | $wbSellerAPI->[**Content()**](/docs/Content.md)         | content     | https://suppliers-api.wildberries.ru
 | Цены и скидки            | $wbSellerAPI->[**Prices()**](/docs/Prices.md)           | prices      | https://discounts-prices-api.wildberries.ru
 | Маркетплейс              | $wbSellerAPI->[**Marketplace()**](/docs/Marketplace.md) | marketplace | https://marketplace-api.wildberries.ru

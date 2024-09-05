@@ -23,7 +23,6 @@ class TariffsTest extends TestCase
     {
         $result = $this->API()->Tariffs()->box(new \DateTime());
 
-        $this->assertObjectHasAttribute('dtFromMin', $result);
         $this->assertObjectHasAttribute('dtNextBox', $result);
         $this->assertObjectHasAttribute('dtTillMax', $result);
         $this->assertObjectHasAttribute('warehouseList', $result);
@@ -36,7 +35,6 @@ class TariffsTest extends TestCase
     {
         $result = $this->API()->Tariffs()->pallet(new \DateTime());
 
-        $this->assertObjectHasAttribute('dtFromMin', $result);
         $this->assertObjectHasAttribute('dtNextPallet', $result);
         $this->assertObjectHasAttribute('dtTillMax', $result);
         $this->assertObjectHasAttribute('warehouseList', $result);

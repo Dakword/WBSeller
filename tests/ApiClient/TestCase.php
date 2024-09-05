@@ -4,6 +4,7 @@ namespace Dakword\WBSeller\Tests\ApiClient;
 
 use Dakword\WBSeller\API\Endpoint\Adv;
 use Dakword\WBSeller\API\Endpoint\Analytics;
+use Dakword\WBSeller\API\Endpoint\Common;
 use Dakword\WBSeller\API\Endpoint\Content;
 use Dakword\WBSeller\API\Endpoint\Feedbacks;
 use Dakword\WBSeller\API\Endpoint\Marketplace;
@@ -41,10 +42,16 @@ abstract class TestCase extends BaseTestCase
         return $this->API()->Content();
     }
 
-    protected function ContentNews(): News
+    protected function Common(): Common
     {
         $this->skipIfNoKeyAPI();
-        return $this->API()->Content()->News();
+        return $this->API()->Common();
+    }
+
+    protected function CommonNews(): News
+    {
+        $this->skipIfNoKeyAPI();
+        return $this->API()->Common()->News();
     }
 
     protected function ContentTags(): Tags
