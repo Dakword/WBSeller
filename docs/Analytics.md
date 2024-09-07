@@ -27,6 +27,8 @@ Wildberries API / [**Аналитика**](https://openapi.wb.ru/analytics/api/r
 | Смена характеристик                 | /api/v1/analytics/characteristics-change | Analytics()->**characteristicsChange()** |
 | [**Продажи по регионам**](https://openapi.wb.ru/analytics/api/ru/#tag/Prodazhi-po-regionam) |||
 | Отчет о продажах сгруппированный<br>по регионам стран | /api/v1/analytics/region-sale | Analytics()->**regionSale()** |
+| [**Отчёт по возвратам товаров**](https://openapi.wb.ru/analytics/api/ru/#tag/Otchyot-po-vozvratam-tovarov) |||
+| Получить отчет | /api/v1/analytics/goods-return | Analytics()->**goodsReturn()** |
 <br>
 
 ## [WBSeller API](/docs/API.md) / Analytics()->PaidStorage()

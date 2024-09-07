@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
-    Adv, Analytics, Chat, Common, Content, Documents, Feedbacks, Marketplace, Prices,
+    Adv, Analytics, Calendar, Chat, Common, Content, Documents, Feedbacks, Marketplace, Prices,
     Questions, Recommends, Returns, Statistics, Tariffs
 };
 
@@ -14,6 +14,7 @@ class API
     private array $apiUrls = [
         'adv'         => 'https://advert-api.wildberries.ru',
         'analytics'   => 'https://seller-analytics-api.wildberries.ru',
+        'calendar'    => 'https://dp-calendar-api.wildberries.ru',
         'chat'        => 'https://buyer-chat-api.wildberries.ru',
         'common'      => 'https://common-api.wildberries.ru',
         'content'     => 'https://content-api.wildberries.ru',
@@ -128,6 +129,11 @@ class API
     public function Analytics(): Analytics
     {
         return new Analytics($this->apiUrls['analytics'], $this->getKey('analytics'), $this->proxy, $this->locale);
+    }
+
+    public function Calendar(): Calendar
+    {
+        return new Calendar($this->apiUrls['calendar'], $this->getKey('prices'), $this->proxy, $this->locale);
     }
 
     public function Chat(): Chat

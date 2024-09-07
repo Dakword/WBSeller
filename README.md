@@ -32,6 +32,7 @@ $contentAPI->getCardsList(); // Получить список карточек
 | Чат с покупателями    | $wbSellerAPI->[**Chat()**](/docs/Chat.md)                |
 | Возвраты покупателями | $wbSellerAPI->[**Returns()**](/docs/Returns.md)          |
 | Документы             | $wbSellerAPI->[**Documents()**](/docs/Documents.md)      |
+| Календарь акций       | $wbSellerAPI->[**Calendar()**](/docs/Calendar.md)        |
 
 
 ### Примеры использования WBSeller API

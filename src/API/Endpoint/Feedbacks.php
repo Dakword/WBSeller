@@ -126,13 +126,13 @@ class Feedbacks extends AbstractEndpoint
      *
      * Метод позволяет получить список отзывов по заданным параметрам с пагинацией и сортировкой
      *
-     * @param int         $page                 Номер страницы
-     * @param int         $onPage               Количество отзывов на странице
-     * @param bool        $isAnswered           Обработанные отзывы (true) или необработанные отзывы (false)
-     * @param int         $nmId                 Идентификатор номенклатуры
-     * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
-     * @param DateTime    $dateFrom             Дата начала периода
-     * @param DateTime    $dateTo               Дата окончания периода
+     * @param int         $page       Номер страницы
+     * @param int         $onPage     Количество отзывов на странице
+     * @param bool        $isAnswered Обработанные отзывы (true) или необработанные отзывы (false)
+     * @param int         $nmId       Идентификатор номенклатуры
+     * @param string|null $order      Сортировка отзывов по дате "dateAsc" / "dateDesc"
+     * @param DateTime    $dateFrom   Дата начала периода
+     * @param DateTime    $dateTo     Дата окончания периода
      *
      * @return object {
      * 	    data: {countUnanswered: int, countArchive: int, feedbacks: [object, ...]},
@@ -168,10 +168,10 @@ class Feedbacks extends AbstractEndpoint
      * Отзыв становится архивным если на него предоставлен ответ
      * или ответ не предоставлен в течение 30 дней со дня его публикации
      *
-     * @param int         $page                 Номер страницы
-     * @param int         $onPage               Количество отзывов на странице
-     * @param int         $nmId                 Идентификатор номенклатуры
-     * @param string|null $order                Сортировка отзывов по дате "dateAsc" / "dateDesc"
+     * @param int         $page   Номер страницы
+     * @param int         $onPage Количество отзывов на странице
+     * @param int         $nmId   Идентификатор номенклатуры
+     * @param string|null $order  Сортировка отзывов по дате "dateAsc" / "dateDesc"
      *
      * @return object {
      * 	    data: {feedbacks: [object, ...]},

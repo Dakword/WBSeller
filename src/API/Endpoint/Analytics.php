@@ -488,4 +488,33 @@ class Analytics extends AbstractEndpoint
         $modifKeys = array_change_key_case($filter);
         return (array_key_exists($key, $modifKeys) ? $modifKeys[$key] : []);
     }
+
+    /*
+     * ОТЧЕТ ПО ВОЗВРАТАМ ТОВАРОВ
+     * --------------------------------------------------------------------------
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Otchyot-po-vozvratam-tovarov
+     */
+
+    /**
+     * Получить отчёт по возвратам товаров
+     *
+     * Возвращает перечень возвратов товаров продавцу.
+     * Одним запросом можно получить отчёт максимум за 31 день.
+     * Максимум 1 запрос в минуту
+     * @link https://openapi.wb.ru/analytics/api/ru/#tag/Otchyot-po-vozvratam-tovarov/paths/~1api~1v1~1analytics~1goods-return/get
+     *
+     * @param DateTime $dateFrom Начало отчётного периода
+     * @param DateTime $dateTo   Конец отчётного периода
+     *
+     * @return array
+     */
+    public function goodsReturn(DateTime $dateFrom, DateTime $dateTo): array
+    {
+        $result = $this->getRequest('/api/v1/analytics/goods-return', [
+            'dateFrom' => $dateFrom->format('Y-m-d'),
+            'dateTo' => $dateTo->format('Y-m-d'),
+        ]);
+        return $result->report ?? [];
+    }
+
 }

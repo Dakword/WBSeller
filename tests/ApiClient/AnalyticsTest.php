@@ -78,4 +78,15 @@ class AnalyticsTest extends TestCase
         $this->assertIsArray($result->response->data);
     }
 
+    public function test_goodsReturn()
+    {
+        $result = $this->Analytics->goodsReturn(new \DateTime('2024-08-01'), new \DateTime('2024-08-31'));
+
+        $this->assertIsArray($result);
+
+        if($result) {
+            $first = array_shift($result);
+            $this->assertObjectHasAttribute('nmId', $first);
+        }
+    }
 }
