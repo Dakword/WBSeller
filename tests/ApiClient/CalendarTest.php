@@ -30,7 +30,7 @@ class CalendarTest extends TestCase
     /**
      * @covers ::promotionsDetails()
      */
-    public function test_promotionDetails()
+    public function test_promotionsDetails()
     {
         $calendar = $this->API()->Calendar();
         $promotions = $calendar->promotions(
@@ -41,7 +41,7 @@ class CalendarTest extends TestCase
 
         if($promotions->data->promotions ?? false) {
             $last = array_pop($promotions->data->promotions);
-            $result = $calendar->promotionDetails($last->id);
+            $result = $calendar->promotionsDetails([$last->id]);
             $this->assertIsArray($result->data->promotions ?? false);
         }
     }

@@ -72,6 +72,11 @@ class APIToken
         return $this->token;
     }
 
+    public function getPayload(): object
+    {
+        return $this->payload;
+    }
+
     public function expireDate(): DateTime
     {
         return (new DateTime())->setTimestamp($this->payload->exp);

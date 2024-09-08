@@ -1,3 +1,7 @@
+### 4.21.0 - 09/09/2024
+* Новый метод: `APIToken::getPayload()`
+* Переименование метода `Calendar::promotionDetails()` в `Calendar::promotionsDetails()`
+
 ### 4.20.0 - 08/09/2024
 * __Декодирование токена__ `APIToken()`
 

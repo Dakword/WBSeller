@@ -47,6 +47,16 @@ class TokenTest extends TestCase
         new APIToken('111.22222.33333');
     }
 
+    public function test_getPayload()
+    {
+        $token = $this->APIToken();
+        $payload = $token->getPayload();
+
+        $this->assertObjectNotHasAttribute('id', $payload);
+        $this->assertObjectHasAttribute('exp', $payload);
+        $this->assertEquals($this->testToken['sid'], $token->sellerUUID());
+    }
+
     public function test_expireDate()
     {
         $token = $this->APIToken();

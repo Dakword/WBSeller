@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Query;
 use InvalidArgumentException;
 
 class Client
@@ -66,13 +67,13 @@ class Client
         ];
         $headers = array_merge($defaultHeaders, $addonHeaders);
         $url = $this->baseUrl . $path;
-        
+
         try {
             switch (strtoupper($method)) {
                 case 'GET':
                     $response = $this->Client->get($url, [
                         'headers' => $headers,
-                        'query' => $params,
+                        'query' => Query::build($params),
                     ]);
                     break;
 

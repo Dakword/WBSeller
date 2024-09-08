@@ -1,6 +1,8 @@
 # WBSeller API
 Библиотека для работы с **Wildberries API** [https://openapi.wb.ru](https://openapi.wb.ru)
 
+:memo: [Лог изменений](CHANGELOG.md)
+
 ```php
 $wbSellerAPI = new \Dakword\WBSeller\API($options = [
     'masterkey' => 'token',
@@ -55,6 +57,7 @@ echo $token->accessTo('chat') ? 'Yes' : 'No'; // No
 echo implode(',', $token->accessList()); // 'Цены и скидки, Маркетплейс, Документы'
 echo implode(',', array_keys($token->accessList())); // '3, 4, 12' - Позиции бита
 echo $token; // eyJhbGciOiJFUzI1NiIs...
+print_r($token->getPayload());
 ```
 
 ### Примеры использования WBSeller API

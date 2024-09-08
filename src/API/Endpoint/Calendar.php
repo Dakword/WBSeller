@@ -45,16 +45,16 @@ class Calendar extends AbstractEndpoint
     }
 
     /**
-     * Детальная информация по акции
+     * Детальная информация по акциям
      *
      * @link https://openapi.wb.ru/prices/api/ru/#tag/Kalendar-akcij/paths/~1api~1v1~1calendar~1promotions~1details/get
      *
-     * @param array $promotionId ID акции
+     * @param array $promotionIds ID акций
      */
-    public function promotionDetails(int $promotionId)
+    public function promotionsDetails(array $promotionIds)
     {
         return $this->getRequest('/api/v1/calendar/promotions/details', [
-            'promotionIDs' => $promotionId,
+            'promotionIDs' => $promotionIds,
         ]);
     }
 
