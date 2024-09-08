@@ -34,6 +34,28 @@ $contentAPI->getCardsList(); // Получить список карточек
 | Документы             | $wbSellerAPI->[**Documents()**](/docs/Documents.md)      |
 | Календарь акций       | $wbSellerAPI->[**Calendar()**](/docs/Calendar.md)        |
 
+### Декодирование токена
+
+```php
+try {
+    $token = new \Dakword\WBSeller\APIToken('eyJhbGciOiJFUzI1NiIs...');
+} catch (\Dakword\WBSeller\Exception\WBSellerException $exc) {
+    echo $exc->getMessage(); // Неверный формат токена
+}
+
+echo $token->expireDate()->format('Y-m-d H:i:s'); // 2024-09-20 16:21:04
+echo $token->isExpired() ? 'Просроченный' : 'Действительный';
+echo $token->isReadOnly() ? 'Только чтение' : 'Чтение и запись';
+echo $token->isTest() ? 'Для тестовой среды' : 'Рабочий';
+echo $token->sellerId(); // 284034
+echo $token->sellerUUID(); // 123e4567-e89b-12d3-a456-426655440000
+echo $token->accessTo('marketplace') ? 'Yes' : 'No'; // Yes
+echo $token->accessTo('common') ? 'Yes' : 'No'; // Yes
+echo $token->accessTo('chat') ? 'Yes' : 'No'; // No
+echo implode(',', $token->accessList()); // 'Цены и скидки, Маркетплейс, Документы'
+echo implode(',', array_keys($token->accessList())); // '3, 4, 12' - Позиции бита
+echo $token; // eyJhbGciOiJFUzI1NiIs...
+```
 
 ### Примеры использования WBSeller API
 
