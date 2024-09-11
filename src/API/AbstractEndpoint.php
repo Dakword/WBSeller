@@ -7,6 +7,7 @@ namespace Dakword\WBSeller\API;
 use Dakword\WBSeller\API\Client;
 use Dakword\WBSeller\Exception\ApiClientException;
 use Dakword\WBSeller\Exception\ApiTimeRestrictionsException;
+use InvalidArgumentException;
 
 abstract class AbstractEndpoint
 {
