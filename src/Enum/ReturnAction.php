@@ -27,6 +27,9 @@ class ReturnAction
     /** @var string Отклонить - Направить в сервисный центр */
     const ACTION_REJECT_SERVICE = 'reject3';
 
+    /** @var string Отклонить с комментарием */
+    const ACTION_REJECT_CUSTOM = 'rejectcustom';
+
     public static function all(): array
     {
         return [
@@ -36,6 +39,7 @@ class ReturnAction
             self::ACTION_REJECT_NODEFECT,
             self::ACTION_REJECT_ADDMEDIA,
             self::ACTION_REJECT_SERVICE,
+            self::ACTION_REJECT_CUSTOM,
         ];
     }
 

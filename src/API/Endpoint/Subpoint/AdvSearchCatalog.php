@@ -46,6 +46,7 @@ class AdvSearchCatalog
      *
      * Максимум 5 запросов в секунду.
      * @link https://openapi.wb.ru/promotion/api/ru/#tag/Upravlenie-parametrami-kampanij-v-poiske-i-poisk-+-katalog/paths/~1adv~1v0~1active/get
+     * @deprecated since 17/10/2024
      *
      * @param int  $id        Идентификатор РК
      * @param int  $subjectId Идентификатор предметной группы, для которой меняется активность
@@ -266,21 +267,6 @@ class AdvSearchCatalog
     public function advertStatisticByWords(int $id): object
     {
         return $this->Adv->getRequest('/adv/v1/stat/words', ['id' => $id]);
-    }
-
-    /**
-     * Статистика кампаний Аукцион
-     *
-     * Допускается 2 запроса в секунду.
-     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v1~1seacat~1stat/get
-     *
-     * @param int $id Идентификатор кампании
-     *
-     * @return object
-     */
-    public function advertStatistic(int $id): object
-    {
-        return $this->Adv->getRequest('/adv/v1/seacat/stat', ['id' => $id]);
     }
 
     /**

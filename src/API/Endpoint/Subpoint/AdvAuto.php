@@ -104,31 +104,6 @@ class AdvAuto
     }
 
     /**
-     * Управление зонами показов в автоматической кампании
-     *
-     * Метод позволяет изменять активность зон показов.
-     * Допускается 1 запрос в секунду.
-     * Вы можете осуществлять показы товаров во всех зонах либо выборочно.
-     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Upravlenie-parametrami-avtomaticheskih-kampanij/paths/~1adv~1v1~1auto~1active/post
-     *
-     * @param int  $id       Идентификатор кампании
-     * @param bool $recom    Рекомендации на главной (false - отключены, true - включены)
-     * @param bool $booster  Поиск/Каталог (false - отключены, true - включены)
-     * @param bool $carousel Карточка товара (false - отключены, true - включены)
-     *
-     * @return bool
-     */
-    public function setAdvertActives(int $id, bool $recom, bool $booster, bool $carousel): bool
-    {
-        $this->Adv->postRequest('/adv/v1/auto/active?id=' . $id, [
-            'recom' => $recom,
-            'booster' => $booster,
-            'carousel' => $carousel,
-        ]);
-        return $this->Adv->responseCode() == 200;
-    }
-
-    /**
      * Установка минус-фраз для автоматической кампании
      *
      * Допускается 1 запрос в 6 секунд.

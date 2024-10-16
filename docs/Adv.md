@@ -43,7 +43,6 @@ Wildberries API Продвижение / **Автоматическая камп
 | [**Управление параметрами**](https://openapi.wb.ru/promotion/api/ru/#tag/Upravlenie-parametrami-avtomaticheskih-kampanij) |||
 | Список номенклатур              | /adv/v1/auto/getnmtoadd   | Auto()->**getAdvertNmsToAdd()**         |
 | Изменение списка номенклатур    | /adv/v1/auto/updatenm     | Auto()->**updateAdvertNms()**           |
-| Управление зонами показов       | /adv/v1/auto/active       | Auto()->**setAdvertActives()**          |
 | Установка минус-фраз            | /adv/v1/auto/set-excluded | Auto()->**setAdvertMinuses()**          |
 | Удаление минус-фраз             | /adv/v1/auto/set-excluded | Auto()->**deleteAdvertMinuses()**       |
 | [**Статистика**](https://openapi.wb.ru/promotion/api/ru/#tag/Statistika) |||
@@ -63,7 +62,6 @@ Wildberries API Продвижение / **Кампания Аукцион** (П
 | ---------------- | ------- | ------------------------------------------------------------ |
 | Создать кампанию Аукцион                    | /adv/v2/seacat/save-ad      | Auction()->**createAdvert()**             |
 | [**Управление параметрами**](https://openapi.wb.ru/promotion/api/ru/#tag/Upravlenie-parametrami-kampanij-Aukcion) |||
-| Изменение активности предметной группы      | /adv/v0/active              | Auction()->**setAdvertSubjectActive()**   |
 | Управление активностью фиксированных фраз   | /adv/v1/search/set-plus     | Auction()->**setAdvertPlusesActive()**    |
 | Установка фиксированных фраз                | /adv/v1/search/set-plus     | Auction()->**setAdvertPluses()**          |
 | Удаление фиксированных фраз                 | /adv/v1/search/set-plus     | Auction()->**deleteAdvertPluses()**       |
@@ -74,7 +72,6 @@ Wildberries API Продвижение / **Кампания Аукцион** (П
 | Установка минус-фраз из поиска              | /adv/v1/search/set-excluded | Auction()->**setAdvertMinuses()**         |
 | Удаление минус-фраз из поиска               | /adv/v1/search/set-excluded | Auction()->**deleteAdvertMinuses()**      |
 | [**Статистика**](https://openapi.wb.ru/promotion/api/ru/#tag/Statistika) |||
-| Статистика кампаний                                   | /adv/v1/seacat/stat    | Auction()->**advertStatistic()**           |
 | Статистика поисковой кампании<br>по ключевым фразам   | /adv/v1/stat/words     | Auction()->**advertStatisticByWords()**    |
 | Статистика по ключевым фразам<br>для компаний Аукцион | /adv/v0/stats/keywords | Auction()->**advertStatisticByKeywords()** |
 <br>
