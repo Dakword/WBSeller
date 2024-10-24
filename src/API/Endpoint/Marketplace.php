@@ -9,6 +9,7 @@ use Dakword\WBSeller\API\Endpoint\Subpoint\CrossBorder;
 use Dakword\WBSeller\API\Endpoint\Subpoint\DBS;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Passes;
 use Dakword\WBSeller\API\Endpoint\Subpoint\Warehouses;
+use Dakword\WBSeller\API\Endpoint\Subpoint\WBGO;
 use DateTime;
 use InvalidArgumentException;
 
@@ -17,8 +18,6 @@ class Marketplace extends AbstractEndpoint
 
     /**
      * Методы используемые при кроссбордере
-     *
-     * @return CrossBorder
      */
     public function CrossBorder(): CrossBorder
     {
@@ -27,8 +26,6 @@ class Marketplace extends AbstractEndpoint
 
     /**
      * Доставка силами продавца
-     *
-     * @return DBS
      */
     public function DBS(): DBS
     {
@@ -37,8 +34,6 @@ class Marketplace extends AbstractEndpoint
 
     /**
      * Сервис для работы с пропусками.
-     *
-     * @return Passes
      */
     public function Passes(): Passes
     {
@@ -47,12 +42,18 @@ class Marketplace extends AbstractEndpoint
 
     /**
      * Сервис для работы со складами.
-     *
-     * @return Warehouses
      */
     public function Warehouses(): Warehouses
     {
         return new Warehouses($this);
+    }
+
+    /**
+     * Доставка курьером WB
+     */
+    public function WBGO(): WBGO
+    {
+        return new WBGO($this);
     }
 
     /**

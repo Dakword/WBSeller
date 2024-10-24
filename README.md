@@ -18,23 +18,23 @@ $contentAPI->getCardsList(); // Получить список карточек
 ### Поддерживаемые API
 :book: [Документация](/docs/API.md)
 
-| API                   | Endpoint                                                 |
-| --------------------- | -------------------------------------------------------- |
-| Общее                 | $wbSellerAPI->[**Common()**](/docs/Common.md)            |
-| Контент               | $wbSellerAPI->[**Content()**](/docs/Content.md)          |
-| Цены и скидки         | $wbSellerAPI->[**Prices()**](/docs/Prices.md)            |
-| Маркетплейс           | $wbSellerAPI->[**Marketplace()**](/docs/Marketplace.md)  |
-| Статистика            | $wbSellerAPI->[**Statistics()**](/docs/Statistics.md)    |
-| Аналитика             | $wbSellerAPI->[**Analytics()**](/docs/Analytics.md)      |
-| Продвижение           | $wbSellerAPI->[**Adv()**](/docs/Adv.md)                  |
-| Рекомендации          | $wbSellerAPI->[**Recommends()**](/docs/Recommends.md)    |
-| Вопросы               | $wbSellerAPI->[**Questions()**](/docs/Questions.md)      |
-| Отзывы                | $wbSellerAPI->[**Feedbacks()**](/docs/Feedbacks.md)      |
-| Тарифы                | $wbSellerAPI->[**Tariffs()**](/docs/Tariffs.md)          |
-| Чат с покупателями    | $wbSellerAPI->[**Chat()**](/docs/Chat.md)                |
-| Возвраты покупателями | $wbSellerAPI->[**Returns()**](/docs/Returns.md)          |
-| Документы             | $wbSellerAPI->[**Documents()**](/docs/Documents.md)      |
-| Календарь акций       | $wbSellerAPI->[**Calendar()**](/docs/Calendar.md)        |
+| API                   | Endpoint                                                 ||
+| --------------------- | -------------------------------------------------------- |-|
+| Общее                 | $wbSellerAPI->[**Common()**](/docs/Common.md)            ||
+| Контент               | $wbSellerAPI->[**Content()**](/docs/Content.md)          ||
+| Цены и скидки         | $wbSellerAPI->[**Prices()**](/docs/Prices.md)            ||
+| Маркетплейс           | $wbSellerAPI->[**Marketplace()**](/docs/Marketplace.md)  | :fire: WBGO |
+| Статистика            | $wbSellerAPI->[**Statistics()**](/docs/Statistics.md)    ||
+| Аналитика             | $wbSellerAPI->[**Analytics()**](/docs/Analytics.md)      ||
+| Продвижение           | $wbSellerAPI->[**Adv()**](/docs/Adv.md)                  ||
+| Рекомендации          | $wbSellerAPI->[**Recommends()**](/docs/Recommends.md)    ||
+| Вопросы               | $wbSellerAPI->[**Questions()**](/docs/Questions.md)      ||
+| Отзывы                | $wbSellerAPI->[**Feedbacks()**](/docs/Feedbacks.md)      ||
+| Тарифы                | $wbSellerAPI->[**Tariffs()**](/docs/Tariffs.md)          ||
+| Чат с покупателями    | $wbSellerAPI->[**Chat()**](/docs/Chat.md)                ||
+| Возвраты покупателями | $wbSellerAPI->[**Returns()**](/docs/Returns.md)          ||
+| Документы             | $wbSellerAPI->[**Documents()**](/docs/Documents.md)      ||
+| Календарь акций       | $wbSellerAPI->[**Calendar()**](/docs/Calendar.md)        ||
 
 ### Декодирование токена
 

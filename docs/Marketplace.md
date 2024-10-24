@@ -112,3 +112,19 @@ Wildberries API Маркетплейс / [**Доставка силами про
 | Сообщить, что сборочное задание принято клиентом     | /api/v3/orders/{orderId}/receive | DBS()->**receive()**         |
 | Сообщить, что клиент отказался от сборочного задания | /api/v3/orders/{orderId}/reject  | DBS()->**reject()**          |
 | Информация по клиенту                                | /api/v3/orders/client            | DBS()->**getOrdersClient()** |
+
+## [WBSeller API](/docs/API.md) / Marketplace()->WBGO()
+
+```php
+$wbSellerAPI = new \Dakword\WBSeller\API($options);
+$Marketplace = $wbSellerAPI->Marketplace();
+$WBGO = $Marketplace->WBGO();
+```
+Wildberries API Маркетплейс / [**Доставка курьером WB**](https://openapi.wb.ru/marketplace/api/ru/#tag/Dostavka-kurerom-WB-(WBGO))
+
+| :speech_balloon: | :cloud: | [WBGO()](/src/API/Endpoint/Subpoint/WBGO.php) |
+| ---------------- | ------- | --------------------------------------------- |
+| Перевести на сборку       | /api/v3/orders/{orderId}/confirm          | WBGO()->**confirm()**        |
+| Перевести в доставку      | /api/v3/orders/{orderId}/assemble         | WBGO()->**assemble()**       |
+| Список контактов          | /api/v3/warehouses/{warehouseId}/contacts | WBGO()->**getContacts()**    |
+| Обновить список контактов | /api/v3/warehouses/{warehouseId}/contacts | WBGO()->**updateContacts()** |
