@@ -91,28 +91,6 @@ class Questions extends AbstractEndpoint
     }
 
     /**
-     * Часто спрашиваемые товары
-     *
-     * @param int $limit Количество запрашиваемых товаров
-     *
-     * @return object {
-     * 	    data: {products: [object, ...]},
-     * 	    error: bool, errorText: string, additionalErrors: ?string
-     * }
-     * @throws InvalidArgumentException Превышение максимального количества запрошенных результатов
-     */
-    public function productRating(int $limit = 100): object
-    {
-        $maxCount = 100;
-        if ($limit > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества запрошенных результатов: {$maxCount}");
-        }
-        return $this->getRequest('/api/v1/questions/products/rating', [
-            'size' => $limit,
-        ]);
-    }
-
-    /**
      * Список вопросов
      *
      * Метод позволяет получить список вопросов по заданным параметрам с пагинацией и сортировкой

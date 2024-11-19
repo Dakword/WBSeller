@@ -9,11 +9,11 @@ class QuestionsTest extends TestCase
 {
 
     private $Questions;
-    
+
     public function setUp(): void
     {
         parent::setUp();
-        
+
         $this->Questions = $this->Questions();
     }
 
@@ -66,18 +66,6 @@ class QuestionsTest extends TestCase
         if(!$result->error) {
             $this->assertObjectHasAttribute('hasNewQuestions', $result->data);
             $this->assertObjectHasAttribute('hasNewFeedbacks', $result->data);
-        }
-    }
-
-    public function test_productRating()
-    {
-        $result = $this->Questions->productRating();
-
-        $this->assertFalse($result->error);
-
-        if(!$result->error) {
-            $this->assertObjectHasAttribute('data', $result);
-            $this->assertObjectHasAttribute('products', $result->data);
         }
     }
 

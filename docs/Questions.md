@@ -19,7 +19,6 @@ Wildberries API / [**Вопросы**](https://openapi.wb.ru/feedbacks-questions
 | Просмотреть вопрос                | /api/v1/questions                     | Questions()->**changeViewed()**            |
 | Ответить на вопрос                | /api/v1/questions                     | Questions()->**sendAnswer()**              |
 | Отклонить вопрос                  | /api/v1/questions                     | Questions()->**reject()**                  |
-| Часто спрашиваемые товары         | /api/v1/questions/products/rating     | Questions()->**productRating()**           |
 | Получение вопросов в формате XLSX | /api/v1/questions/report              | Questions()->**xlsReport()**               |
 <br>
 

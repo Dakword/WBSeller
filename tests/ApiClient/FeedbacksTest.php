@@ -9,11 +9,11 @@ class FeedbacksTest extends TestCase
 {
 
     private $Feedbacks;
-    
+
     public function setUp(): void
     {
         parent::setUp();
-        
+
         $this->Feedbacks = $this->Feedbacks();
     }
 
@@ -37,7 +37,7 @@ class FeedbacksTest extends TestCase
     public function test_unansweredCount()
     {
         $result = $this->Feedbacks->unansweredCount();
-        
+
         $this->assertFalse($result->error);
 
         if(!$result->error) {
@@ -45,64 +45,6 @@ class FeedbacksTest extends TestCase
             $this->assertObjectHasAttribute('countUnanswered', $result->data);
             $this->assertObjectHasAttribute('countUnansweredToday', $result->data);
             $this->assertObjectHasAttribute('valuation', $result->data);
-        }
-    }
-
-    public function test_parentSubjects()
-    {
-        $result = $this->Feedbacks->parentSubjects();
-
-        $this->assertFalse($result->error);
-
-        if(!$result->error) {
-            $this->assertObjectHasAttribute('data', $result);
-            $this->assertIsArray($result->data);
-
-            $firstSubject = array_shift($result->data);
-            if($firstSubject) {
-                $this->assertObjectHasAttribute('subjectId', $firstSubject);
-                $this->assertObjectHasAttribute('subjectName', $firstSubject);
-            } else {
-                $this->markTestSkipped('No products in the account');
-            }
-        }
-    }
-
-    public function test_subjectRating()
-    {
-        $result0 = $this->Feedbacks->parentSubjects();
-        $firstSubject = array_shift($result0->data);
-        if($firstSubject) {
-            $result = $this->Feedbacks->subjectRating($firstSubject->subjectId);
-
-            $this->assertFalse($result->error);
-
-            if(!$result->error) {
-                $this->assertObjectHasAttribute('data', $result);
-                $this->assertObjectHasAttribute('feedbacksCount', $result->data);
-                $this->assertObjectHasAttribute('valuation', $result->data);
-            }
-        } else {
-            $this->markTestSkipped('No products in the account');
-        }
-    }
-
-    public function test_subjectRatingTop()
-    {
-        $result0 = $this->Feedbacks->parentSubjects();
-        $firstSubject = array_shift($result0->data);
-        if($firstSubject) {
-            $result = $this->Feedbacks->subjectRatingTop($firstSubject->subjectId);
-
-            $this->assertFalse($result->error);
-
-            if(!$result->error) {
-                $this->assertObjectHasAttribute('data', $result);
-                $this->assertObjectHasAttribute('productMinRating', $result->data);
-                $this->assertObjectHasAttribute('productMaxRating', $result->data);
-            }
-        } else {
-            $this->markTestSkipped('No products in the account');
         }
     }
 
@@ -131,19 +73,6 @@ class FeedbacksTest extends TestCase
             $this->assertObjectHasAttribute('data', $result);
             $this->assertObjectHasAttribute('feedbacks', $result->data);
             $this->assertIsArray($result->data->feedbacks);
-        }
-    }
-
-    public function test_productRating()
-    {
-        $result = $this->Feedbacks->productRating(123456);
-
-        $this->assertFalse($result->error);
-
-        if(!$result->error) {
-            $this->assertObjectHasAttribute('data', $result);
-            $this->assertObjectHasAttribute('feedbacksCount', $result->data);
-            $this->assertObjectHasAttribute('valuation', $result->data);
         }
     }
 
@@ -200,7 +129,7 @@ class FeedbacksTest extends TestCase
     public function test_count()
     {
         $result = $this->Feedbacks->count();
-        
+
         $this->assertFalse($result->error);
         if(!$result->error) {
             $this->assertObjectHasAttribute('data', $result);

@@ -77,51 +77,6 @@ class Feedbacks extends AbstractEndpoint
     }
 
     /**
-     * Родительские категории товаров
-     *
-     * Метод позволяет получить список родительских категорий товаров, которые есть у продавца
-     *
-     * @return object {
-     * 	    data: [{subjectId: int, subjectName: string}, ...],
-     * 	    error: bool, errorText: string, additionalErrors: ?string
-     */
-    public function parentSubjects(): object
-    {
-        return $this->getRequest('/api/v1/parent-subjects');
-    }
-
-    /**
-     * Средняя оценка товаров по родительской категории
-     *
-     * @param int $subjectId id категории товара
-     *
-     * @return object {
-     * 	    data: [{feedbacksCount: int, valuation: string}, ...],
-     * 	    error: bool, errorText: string, additionalErrors: ?string
-     */
-    public function subjectRating(int $subjectId): object
-    {
-        return $this->getRequest('/api/v1/feedbacks/products/rating', ['subjectId' => $subjectId]);
-    }
-
-    /**
-     * Товары с наибольшей и наименьшей средней оценкой по родительской категории
-     *
-     * Метод позволяет получить список из двух товаров,
-     * с наибольшей и наименьшей средней оценкой, по родительской категории
-     *
-     * @param int $subjectId id категории товара
-     *
-     * @return object {
-     * 	    data: {productMinRating: object, productMaxRating: object},
-     * 	    error: bool, errorText: string, additionalErrors: ?string
-     */
-    public function subjectRatingTop(int $subjectId): object
-    {
-        return $this->getRequest('/api/v1/feedbacks/products/rating/top', ['subjectId' => $subjectId]);
-    }
-
-    /**
      * Список отзывов
      *
      * Метод позволяет получить список отзывов по заданным параметрам с пагинацией и сортировкой
@@ -194,22 +149,6 @@ class Feedbacks extends AbstractEndpoint
             + ($nmId ? ['nmId' => $nmId] : [])
             + (!is_null($order) ? ['order' => $order] : [])
         );
-    }
-
-    /**
-     * Средняя оценка товара
-     *
-     * @param int $nmId Идентификатор номенклатуры
-     *
-     * @return object {
-     * 	    data: {feedbacksCount: int, valuation: string},
-     * 	    error: bool, errorText: string, additionalErrors: ?string
-     */
-    public function productRating(int $nmId): object
-    {
-        return $this->getRequest('/api/v1/feedbacks/products/rating/nmid', [
-            'nmId' => $nmId,
-        ]);
     }
 
     /**
