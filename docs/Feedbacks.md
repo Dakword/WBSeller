@@ -15,13 +15,13 @@ Wildberries API / [**Отзывы**](https://openapi.wb.ru/feedbacks-questions/a
 | Необработанные отзывы            | /api/v1/feedbacks/count-unanswered | Feedbacks()->**unansweredCount()** |
 | Список отзывов                   | /api/v1/feedbacks                  | Feedbacks()->**list()**            |
 | Получить отзыв по Id             | /api/v1/feedbacks                  | Feedbacks()->**get()**             |
-| Просмотреть отзыв                | /api/v1/feedbacks                  | Feedbacks()->**changeViewed()**    |
-| Ответить на отзыв                | /api/v1/feedbacks                  | Feedbacks()->**sendAnswer()**      |
-| Оценить отзыв                    | /api/v1/feedbacks                  | Feedbacks()->**rateFeedback()**    |
-| Оценить товар                    | /api/v1/feedbacks                  | Feedbacks()->**rateProduct()**     |
-| Оценить отзыв и товар            | /api/v1/feedbacks                  | Feedbacks()->**rate()**            |
+| Ответить на отзыв                | /api/v1/feedbacks/answer           | Feedbacks()->**sendAnswer()**      |
+| Отредактировать ответ на отзыв   | /api/v1/feedbacks/answer           | Feedbacks()->**updateAnswer()**    |
+| Пожаловаться на отзыв            | /api/v1/feedbacks/actions          | Feedbacks()->**rateFeedback()**    |
+| Сообщить о проблеме с товаром    | /api/v1/feedbacks/actions          | Feedbacks()->**rateProduct()**     |
+| Пожаловаться на отзый,<br>сообщить о проблеме с товаром | /api/v1/feedbacks/actions | Feedbacks()->**rate()**            |
 | Список архивных отзывов          | /api/v1/feedbacks/archive          | Feedbacks()->**archive()**         |
-| Получить список оценок           | /api/v1/supplier-valuations        | Feedbacks()->**ratesList()**       |
+| Получить списки причин<br>жалоб и проблем с товаром | /api/v1/supplier-valuations | Feedbacks()->**ratesList()**       |
 | Получение отзывов в формате XLSX | /api/v1/feedbacks/report           | Feedbacks()->**xlsReport()**       |
 | Возврат товара по ID отзыва      | /api/v1/feedbacks/order/return     | Feedbacks()->**orderReturn()**     |
 <br>

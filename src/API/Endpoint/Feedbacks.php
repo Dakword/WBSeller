@@ -200,11 +200,28 @@ class Feedbacks extends AbstractEndpoint
      */
     public function sendAnswer(string $id, string $answerText): bool
     {
-        $this->patchRequest('/api/v1/feedbacks', [
+        $this->postRequest('/api/v1/feedbacks/answer', [
             'id' => $id,
             'text' => $answerText,
         ]);
-        return $this->responseCode() == 200;
+        return $this->responseCode() == 204;
+    }
+
+    /**
+     * Отредактировать ответ на отзыв
+     *
+     * @param string $id         Идентификатор отзыва
+     * @param string $answerText Текст ответа
+     *
+     * @return bool true - успешно, false - неудача
+     */
+    public function updateAnswer(string $id, string $answerText): bool
+    {
+        $this->patchRequest('/api/v1/feedbacks/answer', [
+            'id' => $id,
+            'text' => $answerText,
+        ]);
+        return $this->responseCode() == 204;
     }
 
     /**
@@ -240,56 +257,59 @@ class Feedbacks extends AbstractEndpoint
     }
 
     /**
-     * Оценить отзыв
+     * Пожаловаться на отзыв
+     * @link https://openapi.wb.ru/feedbacks-questions/api/ru/#tag/Rabota-s-otzyvami/paths/~1api~1v1~1feedbacks~1actions/post
      *
-     * @param string $id             Идентификатор отзыва
+     * @param string $id             Причина жалобы на отзыв
      * @param int    $feedbackRateId Оценка отзыва
      *
      * @return bool
      */
     public function rateFeedback(string $id, int $feedbackRateId): bool
     {
-        $this->patchRequest('/api/v1/feedbacks', [
+        $this->postRequest('/api/v1/feedbacks/actions', [
             'id' => $id,
             'supplierFeedbackValuation' => $feedbackRateId,
         ]);
-        return $this->responseCode() == 200;
+        return $this->responseCode() == 204;
     }
 
     /**
-     * Оценить товар
+     * Сообщить о проблеме с товаром
+     * @link https://openapi.wb.ru/feedbacks-questions/api/ru/#tag/Rabota-s-otzyvami/paths/~1api~1v1~1feedbacks~1actions/post
      *
      * @param string $id            Идентификатор отзыва
-     * @param int    $productRateId Оценка товара
+     * @param int    $productRateId Причина жалобы на отзыв
      *
      * @return bool
      */
     public function rateProduct(string $id, int $productRateId): bool
     {
-        $this->patchRequest('/api/v1/feedbacks', [
+        $this->postRequest('/api/v1/feedbacks/actions', [
             'id' => $id,
             'supplierProductValuation' => $productRateId,
         ]);
-        return $this->responseCode() == 200;
+        return $this->responseCode() == 204;
     }
 
     /**
-     * Оценить отзыв и товар
+     * Пожаловаться на отзыв, сообщить о проблеме с товаром
+     * @link https://openapi.wb.ru/feedbacks-questions/api/ru/#tag/Rabota-s-otzyvami/paths/~1api~1v1~1feedbacks~1actions/post
      *
      * @param string $id             Идентификатор отзыва
-     * @param int    $feedbackRateId Оценка отзыва
-     * @param int    $productRateId  Оценка товара
+     * @param int    $feedbackRateId Причина жалобы на отзыв
+     * @param int    $productRateId  Описание проблемы товара
      *
      * @return bool
      */
     public function rate(string $id, int $feedbackRateId, int $productRateId): bool
     {
-        $this->patchRequest('/api/v1/feedbacks', [
+        $this->postRequest('/api/v1/feedbacks/actions', [
             'id' => $id,
             'supplierFeedbackValuation' => $feedbackRateId,
             'supplierProductValuation' => $productRateId,
         ]);
-        return $this->responseCode() == 200;
+        return $this->responseCode() == 204;
     }
 
     /**

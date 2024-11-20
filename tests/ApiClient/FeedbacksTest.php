@@ -89,16 +89,6 @@ class FeedbacksTest extends TestCase
         }
     }
 
-    public function test_changeViewed()
-    {
-        $result = $this->Feedbacks->changeViewed('xxl', true);
-        $response = $this->Feedbacks->response();
-
-        $this->assertFalse($result);
-        $this->assertTrue($response->error);
-        $this->assertEquals('Не найден отзыв xxl', $response->errorText);
-    }
-
     public function test_sendAnswer()
     {
         $result = $this->Feedbacks->sendAnswer('xxl', 'OK!');
