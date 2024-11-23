@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Dakword\WBSeller\API\Endpoint;
@@ -285,14 +284,16 @@ class Marketplace extends AbstractEndpoint
      * @param int   $orderId Идентификатор сборочного задания
      * @param array $sgtin   Массив КиЗов (У одного сборочного задания не может быть больше 24 маркировок)
      *
+     * @throws InvalidArgumentException Превышение максимального количества элементов переданного массива
      */
-    public function setOrderKiz(int $orderId, array $sgtin)
+    public function setOrderKiz(int $orderId, array $sgtin): bool
     {
         $maxCount = 24;
         if (count($sgtin) > $maxCount) {
-            throw new InvalidArgumentException("Превышение максимального количества строк переданного массива: {$maxCount}");
+            throw new InvalidArgumentException("Превышение максимального количества элементов переданного массива: {$maxCount}");
         }
-        return $this->putRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtins' => $sgtin]);
+        $this->putRequest('/api/v3/orders/' . $orderId . '/meta/sgtin', ['sgtins' => $sgtin]);
+        return $this->responseCode() == 204;
     }
 
     /**
@@ -584,22 +585,4 @@ class Marketplace extends AbstractEndpoint
         return $this->postRequest('/api/v3/supplies/' . $supplyId . '/trbx/stickers?type=' . $type, ['trbxIds' => $boxIds]);
     }
 
-    /**
-     * Информация по клиенту
-     *
-     * Метод позволяет получать информацию о клиенте по ID заказа.
-     * Только для dbs (доставка силами продавца) и кроссбордера из Турции
-     * @see https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya/paths/~1api~1v3~1orders~1client/post
-     *
-     * @param array $orders Список заказов
-     *
-     * @return array Информация по клиенту
-     */
-    public function getOrdersClient(array $orders): array
-    {
-        return $this->postRequest('/api/v3/orders/client', [
-            'orders' => $orders,
-        ])
-        ->orders;
-    }
 }

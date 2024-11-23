@@ -29,7 +29,6 @@ Wildberries API / [**Маркетплейс**](https://openapi.wb.ru/marketplace
 | Добавить заказы к коробу          | /api/v3/supplies/{supplyId}/trbx/{boxId}  | Marketplace()->**addBoxOrders()**            |
 | Удалить заказ из короба           | /api/v3/supplies/{supplyId}/trbx/{boxId}/orders/{orderId} | Marketplace()->**deleteBoxOrder()** |
 | Получить стикеры коробов поставки | /api/v3/supplies/{supplyId}/trbx/stickers | Marketplace()->**getSupplyBoxStickers()**    |
-| Информация по клиенту             | /api/v3/orders/client                     | Marketplace()->**getOrdersClient()**         |
 | [**Поставки**](https://openapi.wb.ru/marketplace/api/ru/#tag/Postavki) |||
 | Список поставок                       | /api/v3/supplies                            | Marketplace()->**getSuppliesList()**  |
 | Создать новую поставку                | /api/v3/supplies                            | Marketplace()->**createSupply()**     |
@@ -107,11 +106,23 @@ Wildberries API Маркетплейс / [**Доставка силами про
 
 | :speech_balloon: | :cloud: | [DBS()](/src/API/Endpoint/Subpoint/DBS.php) |
 | ---------------- | ------- | ------------------------------------------- |
-| Перевести на сборку                                  | /api/v3/orders/{orderId}/confirm | DBS()->**confirm()**         |
-| Перевести в доставку                                 | /api/v3/orders/{orderId}/deliver | DBS()->**deliver()**         |
-| Сообщить, что сборочное задание принято клиентом     | /api/v3/orders/{orderId}/receive | DBS()->**receive()**         |
-| Сообщить, что клиент отказался от сборочного задания | /api/v3/orders/{orderId}/reject  | DBS()->**reject()**          |
-| Информация по клиенту                                | /api/v3/orders/client            | DBS()->**getOrdersClient()** |
+| [**Сборочные задания**](https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya-(DBS)) |||
+| Получить список новых сборочных заданий              | /api/v3/dbs/orders/new               | DBS()->**getNewOrders()**      |
+| Получить информацию по завершенным сборочным заданиям| /api/v3/dbs/orders                   | DBS()->**getOrders()**         |
+| Получить статусы сборочных заданий                   | /api/v3/dbs/orders/status            | DBS()->**getOrdersStatuses()** |
+| Перевести на сборку                                  | /api/v3/dbs/orders/{orderId}/confirm | DBS()->**confirm()**           |
+| Перевести в доставку                                 | /api/v3/dbs/orders/{orderId}/deliver | DBS()->**deliver()**           |
+| Отменить сборочное задание                           | /api/v3/dbs/orders/{orderId}/cancel  | DBS()->**cancelOrder()**       |
+| Сообщить, что сборочное задание<br>принято клиентом     | /api/v3/dbs/orders/{orderId}/receive | DBS()->**receive()**        |
+| Сообщить, что клиент<br>отказался от сборочного задания | /api/v3/dbs/orders/{orderId}/reject  | DBS()->**reject()**         |
+| Информация по клиенту                                | /api/v3/dbs/orders/client            | DBS()->**getOrdersClient()**   |
+| [**Метаданные**](https://openapi.wb.ru/marketplace/api/ru/#tag/Metadannye-(DBS)) |||
+| Получить метаданные сборочного задания  | /api/v3/dbs/orders/{orderId}/meta        | DBS()->**getOrderMeta()**    |
+| Удалить метаданные сборочного задания   | /api/v3/dbs/orders/{orderId}/meta        | DBS()->**deleteOrderMeta()** |
+| Закрепить за сборочным заданием КиЗ     | /api/v3/dbs/orders/{orderId}/meta/sgtin  | DBS()->**setOrderKiz()**     |
+| Закрепить за сборочным заданием УИН     | /api/v3/dbs/orders/{orderId}/meta/uin    | DBS()->**setOrderUin()**     |
+| Закрепить за сборочным заданием IMEI    | /api/v3/dbs/orders/{orderId}/meta/imei   | DBS()->**setOrderIMEI()**    |
+| Закрепить за сборочным заданием GTIN    | /api/v3/dbs/orders/{orderId}/meta/gtin   | DBS()->**setOrderGTIN()**    |
 
 ## [WBSeller API](/docs/API.md) / Marketplace()->WBGO()
 
