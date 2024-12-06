@@ -11,8 +11,9 @@ Wildberries API / [**Цены и скидки**](https://openapi.wb.ru/prices/ap
 | ---------------- | ------- | ---------------------------------------- |
 | Проверка подключения к API                 | /ping                      | Prices()->**ping()**                  |
 | [**Установка цен и скидок**](https://openapi.wb.ru/prices/api/ru/#tag/Ustanovka-cen-i-skidok) |||
-| Установить цены и скидки                   | /api/v2/upload/task        | Prices()->**upload()**                |
-| Установить цены для размеров               | /api/v2/upload/task/size   | Prices()->**uploadSizes()**           |
+| Установить цены и скидки                   | /api/v2/upload/task               | Prices()->**upload()**             |
+| Установить цены для размеров               | /api/v2/upload/task/size          | Prices()->**uploadSizes()**        |
+| Установить скидки WB Клуба                 | /api/v2/upload/task/club-discount | Prices()->**uploadClubDiscount()** |
 | [**Состояние загрузок**](https://openapi.wb.ru/prices/api/ru/#tag/Sostoyaniya-zagruzok) |||
 | Состояние обработанной загрузки            | /api/v2/history/tasks      | Prices()->**getUploadStatus()**       |
 | Состояние необработанной загрузки          | /api/v2/buffer/tasks       | Prices()->**getBufferUploadStatus()** |

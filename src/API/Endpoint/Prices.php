@@ -178,7 +178,7 @@ class Prices extends AbstractEndpoint
      *
      * @param int $uploadId ID загрузки
      * @param int $page     Номер страницы
-     * @param int $onPage   Количество результатов на странице
+     * @param int $onPage   Количество результатов на странице (max 1000)
      *
      * @return object {data: {uploadID: ?int, historyGoods: ?array}, error: bool, errorText: string}
      *
@@ -251,6 +251,33 @@ class Prices extends AbstractEndpoint
         return $this->getRequest('/api/v2/quarantine/goods', [
             'offset' => --$page * $onPage,
             'limit' => $onPage,
+        ]);
+    }
+
+    /**
+     * Установить скидки WB Клуба
+     *
+     * За раз можно загрузить не более 1000 номенклатур.
+     * @link https://openapi.wb.ru/prices/api/ru/#tag/Ustanovka-cen-i-skidok/paths/~1api~1v2~1upload~1task~1club-discount/post
+     *
+     * @param array $discounts Товары и скидки для них.
+     *                      [{nmID: int, clubDiscount: int}, ...]
+     *
+     * @return object {
+     *      data: {id: int, alreadyExists: bool}
+     *      error: bool, errorText: string
+     * }
+     *
+     * @throws InvalidArgumentException Превышение максимального количества переданных номенклатур
+     */
+    public function uploadClubDiscount(array $discounts): object
+    {
+        $maxCount = 1_000;
+        if (count($discounts) > $maxCount) {
+            throw new InvalidArgumentException("Превышение максимального количества переданных номенклатур: {$maxCount}");
+        }
+        return $this->postRequest('/api/v2/upload/task/club-discount', [
+            'data' => $discounts,
         ]);
     }
 }
