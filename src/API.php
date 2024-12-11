@@ -26,7 +26,7 @@ class API
         'recommends'  => 'https://recommend-api.wildberries.ru',
         'returns'     => 'https://returns-api.wildberries.ru',
         'statistics'  => 'https://statistics-api.wildberries.ru',
-        'supplies'    => 'https://supplies-api.wildberries.ru/',
+        'supplies'    => 'https://supplies-api.wildberries.ru',
         'tariffs'     => 'https://common-api.wildberries.ru',
     ];
     private array $apiKeys;
