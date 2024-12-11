@@ -35,6 +35,7 @@ $contentAPI->getCardsList(); // Получить список карточек
 | Возвраты покупателями | $wbSellerAPI->[**Returns()**](/docs/Returns.md)          |
 | Документы             | $wbSellerAPI->[**Documents()**](/docs/Documents.md)      |
 | Календарь акций       | $wbSellerAPI->[**Calendar()**](/docs/Calendar.md)        |
+| Поставки              | $wbSellerAPI->[**Supplies()**](/docs/Supplies.md)        |
 
 ### Декодирование токена
 
