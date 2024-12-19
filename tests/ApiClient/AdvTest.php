@@ -25,6 +25,15 @@ class AdvTest extends TestCase
         $this->assertInstanceOf(Adv::class, $this->API()->Adv());
     }
 
+    public function test_config()
+    {
+        $result = $this->Adv->config();
+
+        $this->assertIsObject($result);
+        $this->assertObjectHasAttribute('config', $result);
+        $this->assertIsArray($result->config);
+    }
+
     public function test_count()
     {
         $result = $this->Adv->count();

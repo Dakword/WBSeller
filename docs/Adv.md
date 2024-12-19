@@ -11,6 +11,7 @@ Wildberries API / [**Продвиженение**](https://openapi.wb.ru/promoti
 | ---------------- | ------- | ---------------------------------- |
 | Проверка подключения к API    | /ping                                 | Adv()->**ping()**                      |
 | [**Продвижение**](https://openapi.wb.ru/promotion/api/ru/#tag/Prodvizhenie) |||
+| Конфигурационные значения     | /adv/v0/config                        | Adv()->**config()**                    |
 | Списки кампаний               | /adv/v1/promotion/count               | Adv()->**advertsList()**               |
 | Переименование кампании       | /adv/v0/rename                        | Adv()->**renameAdvert()**              |
 | Удаление кампании             | /adv/v0/delete                        | Adv()->**delete()**                    |

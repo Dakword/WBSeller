@@ -298,6 +298,18 @@ class Adv extends AbstractEndpoint
         return $this->postRequest('/adv/v2/supplier/nms', $subjects);
     }
 
+    /**
+     * Конфигурационные значения
+     *
+     * Возвращает информацию о допустимых значениях основных конфигурационных параметров кампаний.
+     * Максимум 1 запрос в минуту
+     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Prodvizhenie/paths/~1adv~1v0~1config/get
+     */
+    public function config(): object
+    {
+        return $this->getRequest('/adv/v0/config');
+    }
+
     private function checkType(int $type, array $types = [])
     {
         if (!in_array($type, $types ?: AdvertType::all())) {
