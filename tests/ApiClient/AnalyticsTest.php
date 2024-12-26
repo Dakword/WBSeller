@@ -89,4 +89,16 @@ class AnalyticsTest extends TestCase
             $this->assertObjectHasAttribute('nmId', $first);
         }
     }
+
+    public function test_dailyDynamics()
+    {
+        $result = $this->Analytics->dailyDynamics(new \DateTime('2024-11-01'), new \DateTime('2024-11-30'));
+
+        $this->assertIsArray($result);
+
+        if($result) {
+            $first = array_shift($result);
+            $this->assertObjectHasAttribute('dt', $first);
+        }
+    }
 }

@@ -517,4 +517,29 @@ class Analytics extends AbstractEndpoint
         return $result->report ?? [];
     }
 
+    /*
+     * Динамика оборачиваемости
+     * --------------------------------------------------------------------------
+     */
+
+    /**
+     * Ежедневная динамика
+     *
+     * Метод предоставляет данные о ежедневной динамике.
+     * Можно получить отчёт максимум за 31 день.
+     * Максимум 1 запрос в 10 секунд.
+     * @link https://dev.wildberries.ru/ru/openapi/reports/#tag/Dinamika-oborachivaemosti/paths/~1api~1v1~1turnover-dynamics~1daily-dynamics/get
+     *
+     * @param DateTime $dateFrom Дата начала отчётного периода
+     * @param DateTime $dateTo   Дата окончания отчётного периода
+     */
+    public function dailyDynamics(DateTime $dateFrom, DateTime $dateTo): array
+    {
+        $result = $this->getRequest('/api/v1/turnover-dynamics/daily-dynamics', [
+            'dateFrom' => $dateFrom->format('Y-m-d'),
+            'dateTo' => $dateTo->format('Y-m-d'),
+        ]);
+        return $result->report ?? [];
+    }
+
 }

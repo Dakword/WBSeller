@@ -29,6 +29,8 @@ Wildberries API / [**Аналитика**](https://openapi.wb.ru/analytics/api/r
 | Отчет о продажах сгруппированный<br>по регионам стран | /api/v1/analytics/region-sale | Analytics()->**regionSale()** |
 | [**Отчёт по возвратам товаров**](https://openapi.wb.ru/analytics/api/ru/#tag/Otchyot-po-vozvratam-tovarov) |||
 | Получить отчет | /api/v1/analytics/goods-return | Analytics()->**goodsReturn()** |
+| [**Динамика оборачиваемости**] |||
+| Ежедневная динамика | /api/v1/turnover-dynamics/daily-dynamics | Analytics()->**dailyDynamics()** |
 <br>
 
 ## [WBSeller API](/docs/API.md) / Analytics()->PaidStorage()
