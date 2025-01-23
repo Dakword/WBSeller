@@ -74,9 +74,9 @@ class WarehouseRemains
      */
     public function checkReportStatus(string $task_id): string
     {
-        return $this->Analitics
+        return $this->Analytics
             ->getRequest('/api/v1/warehouse_remains/tasks/' . $task_id . '/status')
-        ->status;
+        ->data->status;
     }
 
     /**
@@ -92,7 +92,7 @@ class WarehouseRemains
      */
     public function getReport(string $task_id): array
     {
-        return $this->Analitics
+        return $this->Analytics
             ->getRequest('/api/v1/warehouse_remains/tasks/' . $task_id . '/download');
     }
 }
