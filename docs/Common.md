@@ -9,7 +9,8 @@ Wildberries API / **Общее**
 
 | :speech_balloon: | :cloud: | [Common()](/src/API/Endpoint/Common.php) |
 | ---------------- | ------- | ---------------------------------------- |
-| Проверка подключения к API   | /ping | Common()->**ping()** |
+| Проверка подключения к API      | /ping               | Common()->**ping()**       |
+| Получение информации о продавце | /api/v1/seller-info | Common()->**sellerInfo()** |
 <br>
 
 ## [WBSeller API](/docs/API.md) / Common()->News()
