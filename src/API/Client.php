@@ -22,6 +22,7 @@ class Client
     public int $rateLimit = 0;
     public int $rateRemaining = 0;
     public int $rateReset = 0;
+    public int $rateRetry = 0;
     private string $baseUrl;
     private string $apiKey;
     private HttpClient $Client;
@@ -153,6 +154,7 @@ class Client
         $this->rateLimit = (int)$response->getHeaderLine('X-RateLimit-Limit') ?: 0;
         $this->rateRemaining = (int)$response->getHeaderLine('X-RateLimit-Remaining') ?: 0;
         $this->rateReset = (int)$response->getHeaderLine('X-RateLimit-Reset') ?: 0;
+        $this->rateRetry = (int)$response->getHeaderLine('X-RateLimit-Retry') ?: 0;
 
         $responseContent = $response->getBody()->getContents();
         $this->rawResponse = $responseContent;

@@ -98,6 +98,7 @@ abstract class AbstractEndpoint
             'limit' => $this->Client->rateLimit,
             'remaining' => $this->Client->rateRemaining,
             'reset' => $this->Client->rateReset,
+            'retry' => $this->Client->rateRetry,
         ];
     }
 
