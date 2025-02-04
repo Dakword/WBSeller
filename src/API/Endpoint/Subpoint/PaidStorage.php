@@ -50,7 +50,7 @@ class PaidStorage
     public function checkReportStatus(string $task_id): string
     {
         $result = $this->Analitics->getRequest('/api/v1/paid_storage/tasks/' . $task_id . '/status');
-        return $result->status;
+        return $result->data->status;
     }
     
     /**
