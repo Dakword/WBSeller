@@ -174,23 +174,6 @@ class Feedbacks extends AbstractEndpoint
     }
 
     /**
-     * Изменение статуса "просмотра" отзыва
-     *
-     * @param string $id        Идентификатор отзыва
-     * @param bool   $wasViewed Просмотрен (true) или не просмотрен (false)
-     *
-     * @return bool true - успешно, false - неудача
-     */
-    public function changeViewed(string $id, bool $wasViewed): bool
-    {
-        $this->patchRequest('/api/v1/feedbacks', [
-            'id' => $id,
-            'wasViewed' => $wasViewed,
-        ]);
-        return $this->responseCode() == 200;
-    }
-
-    /**
      * Ответить на отзыв
      *
      * @param string $id         Идентификатор отзыва
