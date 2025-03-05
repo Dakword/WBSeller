@@ -595,7 +595,7 @@ class Content extends AbstractEndpoint
     public function searchDirectoryTNVED(int $subjectID, string $search = ''): object
     {
         return $this->getDirectory('tnved', [
-            '$subjectID' => $subjectID,
+            'subjectID' => $subjectID,
             'search' => $search,
         ]);
     }
